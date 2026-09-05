@@ -1,0 +1,1052 @@
+warmupDuration: "10s"
+enableDefaultIgnored: true
+policies:
+  # ═══════════════════════════════════════════════
+  # HTTP — REST API (gateway module, /api/*)
+  # ═══════════════════════════════════════════════
+
+  # ── Auth ──────────────────────────────────────
+  - name: "http-auth-login-rate-limit"
+    type: "http"
+    target: "POST:/api/auth/login"
+    enabled: false
+    errorChance: 0.4
+    errorCode: 429
+    errorBody: '{"error":"too_many_requests","message":"Rate limit exceeded by chaos simulation"}'
+    latencyMs: 1000
+
+  - name: "http-auth-login-delay"
+    type: "http"
+    target: "POST:/api/auth/login"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 2000
+
+  - name: "http-auth-register-error"
+    type: "http"
+    target: "POST:/api/auth/register"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos error on registration"}'
+    latencyMs: 800
+
+  - name: "http-auth-forgot-password-delay"
+    type: "http"
+    target: "POST:/api/auth/forgot-password"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 2000
+
+  - name: "http-auth-reset-password-error"
+    type: "http"
+    target: "POST:/api/auth/reset-password"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos reset password failure"}'
+    latencyMs: 800
+
+  - name: "http-auth-refresh-error"
+    type: "http"
+    target: "POST:/api/auth/refresh"
+    enabled: false
+    errorChance: 0.15
+    errorCode: 401
+    errorBody: '{"error":"unauthorized","message":"Simulated chaos token refresh failure"}'
+    latencyMs: 500
+
+  - name: "http-auth-verify-error"
+    type: "http"
+    target: "POST:/api/auth/verify"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 400
+    errorBody: '{"error":"bad_request","message":"Simulated chaos email verification failure"}'
+    latencyMs: 1000
+
+  - name: "http-auth-me-timeout"
+    type: "http"
+    target: "GET:/api/auth/me"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 2500
+
+  # ── Users ─────────────────────────────────────
+  - name: "http-user-list-delay"
+    type: "http"
+    target: "GET:/api/users"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  - name: "http-user-create-error"
+    type: "http"
+    target: "POST:/api/users"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos user creation failure"}'
+    latencyMs: 500
+
+  - name: "http-user-by-id-delay"
+    type: "http"
+    target: "GET:/api/users/*"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 800
+
+  - name: "http-user-update-error"
+    type: "http"
+    target: "PUT:/api/users/*"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos user update failure"}'
+    latencyMs: 600
+
+  - name: "http-user-delete-error"
+    type: "http"
+    target: "DELETE:/api/users/*"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos user delete failure"}'
+    latencyMs: 400
+
+  # ── Roles ─────────────────────────────────────
+  - name: "http-role-list-delay"
+    type: "http"
+    target: "GET:/api/roles"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-role-create-error"
+    type: "http"
+    target: "POST:/api/roles"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos role creation failure"}'
+    latencyMs: 500
+
+  - name: "http-role-assign-error"
+    type: "http"
+    target: "POST:/api/roles/assign"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos role assignment failure"}'
+    latencyMs: 600
+
+  - name: "http-role-remove-error"
+    type: "http"
+    target: "POST:/api/roles/remove"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos role removal failure"}'
+    latencyMs: 600
+
+  # ── Merchants ─────────────────────────────────
+  - name: "http-merchant-list-delay"
+    type: "http"
+    target: "GET:/api/merchants"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  - name: "http-merchant-create-error"
+    type: "http"
+    target: "POST:/api/merchants"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos merchant creation failure"}'
+    latencyMs: 500
+
+  - name: "http-merchant-update-status-error"
+    type: "http"
+    target: "PUT:/api/merchants/*/status"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos merchant status update failure"}'
+    latencyMs: 600
+
+  # ── Products ──────────────────────────────────
+  - name: "http-product-list-delay"
+    type: "http"
+    target: "GET:/api/products"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  - name: "http-product-create-error"
+    type: "http"
+    target: "POST:/api/products/create"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos product creation failure"}'
+    latencyMs: 800
+
+  - name: "http-product-upload-error"
+    type: "http"
+    target: "POST:/api/products/upload"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos product upload failure"}'
+    latencyMs: 1500
+
+  # ── Category ──────────────────────────────────
+  - name: "http-category-list-delay"
+    type: "http"
+    target: "GET:/api/category"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-category-create-error"
+    type: "http"
+    target: "POST:/api/category/create"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos category creation failure"}'
+    latencyMs: 500
+
+  # ── Carts ─────────────────────────────────────
+  - name: "http-cart-list-delay"
+    type: "http"
+    target: "GET:/api/carts/user/*"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-cart-create-error"
+    type: "http"
+    target: "POST:/api/carts"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos cart add failure"}'
+    latencyMs: 500
+
+  - name: "http-cart-delete-error"
+    type: "http"
+    target: "DELETE:/api/carts/user/*"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos cart delete failure"}'
+    latencyMs: 400
+
+  # ── Orders ────────────────────────────────────
+  - name: "http-order-list-delay"
+    type: "http"
+    target: "GET:/api/orders"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  - name: "http-order-create-error"
+    type: "http"
+    target: "POST:/api/orders/create"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos order creation failure"}'
+    latencyMs: 800
+
+  - name: "http-order-update-total-price-error"
+    type: "http"
+    target: "POST:/api/orders/update-total-price"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos total price update failure"}'
+    latencyMs: 600
+
+  - name: "http-order-stats-delay"
+    type: "http"
+    target: "GET:/api/orders/stats/*"
+    enabled: false
+    errorChance: 0.25
+    latencyMs: 2000
+
+  # ── Shipping Addresses ────────────────────────
+  - name: "http-shipping-list-delay"
+    type: "http"
+    target: "GET:/api/shipping-addresses"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-shipping-create-error"
+    type: "http"
+    target: "POST:/api/shipping-addresses/create"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos shipping address creation failure"}'
+    latencyMs: 600
+
+  # ── Transactions ──────────────────────────────
+  - name: "http-transaction-list-delay"
+    type: "http"
+    target: "GET:/api/transactions"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  - name: "http-transaction-create-error"
+    type: "http"
+    target: "POST:/api/transactions/create"
+    enabled: false
+    errorChance: 0.25
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos transaction creation failure"}'
+    latencyMs: 800
+
+  - name: "http-transaction-by-merchant-delay"
+    type: "http"
+    target: "GET:/api/transactions/merchant/*"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1500
+
+  # ── Banners ───────────────────────────────────
+  - name: "http-banner-list-delay"
+    type: "http"
+    target: "GET:/api/banners"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-banner-create-error"
+    type: "http"
+    target: "POST:/api/banners"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos banner creation failure"}'
+    latencyMs: 600
+
+  - name: "http-banner-upload-error"
+    type: "http"
+    target: "POST:/api/banners/upload"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos banner upload failure"}'
+    latencyMs: 1000
+
+  # ── Sliders ───────────────────────────────────
+  - name: "http-slider-list-delay"
+    type: "http"
+    target: "GET:/api/sliders"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-slider-create-error"
+    type: "http"
+    target: "POST:/api/sliders/create"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos slider creation failure"}'
+    latencyMs: 600
+
+  - name: "http-slider-upload-error"
+    type: "http"
+    target: "POST:/api/sliders/upload"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos slider upload failure"}'
+    latencyMs: 1000
+
+  # ── Reviews ───────────────────────────────────
+  - name: "http-review-list-delay"
+    type: "http"
+    target: "GET:/api/reviews"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-review-create-error"
+    type: "http"
+    target: "POST:/api/reviews/create"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos review creation failure"}'
+    latencyMs: 500
+
+  # ── Merchant Awards ───────────────────────────
+  - name: "http-merchant-award-list-delay"
+    type: "http"
+    target: "GET:/api/merchant-awards"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-merchant-award-create-error"
+    type: "http"
+    target: "POST:/api/merchant-awards/create"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos award creation failure"}'
+    latencyMs: 500
+
+  - name: "http-merchant-award-upload-error"
+    type: "http"
+    target: "POST:/api/merchant-awards/upload"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos award upload failure"}'
+    latencyMs: 1000
+
+  # ── Merchant Businesses ───────────────────────
+  - name: "http-merchant-business-list-delay"
+    type: "http"
+    target: "GET:/api/merchant-businesses"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-merchant-business-create-error"
+    type: "http"
+    target: "POST:/api/merchant-businesses/create"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos business info creation failure"}'
+    latencyMs: 500
+
+  # ── Merchant Documents ────────────────────────
+  - name: "http-merchant-document-list-delay"
+    type: "http"
+    target: "GET:/api/merchant-documents"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-merchant-document-create-error"
+    type: "http"
+    target: "POST:/api/merchant-documents"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos document upload failure"}'
+    latencyMs: 600
+
+  # ── Merchant Policies ─────────────────────────
+  - name: "http-merchant-policy-list-delay"
+    type: "http"
+    target: "GET:/api/merchant-policies"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "http-merchant-policy-create-error"
+    type: "http"
+    target: "POST:/api/merchant-policies/create"
+    enabled: false
+    errorChance: 0.2
+    errorCode: 500
+    errorBody: '{"error":"internal_error","message":"Simulated chaos policy creation failure"}'
+    latencyMs: 500
+
+  # ═══════════════════════════════════════════════
+  # SQL — Database table-level chaos
+  # ═══════════════════════════════════════════════
+  - name: "sql-users-deadlock"
+    type: "sql"
+    target: "users"
+    enabled: false
+    errorChance: 0.15
+    errorMessage: "ERROR: deadlock detected (simulated chaos)"
+    latencyMs: 500
+
+  - name: "sql-roles-delay"
+    type: "sql"
+    target: "roles"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 500
+
+  - name: "sql-user-roles-delay"
+    type: "sql"
+    target: "user_roles"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 400
+
+  - name: "sql-refresh-tokens-timeout"
+    type: "sql"
+    target: "refresh_tokens"
+    enabled: false
+    errorChance: 0.1
+    latencyMs: 2000
+
+  - name: "sql-categories-delay"
+    type: "sql"
+    target: "categories"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "sql-merchants-delay"
+    type: "sql"
+    target: "merchants"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1200
+
+  - name: "sql-products-delay"
+    type: "sql"
+    target: "products"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  - name: "sql-products-stock-error"
+    type: "sql"
+    target: "products"
+    enabled: false
+    errorChance: 0.15
+    errorMessage: "ERROR: could not serialize access due to concurrent update (simulated)"
+    latencyMs: 700
+
+  - name: "sql-carts-delay"
+    type: "sql"
+    target: "carts"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "sql-orders-timeout"
+    type: "sql"
+    target: "orders"
+    enabled: false
+    errorChance: 0.15
+    errorMessage: "ERROR: query_timeout (simulated chaos)"
+    latencyMs: 1500
+
+  - name: "sql-order-items-delay"
+    type: "sql"
+    target: "order_items"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "sql-shipping-addresses-delay"
+    type: "sql"
+    target: "shipping_addresses"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  - name: "sql-transactions-timeout"
+    type: "sql"
+    target: "transactions"
+    enabled: false
+    errorChance: 0.15
+    errorMessage: "ERROR: query_timeout (simulated chaos)"
+    latencyMs: 1500
+
+  - name: "sql-reviews-delay"
+    type: "sql"
+    target: "reviews"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "sql-review-details-delay"
+    type: "sql"
+    target: "review_details"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  - name: "sql-merchant-business-info-delay"
+    type: "sql"
+    target: "merchant_business_information"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  - name: "sql-merchant-awards-delay"
+    type: "sql"
+    target: "merchant_certifications_and_awards"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  - name: "sql-merchant-policies-delay"
+    type: "sql"
+    target: "merchant_policies"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  - name: "sql-banners-delay"
+    type: "sql"
+    target: "banners"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "sql-sliders-delay"
+    type: "sql"
+    target: "sliders"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 800
+
+  - name: "sql-merchant-details-delay"
+    type: "sql"
+    target: "merchant_details"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  - name: "sql-merchant-social-links-delay"
+    type: "sql"
+    target: "merchant_social_media_links"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 600
+
+  # ═══════════════════════════════════════════════
+  # gRPC — Internal service-level chaos
+  # ═══════════════════════════════════════════════
+
+  # ── Auth ──────────────────────────────────────
+  - name: "grpc-auth-login-unavailable"
+    type: "grpc"
+    target: "pb.AuthService/LoginUser"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated gRPC unavailability for LoginUser"
+    latencyMs: 250
+
+  - name: "grpc-auth-register-timeout"
+    type: "grpc"
+    target: "pb.AuthService/RegisterUser"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "DEADLINE_EXCEEDED"
+    errorMessage: "Simulated gRPC deadline exceeded for RegisterUser"
+    latencyMs: 3000
+
+  - name: "grpc-auth-verify-delay"
+    type: "grpc"
+    target: "pb.AuthService/VerifyCode"
+    enabled: false
+    errorChance: 0.15
+    grpcStatus: "DEADLINE_EXCEEDED"
+    errorMessage: "Simulated gRPC delay for email verification"
+    latencyMs: 2000
+
+  - name: "grpc-auth-forgot-password-delay"
+    type: "grpc"
+    target: "pb.AuthService/ForgotPassword"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 2000
+
+  - name: "grpc-auth-refresh-error"
+    type: "grpc"
+    target: "pb.AuthService/RefreshToken"
+    enabled: false
+    errorChance: 0.15
+    grpcStatus: "UNAUTHORIZED"
+    errorMessage: "Simulated token refresh failure"
+    latencyMs: 500
+
+  - name: "grpc-auth-getme-timeout"
+    type: "grpc"
+    target: "pb.AuthService/GetMe"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 2500
+
+  # ── User ──────────────────────────────────────
+  - name: "grpc-user-query-unavailable"
+    type: "grpc"
+    target: "pb.UserQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated gRPC unavailability for UserQuery"
+    latencyMs: 200
+
+  - name: "grpc-user-query-by-id-delay"
+    type: "grpc"
+    target: "pb.UserQueryService/FindById"
+    enabled: false
+    errorChance: 0.15
+    latencyMs: 800
+
+  - name: "grpc-user-command-create-error"
+    type: "grpc"
+    target: "pb.UserCommandService/Create"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated user creation failure"
+    latencyMs: 500
+
+  - name: "grpc-user-command-update-error"
+    type: "grpc"
+    target: "pb.UserCommandService/Update"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated user update failure"
+    latencyMs: 500
+
+  # ── Role ──────────────────────────────────────
+  - name: "grpc-role-query-delay"
+    type: "grpc"
+    target: "pb.RoleQueryService/FindAllRole"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated role query unavailability"
+    latencyMs: 800
+
+  - name: "grpc-role-command-create-error"
+    type: "grpc"
+    target: "pb.RoleCommandService/CreateRole"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated role creation failure"
+    latencyMs: 500
+
+  - name: "grpc-role-assign-error"
+    type: "grpc"
+    target: "pb.RoleCommandService/AssignRoleToUser"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated role assignment failure"
+    latencyMs: 500
+
+  # ── Merchant ──────────────────────────────────
+  - name: "grpc-merchant-query-unavailable"
+    type: "grpc"
+    target: "pb.MerchantQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated merchant query unavailability"
+    latencyMs: 300
+
+  - name: "grpc-merchant-command-create-error"
+    type: "grpc"
+    target: "pb.MerchantCommandService/Create"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated merchant creation failure"
+    latencyMs: 500
+
+  - name: "grpc-merchant-update-status-delay"
+    type: "grpc"
+    target: "pb.MerchantCommandService/UpdateStatus"
+    enabled: false
+    errorChance: 0.2
+    latencyMs: 1000
+
+  # ── Product ───────────────────────────────────
+  - name: "grpc-product-query-delay"
+    type: "grpc"
+    target: "pb.ProductQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated product query unavailability"
+    latencyMs: 800
+
+  - name: "grpc-product-command-create-error"
+    type: "grpc"
+    target: "pb.ProductCommandService/Create"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated product creation failure"
+    latencyMs: 800
+
+  - name: "grpc-product-command-stock-error"
+    type: "grpc"
+    target: "pb.ProductCommandService/UpdateProductCountStock"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "ABORTED"
+    errorMessage: "Simulated stock update failure"
+    latencyMs: 500
+
+  # ── Category ──────────────────────────────────
+  - name: "grpc-category-query-delay"
+    type: "grpc"
+    target: "pb.CategoryQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated category query unavailability"
+    latencyMs: 800
+
+  - name: "grpc-category-command-create-error"
+    type: "grpc"
+    target: "pb.CategoryCommandService/Create"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated category creation failure"
+    latencyMs: 500
+
+  # ── Cart ──────────────────────────────────────
+  - name: "grpc-cart-query-delay"
+    type: "grpc"
+    target: "pb.CartQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated cart query unavailability"
+    latencyMs: 800
+
+  - name: "grpc-cart-command-create-error"
+    type: "grpc"
+    target: "pb.CartCommandService/Create"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated cart add failure"
+    latencyMs: 500
+
+  - name: "grpc-cart-command-delete-error"
+    type: "grpc"
+    target: "pb.CartCommandService/Delete"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated cart delete failure"
+    latencyMs: 400
+
+  # ── Order ─────────────────────────────────────
+  - name: "grpc-order-command-create-error"
+    type: "grpc"
+    target: "pb.OrderCommandService/Create"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "ABORTED"
+    errorMessage: "Simulated order creation aborted"
+    latencyMs: 800
+
+  - name: "grpc-order-query-delay"
+    type: "grpc"
+    target: "pb.OrderQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated order query unavailability"
+    latencyMs: 1000
+
+  - name: "grpc-order-update-total-price-error"
+    type: "grpc"
+    target: "pb.OrderCommandService/UpdateTotalPrice"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated order total price update failure"
+    latencyMs: 600
+
+  # ── Order Item ────────────────────────────────
+  - name: "grpc-order-item-create-error"
+    type: "grpc"
+    target: "pb.OrderItemCommandService/CreateOrderItem"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated order item creation failure"
+    latencyMs: 500
+
+  - name: "grpc-order-item-calculate-price-error"
+    type: "grpc"
+    target: "pb.OrderItemCommandService/CalculateTotalPrice"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated order item price calculation failure"
+    latencyMs: 600
+
+  # ── Shipping Address ──────────────────────────
+  - name: "grpc-shipping-create-error"
+    type: "grpc"
+    target: "pb.ShippingCommandService/CreateShipping"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "INTERNAL"
+    errorMessage: "Simulated shipping address creation failure"
+    latencyMs: 600
+
+  - name: "grpc-shipping-query-delay"
+    type: "grpc"
+    target: "pb.ShippingQueryService/FindAll"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated shipping query unavailability"
+    latencyMs: 800
+
+  # ── Transaction ───────────────────────────────
+  - name: "grpc-transaction-create-error"
+    type: "grpc"
+    target: "pb.TransactionCommandService/Create"
+    enabled: false
+    errorChance: 0.25
+    grpcStatus: "ABORTED"
+    errorMessage: "Simulated transaction creation aborted"
+    latencyMs: 800
+
+  - name: "grpc-transaction-query-delay"
+    type: "grpc"
+    target: "pb.TransactionQueryService/FindAllTransactions"
+    enabled: false
+    errorChance: 0.2
+    grpcStatus: "UNAVAILABLE"
+    errorMessage: "Simulated transaction query unavailability"
+
+  # ═══════════════════════════════════════════════
+  # Kafka — Event/messaging chaos per module
+  # ═══════════════════════════════════════════════
+
+  # ── Auth Kafka ────────────────────────────────
+  - name: "kafka-auth-register-error"
+    type: "kafka"
+    target: "email-service-topic-auth-register"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for auth register"
+    latencyMs: 500
+
+  - name: "kafka-auth-register-drop"
+    type: "kafka"
+    target: "email-service-topic-auth-register"
+    enabled: false
+    errorChance: 0.1
+    dropMessage: true
+    rejectMessage: false
+    latencyMs: 0
+
+  - name: "kafka-auth-forgot-password-error"
+    type: "kafka"
+    target: "email-service-topic-auth-forgot-password"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for forgot password"
+    latencyMs: 500
+
+  - name: "kafka-auth-verify-code-error"
+    type: "kafka"
+    target: "email-service-topic-auth-verify-code-success"
+    enabled: false
+    errorChance: 0.15
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for verify code"
+    latencyMs: 500
+
+  - name: "kafka-auth-verify-code-drop"
+    type: "kafka"
+    target: "email-service-topic-auth-verify-code-success"
+    enabled: false
+    errorChance: 0.1
+    dropMessage: true
+    rejectMessage: false
+    latencyMs: 0
+
+  # ── Merchant Kafka ────────────────────────────
+  - name: "kafka-merchant-create-error"
+    type: "kafka"
+    target: "email-service-topic-merchant-create"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for merchant create"
+    latencyMs: 500
+
+  - name: "kafka-merchant-create-drop"
+    type: "kafka"
+    target: "email-service-topic-merchant-create"
+    enabled: false
+    errorChance: 0.1
+    dropMessage: true
+    rejectMessage: false
+    latencyMs: 0
+
+  - name: "kafka-merchant-update-status-error"
+    type: "kafka"
+    target: "email-service-topic-merchant-update-status"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for merchant update status"
+    latencyMs: 500
+
+  - name: "kafka-merchant-document-create-error"
+    type: "kafka"
+    target: "email-service-topic-merchant-document-create"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for merchant document create"
+    latencyMs: 500
+
+  - name: "kafka-merchant-document-update-status-error"
+    type: "kafka"
+    target: "email-service-topic-merchant-document-update-status"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for merchant document update status"
+    latencyMs: 500
+
+  # ── Transaction Kafka ─────────────────────────
+  - name: "kafka-transaction-create-error"
+    type: "kafka"
+    target: "email-service-topic-transaction-create"
+    enabled: false
+    errorChance: 0.2
+    dropMessage: false
+    rejectMessage: true
+    errorMessage: "Simulated Kafka rejection for transaction create"
+    latencyMs: 500
+
+  - name: "kafka-transaction-create-drop"
+    type: "kafka"
+    target: "email-service-topic-transaction-create"
+    enabled: false
+    errorChance: 0.1
+    dropMessage: true
+    rejectMessage: false
+    latencyMs: 0

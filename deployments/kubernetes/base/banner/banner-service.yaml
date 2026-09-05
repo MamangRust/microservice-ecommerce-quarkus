@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: banner
+  namespace: ecommerce
+spec:
+  selector:
+    app: banner
+  ports:
+    - name: http
+      port: 8093
+      targetPort: 8093
+    - name: grpc
+      port: 9013
+      targetPort: 9013
+  type: ClusterIP

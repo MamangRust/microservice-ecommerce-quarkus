@@ -1,0 +1,24 @@
+-- Create products table
+CREATE TABLE IF NOT EXISTS "products" (
+    "id" BIGINT PRIMARY KEY,
+    "merchant_id" BIGINT NOT NULL REFERENCES "merchants" ("id") ON DELETE CASCADE,
+    "category_id" BIGINT NOT NULL REFERENCES "categories" ("id") ON DELETE CASCADE,
+    "name" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "price" INT NOT NULL,
+    "count_in_stock" INT NOT NULL DEFAULT 0,
+    "brand" VARCHAR(100),
+    "weight" INT,
+    "rating" FLOAT DEFAULT 0.0,
+    "slug_product" VARCHAR(100) UNIQUE,
+    "image_product" TEXT,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP DEFAULT NULL
+);
+
+CREATE INDEX "idx_products_merchant_id" ON "products" ("merchant_id");
+CREATE INDEX "idx_products_category_id" ON "products" ("category_id");
+CREATE INDEX "idx_products_slug" ON "products" ("slug_product");
+CREATE INDEX "idx_products_price" ON "products" ("price");
+CREATE INDEX "idx_products_created_at" ON "products" ("created_at");

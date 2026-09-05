@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package pb.category;
+
+import "category/category_common.proto";
+
+option go_package = "github.com/MamangRust/monolith-ecommerce-shared/pb";
+
+message FindAllCategoryRequest {
+    int32 page = 1;
+    int32 page_size = 2;
+    string search = 3;
+}
+
+service CategoryQueryService {
+    rpc FindAll(FindAllCategoryRequest) returns (ApiResponsePaginationCategory);
+    rpc FindById(FindByIdCategoryRequest) returns (ApiResponseCategory);
+
+    rpc FindByActive(FindAllCategoryRequest) returns (ApiResponsePaginationCategoryDeleteAt);
+    rpc FindByTrashed(FindAllCategoryRequest) returns (ApiResponsePaginationCategoryDeleteAt);
+}

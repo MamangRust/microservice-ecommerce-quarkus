@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: ecommerce
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 10s
+      evaluation_interval: 10s
+
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets: ['alertmanager.ecommerce.svc.cluster.local:9093']
+
+    rule_files:
+      - /etc/prometheus/rules/*.yaml
+
+    scrape_configs:
+      # Application metrics arrive here via OTLP from the Quarkus services
+      # (quarkus-opentelemetry -> otel-collector -> prometheus exporter, prefix
+      # `java_app_`). No per-service /metrics scrape jobs exist: the services
+      # are gRPC-only and do not expose Prometheus /metrics endpoints.
+      - job_name: 'otel-collector'
+        static_configs:
+          - targets: ['otel-collector.ecommerce.svc.cluster.local:8889']
+
+      - job_name: 'kafka-exporter'
+        static_configs:
+          - targets: ['kafka-exporter.ecommerce.svc.cluster.local:9308']
+
+      - job_name: 'node-exporter'
+        static_configs:
+          - targets: ['node-exporter.ecommerce.svc.cluster.local:9100']

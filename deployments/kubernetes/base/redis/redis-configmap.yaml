@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: ecommerce
+data:
+  redis.conf: |
+    port 6379
+    appendonly yes
+    protected-mode yes
+    bind 0.0.0.0
+    requirepass dragon_knight

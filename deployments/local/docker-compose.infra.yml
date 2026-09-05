@@ -1,0 +1,110 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ecommerce-postgres
+    environment:
+      POSTGRES_USER: DRAGON
+      POSTGRES_PASSWORD: DRAGON
+      POSTGRES_DB: PAYMENT_GATEWAY
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      - postgres
+      - -c
+      - max_connections=1000
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - effective_cache_size=6GB
+      - -c
+      - maintenance_work_mem=256MB
+      - -c
+      - work_mem=16MB
+      - -c
+      - wal_buffers=16MB
+      - -c
+      - max_parallel_workers_per_gather=4
+      - -c
+      - max_parallel_workers=8
+      - -c
+      - idle_in_transaction_session_timeout=60000
+      - -c
+      - statement_timeout=30000
+    ports:
+      - "5432:5432"
+    volumes:
+      - ecommerce_postgres_data:/var/lib/postgresql/data
+    networks: [ecommerce_net]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U DRAGON -d PAYMENT_GATEWAY"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.4
+    container_name: ecommerce-redis
+    command: redis-server --port 6379 --requirepass dragon_knight --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - ecommerce_redis_data:/data
+    networks: [ecommerce_net]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "dragon_knight", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: ecommerce-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      KAFKA_CLUSTER_ID: ecommerce-kraft-01
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    networks: [ecommerce_net]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    container_name: ecommerce-clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    networks: [ecommerce_net]
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8123/ping || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  ecommerce_postgres_data:
+  ecommerce_redis_data:
+
+networks:
+  ecommerce_net:
+    driver: bridge

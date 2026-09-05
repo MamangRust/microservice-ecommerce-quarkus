@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package pb.role;
+
+import "role/role_common.proto";
+
+option go_package = "github.com/MamangRust/monolith-ecommerce-shared/pb";
+
+message FindAllRoleRequest {
+    int32 page = 1;
+    int32 page_size = 2;
+    string search = 3;
+}
+
+message FindByIdUserRoleRequest{
+    int32 user_id = 1;
+}
+
+message FindByNameRoleRequest {
+    string name = 1;
+}
+
+service RoleQueryService {
+    rpc FindAllRole(FindAllRoleRequest) returns(ApiResponsePaginationRole);
+    rpc FindByIdRole(FindByIdRoleRequest) returns(ApiResponseRole);
+    rpc FindByNameRole(FindByNameRoleRequest) returns(ApiResponseRole);
+
+    rpc FindByActive(FindAllRoleRequest) returns(ApiResponsePaginationRoleDeleteAt);
+    rpc FindByTrashed(FindAllRoleRequest) returns(ApiResponsePaginationRoleDeleteAt);
+
+    rpc FindByUserId(FindByIdUserRoleRequest) returns(ApiResponsesRole);
+}

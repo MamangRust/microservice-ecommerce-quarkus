@@ -1,0 +1,15 @@
+global:
+  smtp_smarthost: '${SMTP_SERVER}:${SMTP_PORT}'
+  smtp_from: '${SMTP_USER}'
+  smtp_auth_username: '${SMTP_USER}'
+  smtp_auth_password: '${SMTP_PASS}'
+  smtp_require_tls: true
+
+route:
+  receiver: 'email-notifications'
+
+receivers:
+  - name: 'email-notifications'
+    email_configs:
+      - to: 'jerrell.wiegand83@ethereal.email'
+        send_resolved: true

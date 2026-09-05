@@ -1,0 +1,59 @@
+package com.sanedge.product.repository;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import com.sanedge.product.entity.ProductOutbox;
+import io.quarkus.hibernate.reactive.panache.PanacheRepository;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
+import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class ProductOutboxRepository implements PanacheRepository<ProductOutbox> {
+
+    @WithTransaction
+    public Uni<Long> countPending() {
+        return count("status = 'PENDING'");
+    }
+
+    @WithTransaction
+    public Uni<List<ProductOutbox>> findDue(int limit) {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        Timestamp leaseCutoff = Timestamp.valueOf(LocalDateTime.now().minusSeconds(300));
+        return find("status = 'PENDING' AND (nextAttemptAt IS NULL OR nextAttemptAt <= ?1) "
+                + "AND (claimedAt IS NULL OR claimedAt < ?2) ORDER BY createdAt", now, leaseCutoff)
+                .page(0, limit)
+                .list();
+    }
+
+    @WithTransaction
+    public Uni<ProductOutbox> claim(ProductOutbox event) {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        Timestamp leaseCutoff = Timestamp.valueOf(LocalDateTime.now().minusSeconds(300));
+        String claimToken = UUID.randomUUID().toString();
+        return update("claimedAt = ?1, claimToken = ?2, attempts = attempts + 1 "
+                + "WHERE id = ?3 AND status = 'PENDING' "
+                + "AND (claimedAt IS NULL OR claimedAt < ?4) "
+                + "AND (nextAttemptAt IS NULL OR nextAttemptAt <= ?1)", now, claimToken, event.id, leaseCutoff)
+                .chain(updated -> updated > 0 ? findById(event.id) : Uni.createFrom().nullItem());
+    }
+
+    @WithTransaction
+    public Uni<Void> markSent(ProductOutbox event) {
+        return update("status = 'SENT', claimedAt = NULL, lastError = NULL "
+                + "WHERE id = ?1 AND status = 'PENDING' AND claimToken = ?2", event.id, event.getClaimToken())
+                .replaceWithVoid();
+    }
+
+    @WithTransaction
+    public Uni<Void> markRetry(ProductOutbox event, Throwable failure, long delaySeconds) {
+        return update("status = 'PENDING', claimedAt = NULL, lastError = ?1, nextAttemptAt = ?2 "
+                + "WHERE id = ?3 AND status = 'PENDING' AND claimToken = ?4",
+                failure == null ? "unknown failure" : failure.getMessage(),
+                Timestamp.valueOf(LocalDateTime.now().plusSeconds(delaySeconds)), event.id, event.getClaimToken())
+                .replaceWithVoid();
+    }
+}

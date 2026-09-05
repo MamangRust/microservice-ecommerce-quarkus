@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package pb.category.stats;
+
+import "category/category_common.proto";
+
+option go_package = "github.com/MamangRust/monolith-ecommerce-shared/pb";
+
+service CategoryPriceService {
+    rpc FindMonthPrice(FindYearCategory) returns(ApiResponseCategoryMonthPrice);
+    rpc FindYearPrice(FindYearCategory) returns(ApiResponseCategoryYearPrice);
+}
+
+service CategoryPriceByIdService{
+    rpc FindMonthPriceById(FindYearCategoryById) returns(ApiResponseCategoryMonthPrice);
+    rpc FindYearPriceById(FindYearCategoryById) returns(ApiResponseCategoryYearPrice);
+}
+
+service CategoryPriceByMerchant{
+    rpc FindMonthPriceByMerchant(FindYearCategoryByMerchant) returns(ApiResponseCategoryMonthPrice);
+    rpc FindYearPriceByMerchant(FindYearCategoryByMerchant) returns(ApiResponseCategoryYearPrice);
+
+}

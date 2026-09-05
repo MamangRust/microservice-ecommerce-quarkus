@@ -1,0 +1,45 @@
+package com.sanedge.merchant_detail.entity;
+
+import java.sql.Timestamp;
+
+import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@MappedSuperclass
+public class BaseModel extends PanacheEntityBase {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
+
+    @Column(name = "deleted_at")
+    private Timestamp deletedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+}
