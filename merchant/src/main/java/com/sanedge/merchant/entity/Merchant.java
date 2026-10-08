@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "merchants", schema = "ecommerce_merchant")
+@Table(name = "merchants")
 public class Merchant extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

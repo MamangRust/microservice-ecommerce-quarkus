@@ -1,0 +1,5 @@
+{"level":"debug","ts":"2026-08-21T17:30:19.261+0700","caller":"clickhouse/connect.go:96","msg":"ClickHouse connection established successfully","addr":"localhost:9000"}
+{"level":"fatal","ts":"2026-08-21T17:30:19.262+0700","caller":"cmd/main.go:56","msg":"Failed to listen","error":"listen tcp :{"level":"error","ts":"2026-08-21T18:20:50.613+0700","caller":"handler/order_handler.go:27","msg":"FindMonthlyTotalRevenue failed","error":"code: 516, message: dragon: Authentication failed: password is incorrect, or there is no user with such name."}
+{"level":"error","ts":"2026-08-21T18:21:54.646+0700","caller":"handler/order_handler.go:27","msg":"FindMonthlyTotalRevenue failed","error":"code: 81, message: Database ecommerce does not exist"}
+{"level":"error","ts":"2026-08-21T18:22:19.067+0700","caller":"handler/order_handler.go:27","msg":"FindMonthlyTotalRevenue failed","error":"code: 81, message: Database ecommerce does not exist"}
+{"level":"info","ts":"2026-08-21T18:25:04.246+0700","caller":"cmd/main.go:71","msg":"Shutting down Stats Reader..."}

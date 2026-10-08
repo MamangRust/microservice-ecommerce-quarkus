@@ -17,6 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.sanedge.common.adapter.role.RolePort;
+import com.sanedge.common.adapter.user_role.UserRolePort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.InvalidRequestException;
@@ -33,8 +35,6 @@ import com.sanedge.user.repository.UserRepository;
 
 import io.opentelemetry.api.common.Attributes;
 import io.smallrye.mutiny.Uni;
-import pb.role.RoleCommandService;
-import pb.role.RoleQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class UserCommandServiceImplTest {
@@ -52,10 +52,10 @@ class UserCommandServiceImplTest {
     private TracingMetrics tracingMetrics;
 
     @Mock
-    private RoleQueryService roleQueryService;
+    private RolePort rolePort;
 
     @Mock
-    private RoleCommandService roleCommandService;
+    private UserRolePort userRolePort;
 
     private UserCommandServiceImpl userCommandService;
 
@@ -65,20 +65,9 @@ class UserCommandServiceImplTest {
                 userRepository,
                 passwordUtil,
                 redisService,
-                tracingMetrics);
-
-        try {
-            java.lang.reflect.Field roleQueryField = UserCommandServiceImpl.class.getDeclaredField("roleQueryService");
-            roleQueryField.setAccessible(true);
-            roleQueryField.set(userCommandService, roleQueryService);
-
-            java.lang.reflect.Field roleCommandField = UserCommandServiceImpl.class
-                    .getDeclaredField("roleCommandService");
-            roleCommandField.setAccessible(true);
-            roleCommandField.set(userCommandService, roleCommandService);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                tracingMetrics,
+                rolePort,
+                userRolePort);
 
         lenient().doAnswer(invocation -> {
             Supplier<Uni<?>> supplier = invocation.getArgument(3);
@@ -159,20 +148,6 @@ class UserCommandServiceImplTest {
         request.setEmail("newuser@example.com");
         request.setFirstname("John");
         request.setLastname("Doe");
-
-        pb.role.RoleQuery.FindByNameRoleRequest requestProto = pb.role.RoleQuery.FindByNameRoleRequest.newBuilder()
-                .setName("ROLE_ADMIN")
-                .build();
-        pb.role.RoleCommon.ApiResponseRole responseProto = pb.role.RoleCommon.ApiResponseRole.newBuilder()
-                .setStatus("success")
-                .setMessage("Role found")
-                .setData(pb.role.RoleCommon.RoleResponse.newBuilder()
-                        .setId(1)
-                        .setName("ROLE_ADMIN")
-                        .build())
-                .build();
-
-        lenient().when(roleQueryService.findByNameRole(requestProto)).thenReturn(Uni.createFrom().item(responseProto));
 
         lenient().when(userRepository.persist(any(User.class))).thenAnswer(invocation -> {
             User userToPersist = invocation.getArgument(0);

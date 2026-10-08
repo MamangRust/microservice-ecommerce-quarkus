@@ -1,0 +1,62 @@
+2026/08/21 17:30:18 Go runtime metrics collection started
+2026/08/21 17:30:18 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:18 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.183+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_MERCHANT_DETAIL","dbname":"merchant_detail_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.184+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"merchant_detail_db","prefix":"DB_MERCHANT_DETAIL"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250213033320
+{"level":"info","ts":"2026-08-21T17:30:19.399+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.419+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50067,"address":"[::]:50067"}
+2026/08/21 17:30:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.423+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.6 MB"}
+2026/08/21 17:30:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.426+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.5 MB"}
+{"level":"info","ts":"2026-08-21T17:31:22.971+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailCommandService/Create","request_id":"req_1787308282970599656_LWXMthrl","duration":"720.316µs","error":"rpc error: code = InvalidArgument desc = Validation failed: invalid create merchant detail request"}
+{"level":"info","ts":"2026-08-21T17:31:22.975+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:22.985+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted all merchant details permanently"}
+{"level":"info","ts":"2026-08-21T17:31:22.986+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailCommandService/DeleteAllMerchantDetailPermanent","request_id":"req_1787308282975444224_Br2NyQ68","duration":"11.300964ms"}
+{"level":"info","ts":"2026-08-21T17:31:22.993+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:23.010+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted merchant detail permanently","merchantDetailID":1}
+{"level":"info","ts":"2026-08-21T17:31:23.011+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailCommandService/DeleteMerchantDetailPermanent","request_id":"req_1787308282993312936_f0pi4u7A","duration":"17.667031ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.015+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:23.016+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all merchant details"}
+{"level":"info","ts":"2026-08-21T17:31:23.017+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailCommandService/RestoreAllMerchantDetail","request_id":"req_1787308283015489711_mGZQW8Tb","duration":"1.817264ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.021+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:23.024+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"03b0e9129fc7c20b975910348388c509","status_code":404,"merchantDetailID":1,"error":"[NOT_FOUND] merchant detail not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.025+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailCommandService/RestoreMerchantDetail","request_id":"req_1787308283021092439_VWgvVwzH","duration":"4.653999ms","error":"rpc error: code = NotFound desc = merchant detail not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.029+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"error","ts":"2026-08-21T17:31:23.030+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Trash","trace.id":"d278131cb0a4197f07bec1d402f131f6","status_code":404,"merchantDetailID":1,"error":"[NOT_FOUND] merchant detail not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.031+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailCommandService/TrashedMerchantDetail","request_id":"req_1787308283029243002_Gfu3p5fh","duration":"2.211468ms","error":"rpc error: code = NotFound desc = merchant detail not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.038+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:23.050+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"merchant_detail:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:23.051+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchants","total":7}
+{"level":"info","ts":"2026-08-21T17:31:23.051+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailQueryService/FindAll","request_id":"req_1787308283038836217_pyVOGtzy","duration":"12.778982ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.065+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:23.074+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"merchant_detail:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:23.074+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active merchants","total":7}
+{"level":"info","ts":"2026-08-21T17:31:23.074+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailQueryService/FindByActive","request_id":"req_1787308283064926418_50xcnofk","duration":"9.735044ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.086+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:23.098+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"merchant_detail:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:23.099+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed merchants","total":0}
+{"level":"info","ts":"2026-08-21T17:31:23.099+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailQueryService/FindByTrashed","request_id":"req_1787308283086780433_ZiVeK5He","duration":"12.526917ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.111+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:23.119+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"70a0a0aad11864d1dec61d30923cf954","status_code":404,"merchantID":1,"error":"[NOT_FOUND] merchant detail not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.119+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantDetailQueryService/FindById","request_id":"req_1787308283111581708_0VdOPTuj","duration":"8.044541ms","error":"rpc error: code = NotFound desc = merchant detail not found"}
+2026/08/21 17:31:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.467+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"1.8 MB"}
+2026/08/21 17:31:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.461+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":1,"total_keys":182,"hit_rate":62.295081967213115,"memory_used":"2.1 MB"}
+2026/08/21 17:32:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:45.215+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:45.216+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:45.218+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:45.227+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:45.227+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:45.227+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:45.228+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:55 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:55.673+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:55.673+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

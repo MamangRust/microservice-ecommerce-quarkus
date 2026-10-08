@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sanedge.common.adapter.role.RolePort;
+import com.sanedge.common.adapter.user_role.UserRolePort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.InvalidRequestException;
@@ -26,7 +28,6 @@ import com.sanedge.user.repository.UserRepository;
 import com.sanedge.user.service.UserCommandService;
 
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,20 +42,19 @@ public class UserCommandServiceImpl implements UserCommandService {
         PasswordUtil passwordUtil;
         RedisService redisService;
         TracingMetrics tracingMetrics;
-
-        @GrpcClient("role")
-        pb.role.RoleQueryService roleQueryService;
-
-        @GrpcClient("role")
-        pb.role.RoleCommandService roleCommandService;
+        RolePort rolePort;
+        UserRolePort userRolePort;
 
         @Inject
         public UserCommandServiceImpl(UserRepository userRepository,
-                        PasswordUtil passwordUtil, RedisService redisService, TracingMetrics tracingMetrics) {
+                        PasswordUtil passwordUtil, RedisService redisService, TracingMetrics tracingMetrics,
+                        RolePort rolePort, UserRolePort userRolePort) {
                 this.userRepository = userRepository;
                 this.passwordUtil = passwordUtil;
                 this.redisService = redisService;
                 this.tracingMetrics = tracingMetrics;
+                this.rolePort = rolePort;
+                this.userRolePort = userRolePort;
         }
 
         @Override
@@ -136,17 +136,12 @@ public class UserCommandServiceImpl implements UserCommandService {
                                                                                                 return Uni.createFrom()
                                                                                                                 .item(user);
                                                                                         }
-                                                                                        List<Uni<pb.role.RoleCommon.ApiResponseUserRole>> assignUnis = rolesToAssign
+                                                                                        List<Uni<com.sanedge.common.adapter.model.UserRole>> assignUnis = rolesToAssign
                                                                                                         .stream()
-                                                                                                        .map(role -> roleCommandService
+                                                                                                        .map(role -> userRolePort
                                                                                                                         .assignRoleToUser(
-                                                                                                                                        pb.role.RoleCommon.AssignRoleToUserRequest
-                                                                                                                                                        .newBuilder()
-                                                                                                                                                        .setUserId(user.id
-                                                                                                                                                                        .intValue())
-                                                                                                                                                        .setRoleId(role.id
-                                                                                                                                                                        .intValue())
-                                                                                                                                                        .build()))
+                                                                                                                                        user.id.intValue(),
+                                                                                                                                        role.id.intValue()))
                                                                                                         .collect(Collectors
                                                                                                                         .toList());
                                                                                         return Uni.join()
@@ -492,19 +487,12 @@ public class UserCommandServiceImpl implements UserCommandService {
         }
 
         private Uni<Role> resolveRoleViaGrpc(String roleName) {
-                return roleQueryService.findByNameRole(pb.role.RoleQuery.FindByNameRoleRequest.newBuilder()
-                                .setName(roleName)
-                                .build())
-                                .chain(response -> {
-                                        if (!response.hasData()) {
-                                                return Uni.createFrom().failure(new ResourceNotFoundException(
-                                                                "Role '" + roleName + "' not found in Role service"));
-                                        }
-                                        pb.role.RoleCommon.RoleResponse matchedRole = response.getData();
+                return rolePort.findByName(roleName)
+                                .map(matchedRole -> {
                                         Role role = new Role();
-                                        role.id = (long) matchedRole.getId();
-                                        role.setRoleName(matchedRole.getName());
-                                        return Uni.createFrom().item(role);
+                                        role.id = (long) matchedRole.id();
+                                        role.setRoleName(matchedRole.name());
+                                        return role;
                                 });
         }
 }

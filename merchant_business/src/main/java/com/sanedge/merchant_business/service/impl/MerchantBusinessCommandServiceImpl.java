@@ -20,7 +20,6 @@ import com.sanedge.merchant_business.service.MerchantBusinessCommandService;
 import com.sanedge.common.observability.TracingMetrics;
 
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +27,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-import pb.merchant.MerchantQueryService;
+import com.sanedge.common.adapter.merchant.MerchantPort;
 
 @ApplicationScoped
 public class MerchantBusinessCommandServiceImpl implements MerchantBusinessCommandService {
@@ -39,7 +38,7 @@ public class MerchantBusinessCommandServiceImpl implements MerchantBusinessComma
     private final Validator validator;
     private final RedisService redisService;
     private final TracingMetrics tracingMetrics;
-    private final MerchantQueryService merchantQueryService;
+    private final MerchantPort merchantPort;
 
     @Inject
     public MerchantBusinessCommandServiceImpl(MerchantBusinessCommandRepository merchantBusinessCommandRepository,
@@ -47,13 +46,13 @@ public class MerchantBusinessCommandServiceImpl implements MerchantBusinessComma
             Validator validator,
             RedisService redisService,
             TracingMetrics tracingMetrics,
-            @GrpcClient("merchant") MerchantQueryService merchantQueryService) {
+            MerchantPort merchantPort) {
         this.merchantBusinessCommandRepository = merchantBusinessCommandRepository;
         this.merchantBusinessQueryRepository = merchantBusinessQueryRepository;
         this.validator = validator;
         this.redisService = redisService;
         this.tracingMetrics = tracingMetrics;
-        this.merchantQueryService = merchantQueryService;
+        this.merchantPort = merchantPort;
     }
 
     private <T> void validateRequest(T req) {
@@ -88,18 +87,8 @@ public class MerchantBusinessCommandServiceImpl implements MerchantBusinessComma
         logger.info("Creating merchant business info for merchant ID: {}", req.getMerchantId());
 
         return tracingMetrics.traceAndMeasure("createMerchantBusiness", "create_business", attrs,
-                () -> merchantQueryService.findById(
-                        pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder()
-                                .setId(req.getMerchantId())
-                                .build())
-                        .chain(merchantResponse -> {
-                            if (merchantResponse == null || !merchantResponse.hasData()
-                                    || merchantResponse.getData().getId() == 0) {
-                                logger.warn("Merchant not found with id {}", req.getMerchantId());
-                                throw new ResourceNotFoundException(
-                                        "Merchant not found with id " + req.getMerchantId());
-                            }
-
+                () -> merchantPort.findById(req.getMerchantId())
+                        .chain(merchant -> {
                             MerchantBusinessInformation business = MerchantBusinessInformation.fromCreateRequest(req);
                             return merchantBusinessCommandRepository.persist(business)
                                     .chain(saved -> {

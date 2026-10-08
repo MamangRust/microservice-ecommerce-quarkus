@@ -1,0 +1,61 @@
+2026/08/21 17:30:18 Go runtime metrics collection started
+2026/08/21 17:30:18 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:18 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.266+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_MERCHANT_POLICY","dbname":"merchant_policy_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.282+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"merchant_policy_db","prefix":"DB_MERCHANT_POLICY"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250213033316
+{"level":"info","ts":"2026-08-21T17:30:19.563+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.573+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50068,"address":"[::]:50068"}
+2026/08/21 17:30:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.581+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.8 MB"}
+2026/08/21 17:30:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.570+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.6 MB"}
+{"level":"info","ts":"2026-08-21T17:31:23.236+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:23.247+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted all merchant policies"}
+{"level":"info","ts":"2026-08-21T17:31:23.248+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyCommandService/DeleteAllMerchantPoliciesPermanent","request_id":"req_1787308283236752742_o5XCQSuZ","duration":"11.935698ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.253+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:23.258+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted merchant policy","merchantPolicy_id":1}
+{"level":"info","ts":"2026-08-21T17:31:23.258+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyCommandService/DeleteMerchantPoliciesPermanent","request_id":"req_1787308283253313428_YXAxadK9","duration":"5.370065ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.262+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:23.263+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all merchant policies"}
+{"level":"info","ts":"2026-08-21T17:31:23.264+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyCommandService/RestoreAllMerchantPolicies","request_id":"req_1787308283262677421_ONj0lrbT","duration":"1.495305ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.268+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:23.270+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"3ce71a95bc516dbcd5a96eb56c199764","status_code":404,"merchantPolicy_id":1,"error":"[NOT_FOUND] merchant policy not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.271+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyCommandService/RestoreMerchantPolicies","request_id":"req_1787308283268289433_W2Ud64ES","duration":"3.339903ms","error":"rpc error: code = NotFound desc = merchant policy not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.275+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:23.280+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed merchant policy","merchantPolicy_id":1}
+{"level":"info","ts":"2026-08-21T17:31:23.280+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyCommandService/TrashedMerchantPolicies","request_id":"req_1787308283275100275_PyjGc5MJ","duration":"5.460697ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.288+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:23.296+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"merchant_policy:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:23.297+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all merchant policies"}
+{"level":"info","ts":"2026-08-21T17:31:23.297+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyQueryService/FindAll","request_id":"req_1787308283288337751_bUEVdLXO","duration":"9.020962ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.303+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByActive"}
+{"level":"debug","ts":"2026-08-21T17:31:23.313+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"merchant_policy:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:23.314+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active merchant policies"}
+{"level":"info","ts":"2026-08-21T17:31:23.314+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyQueryService/FindByActive","request_id":"req_1787308283303713916_jzH5wwbv","duration":"10.784345ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.323+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:23.336+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"merchant_policy:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:23.336+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed merchant policies"}
+{"level":"info","ts":"2026-08-21T17:31:23.337+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyQueryService/FindByTrashed","request_id":"req_1787308283322789876_3Pc900au","duration":"15.044949ms"}
+{"level":"info","ts":"2026-08-21T17:31:23.348+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:23.353+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"01bf227eb58f3d3a99ba28d9342068f1","status_code":404,"merchantPolicy_id":1,"error":"[NOT_FOUND] merchant policy not found"}
+{"level":"info","ts":"2026-08-21T17:31:23.354+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.MerchantPolicyQueryService/FindById","request_id":"req_1787308283347970618_P8qCMdnC","duration":"6.663118ms","error":"rpc error: code = NotFound desc = merchant policy not found"}
+2026/08/21 17:31:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.569+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"1.9 MB"}
+2026/08/21 17:31:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.585+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":182,"hit_rate":66.66666666666666,"memory_used":"2.3 MB"}
+2026/08/21 17:32:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:45.425+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:45.426+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:45.426+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:45.431+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:45.434+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:45.436+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:45.445+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:55 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:55.797+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:55.797+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

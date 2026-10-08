@@ -1,0 +1,87 @@
+2026/08/21 17:30:19 Go runtime metrics collection started
+2026/08/21 17:30:19 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:19 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.486+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_SLIDER","dbname":"slider_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.493+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"slider_db","prefix":"DB_SLIDER"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250213032318
+{"level":"info","ts":"2026-08-21T17:30:19.592+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.596+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50062,"address":"[::]:50062"}
+2026/08/21 17:30:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.603+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.9 MB"}
+2026/08/21 17:31:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.597+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.6 MB"}
+{"level":"info","ts":"2026-08-21T17:31:25.862+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:25.872+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.872+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted all trashed sliders"}
+{"level":"info","ts":"2026-08-21T17:31:25.873+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/DeleteAllSliderPermanent","request_id":"req_1787308285862065581_Bqz8QA95","duration":"10.944625ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.878+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:25.882+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.883+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted slider","sliderID":1}
+{"level":"info","ts":"2026-08-21T17:31:25.883+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/DeleteSliderPermanent","request_id":"req_1787308285878032699_hVoRdiM3","duration":"5.376181ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.888+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:25.890+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.890+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all trashed sliders"}
+{"level":"info","ts":"2026-08-21T17:31:25.890+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/RestoreAllSlider","request_id":"req_1787308285888004593_uGnmqmpi","duration":"2.81519ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.894+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:25.897+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"a6d22f997987bb86a1d8e6ecfc184cd8","status_code":404,"sliderID":1,"error":"[NOT_FOUND] slider not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.898+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/RestoreSlider","request_id":"req_1787308285894507822_6aIM2iAm","duration":"4.112918ms","error":"rpc error: code = NotFound desc = slider not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.903+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:25.909+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.909+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed slider","slider_id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.909+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/TrashedSlider","request_id":"req_1787308285902926332_EObXYR5r","duration":"6.982002ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.919+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:25.934+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"slider:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.934+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched sliders from repository","totalCount":9}
+{"level":"info","ts":"2026-08-21T17:31:25.934+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderQueryService/FindAll","request_id":"req_1787308285919866446_7DCMOxNn","duration":"14.959385ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.942+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:25.948+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"slider:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.948+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active sliders from repository","totalCount":9}
+{"level":"info","ts":"2026-08-21T17:31:25.949+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderQueryService/FindByActive","request_id":"req_1787308285942413975_Wk962GNM","duration":"7.207596ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.956+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:25.962+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"slider:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.962+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed sliders from repository","totalCount":1}
+{"level":"info","ts":"2026-08-21T17:31:25.963+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderQueryService/FindByTrashed","request_id":"req_1787308285955895072_Iy5YLa9x","duration":"7.379025ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.973+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:25.977+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"1af701bc95ad564f03b15f162c1eafa6","status_code":404,"slider_id":1,"error":"[NOT_FOUND] failed to find slider by ID"}
+{"level":"info","ts":"2026-08-21T17:31:25.978+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderQueryService/FindById","request_id":"req_1787308285973622342_h9tYOJYE","duration":"5.082976ms","error":"rpc error: code = NotFound desc = failed to find slider by ID"}
+2026/08/21 17:31:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:39 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:40 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.597+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"1.9 MB"}
+2026/08/21 17:32:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:02.940+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:32:02.952+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":3}
+{"level":"info","ts":"2026-08-21T17:32:02.952+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created slider","slider_id":11,"slider_name":"Hurl Slider hurl.slider.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:02.952+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/Create","request_id":"req_1787308322940532005_2wWajwDu","duration":"12.267032ms"}
+{"level":"info","ts":"2026-08-21T17:32:02.982+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:32:02.992+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"slider:id:11","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:32:02.993+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched slider by ID from repository","slider_id":11}
+{"level":"info","ts":"2026-08-21T17:32:02.993+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderQueryService/FindById","request_id":"req_1787308322982182130_7GW9Snp2","duration":"11.686302ms"}
+{"level":"info","ts":"2026-08-21T17:32:03.031+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Update"}
+{"level":"info","ts":"2026-08-21T17:32:03.043+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":1}
+{"level":"info","ts":"2026-08-21T17:32:03.044+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully updated slider","slider_id":11,"slider_name":"Hurl Slider Updated"}
+{"level":"info","ts":"2026-08-21T17:32:03.045+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/Update","request_id":"req_1787308323031485368_XPhwdGSg","duration":"13.876089ms"}
+{"level":"info","ts":"2026-08-21T17:32:03.052+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:32:03.055+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":0}
+{"level":"info","ts":"2026-08-21T17:32:03.056+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed slider","slider_id":11}
+{"level":"info","ts":"2026-08-21T17:32:03.056+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/TrashedSlider","request_id":"req_1787308323051939920_wF6bEfIH","duration":"4.502144ms"}
+{"level":"info","ts":"2026-08-21T17:32:03.064+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"info","ts":"2026-08-21T17:32:03.068+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"slider:*","count":0}
+{"level":"info","ts":"2026-08-21T17:32:03.068+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored slider","slider_id":11}
+{"level":"info","ts":"2026-08-21T17:32:03.068+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.SliderCommandService/RestoreSlider","request_id":"req_1787308323064430033_ZqCRPXlw","duration":"4.354761ms"}
+2026/08/21 17:32:13 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:14 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.606+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":182,"hit_rate":67.34279918864098,"memory_used":"2.4 MB"}
+2026/08/21 17:32:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:43.982+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:43.982+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:43.982+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:43.985+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:43.986+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:43.986+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:43.988+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:54 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:54.403+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:54.404+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

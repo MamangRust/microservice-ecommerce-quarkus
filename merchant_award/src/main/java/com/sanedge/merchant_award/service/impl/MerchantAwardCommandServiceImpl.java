@@ -17,12 +17,11 @@ import com.sanedge.merchant_award.service.MerchantAwardCommandService;
 import com.sanedge.common.observability.TracingMetrics;
 
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import pb.merchant.MerchantQueryService;
+import com.sanedge.common.adapter.merchant.MerchantPort;
 
 @ApplicationScoped
 public class MerchantAwardCommandServiceImpl implements MerchantAwardCommandService {
@@ -31,18 +30,18 @@ public class MerchantAwardCommandServiceImpl implements MerchantAwardCommandServ
     private final MerchantAwardCommandRepository merchantAwardCommandRepository;
     private final RedisService redisService;
     private final TracingMetrics tracingMetrics;
-    private final MerchantQueryService merchantQueryService;
+    private final MerchantPort merchantPort;
 
     @Inject
     public MerchantAwardCommandServiceImpl(
             MerchantAwardCommandRepository merchantAwardCommandRepository,
             RedisService redisService,
             TracingMetrics tracingMetrics,
-            @GrpcClient("merchant") MerchantQueryService merchantQueryService) {
+            MerchantPort merchantPort) {
         this.merchantAwardCommandRepository = merchantAwardCommandRepository;
         this.redisService = redisService;
         this.tracingMetrics = tracingMetrics;
-        this.merchantQueryService = merchantQueryService;
+        this.merchantPort = merchantPort;
     }
 
     private Uni<Void> invalidateCache(Long awardId) {
@@ -62,18 +61,8 @@ public class MerchantAwardCommandServiceImpl implements MerchantAwardCommandServ
         logger.info("Creating merchant award: {}", req.getTitle());
 
         return tracingMetrics.traceAndMeasure("createMerchantAward", "create_award", attrs,
-                () -> merchantQueryService.findById(
-                        pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder()
-                                .setId(req.getMerchantId())
-                                .build())
-                        .chain(merchantResponse -> {
-                            if (merchantResponse == null || !merchantResponse.hasData()
-                                    || merchantResponse.getData().getId() == 0) {
-                                logger.warn("Merchant not found with id {}", req.getMerchantId());
-                                throw new ResourceNotFoundException(
-                                        "Merchant not found with id " + req.getMerchantId());
-                            }
-
+                () -> merchantPort.findById(req.getMerchantId())
+                        .chain(merchant -> {
                             MerchantCertificationAndAward award = MerchantCertificationAndAward.fromCreateRequest(req);
                             return merchantAwardCommandRepository.persist(award)
                                     .chain(saved -> {

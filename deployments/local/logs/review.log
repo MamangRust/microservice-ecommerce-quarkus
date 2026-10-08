@@ -1,0 +1,92 @@
+2026/08/21 17:30:19 Go runtime metrics collection started
+2026/08/21 17:30:19 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:19 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.329+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_REVIEW","dbname":"review_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.330+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"review_db","prefix":"DB_REVIEW"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250213033313
+{"level":"info","ts":"2026-08-21T17:30:19.364+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.367+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50061,"address":"[::]:50061"}
+2026/08/21 17:30:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.374+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.5 MB"}
+2026/08/21 17:31:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.483+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.4 MB"}
+{"level":"info","ts":"2026-08-21T17:31:24.913+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"error","ts":"2026-08-21T17:31:24.940+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Create","trace.id":"4434fce3ed7841663a75db2654e4dfab","status_code":404,"product_id":0,"error":"[NOT_FOUND] product not found"}
+{"level":"info","ts":"2026-08-21T17:31:24.941+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/Create","request_id":"req_1787308284912601875_24qqcNem","duration":"28.78038ms","error":"rpc error: code = NotFound desc = product not found"}
+{"level":"info","ts":"2026-08-21T17:31:24.946+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:24.965+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted all reviews"}
+{"level":"info","ts":"2026-08-21T17:31:24.965+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/DeleteAllReviewPermanent","request_id":"req_1787308284946604908_JBGOjo9f","duration":"19.200919ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.982+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:25.025+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted review","review_id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.026+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/DeleteReviewPermanent","request_id":"req_1787308284981809761_NhJGmV24","duration":"44.942897ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.039+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:25.048+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all trashed reviews"}
+{"level":"info","ts":"2026-08-21T17:31:25.051+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/RestoreAllReview","request_id":"req_1787308285039493837_f7OTmvcW","duration":"11.747244ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.058+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:25.064+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"f8dc2f7096c4597509873627f6a0e227","status_code":404,"reviewID":1,"error":"[NOT_FOUND] review not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.065+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/RestoreReview","request_id":"req_1787308285058220901_sOu4Ofc1","duration":"7.450675ms","error":"rpc error: code = NotFound desc = review not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.073+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:25.090+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed review","review_id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.090+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/TrashedReview","request_id":"req_1787308285073094301_gBSKnzr3","duration":"17.215787ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.316+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:25.367+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.368+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all reviews","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.368+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindAll","request_id":"req_1787308285316737753_NxkCdhfd","duration":"51.722171ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.378+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:25.384+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.384+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active reviews","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.385+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindByActive","request_id":"req_1787308285378661143_G2CX0EMC","duration":"6.812973ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.391+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByMerchant"}
+{"level":"debug","ts":"2026-08-21T17:31:25.446+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:merchant:1:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.446+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchant reviews","totalRecords":0,"page":1,"pageSize":10,"merchantID":1}
+{"level":"info","ts":"2026-08-21T17:31:25.446+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindByMerchant","request_id":"req_1787308285391719164_yqZ2SjUs","duration":"55.070181ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.466+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByProduct"}
+{"level":"debug","ts":"2026-08-21T17:31:25.481+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:product:1:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.482+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product reviews","totalRecords":0,"page":1,"pageSize":10,"productID":1}
+{"level":"info","ts":"2026-08-21T17:31:25.484+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindByProduct","request_id":"req_1787308285465889903_8w5XPShP","duration":"18.326524ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.492+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:25.509+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.514+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed reviews","totalRecords":1,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.515+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindByTrashed","request_id":"req_1787308285492423199_jUA8tDM6","duration":"22.773248ms"}
+2026/08/21 17:31:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:39 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:40 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.403+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"1.8 MB"}
+2026/08/21 17:31:50 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:53.356+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:53.385+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created review","review_id":9,"user_id":19,"product_id":12}
+{"level":"info","ts":"2026-08-21T17:31:53.386+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/Create","request_id":"req_1787308313355973356_qy19KDgL","duration":"30.092938ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.397+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByProduct"}
+{"level":"debug","ts":"2026-08-21T17:31:53.404+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:product:12:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:53.405+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product reviews","totalRecords":0,"page":1,"pageSize":10,"productID":12}
+{"level":"info","ts":"2026-08-21T17:31:53.406+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindByProduct","request_id":"req_1787308313397190091_pb5l5tQT","duration":"9.103709ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.415+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByMerchant"}
+{"level":"debug","ts":"2026-08-21T17:31:53.436+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"review:merchant:13:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:53.437+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchant reviews","totalRecords":0,"page":1,"pageSize":10,"merchantID":13}
+{"level":"info","ts":"2026-08-21T17:31:53.439+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewQueryService/FindByMerchant","request_id":"req_1787308313414852920_dzyEMx1X","duration":"24.184329ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.450+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Update"}
+{"level":"info","ts":"2026-08-21T17:31:53.485+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully updated review","review_id":9}
+{"level":"info","ts":"2026-08-21T17:31:53.486+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/Update","request_id":"req_1787308313450073719_4xviSNCZ","duration":"35.905884ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.493+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:53.499+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed review","review_id":9}
+{"level":"info","ts":"2026-08-21T17:31:53.499+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/TrashedReview","request_id":"req_1787308313493539939_woFRe9w7","duration":"6.00111ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.513+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"info","ts":"2026-08-21T17:31:53.522+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored review","review_id":9}
+{"level":"info","ts":"2026-08-21T17:31:53.523+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ReviewCommandService/RestoreReview","request_id":"req_1787308313513676980_QvWGQFwP","duration":"9.369075ms"}
+2026/08/21 17:32:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:04 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:10 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.400+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":182,"hit_rate":60.5875152998776,"memory_used":"2.0 MB"}
+2026/08/21 17:32:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:43.742+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:43.742+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:43.742+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:43.761+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:43.764+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:43.764+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:43.766+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:54 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:54.014+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:54.015+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

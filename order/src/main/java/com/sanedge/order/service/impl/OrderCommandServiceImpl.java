@@ -7,6 +7,12 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sanedge.common.adapter.merchant.MerchantPort;
+import com.sanedge.common.adapter.order_item.OrderItemPort;
+import com.sanedge.common.adapter.product.ProductPort;
+import com.sanedge.common.adapter.shipping_address.ShippingAddressPort;
+import com.sanedge.common.adapter.transaction.TransactionPort;
+import com.sanedge.common.adapter.user.UserPort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.ResourceNotFoundException;
@@ -25,7 +31,6 @@ import com.sanedge.order.repository.OrderQueryRepository;
 import com.sanedge.order.service.OrderCommandService;
 
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
@@ -41,40 +46,22 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     private static final Logger logger = LoggerFactory.getLogger(OrderCommandServiceImpl.class);
 
     @Inject
-    @GrpcClient("merchant")
-    pb.merchant.MerchantQueryService merchantQueryService;
+    MerchantPort merchantPort;
 
     @Inject
-    @GrpcClient("user")
-    pb.user.UserQueryService userQueryService;
+    UserPort userPort;
 
     @Inject
-    @GrpcClient("product")
-    pb.product.ProductQueryService productQueryService;
+    ProductPort productPort;
 
     @Inject
-    @GrpcClient("product")
-    pb.product.ProductCommandService productCommandService;
+    OrderItemPort orderItemPort;
 
     @Inject
-    @GrpcClient("order_item")
-    pb.order_item.OrderItemCommandService orderItemCommandServiceGrpc;
+    TransactionPort transactionPort;
 
     @Inject
-    @GrpcClient("order_item")
-    pb.order_item.OrderItemQueryService orderItemQueryServiceGrpc;
-
-    @Inject
-    @GrpcClient("transaction")
-    pb.transaction.TransactionQueryService transactionQueryService;
-
-    @Inject
-    @GrpcClient("shipping_address")
-    pb.shipping_address.MutinyShippingCommandServiceGrpc.MutinyShippingCommandServiceStub shippingCommandService;
-
-    @Inject
-    @GrpcClient("shipping_address")
-    pb.shipping_address.MutinyShippingQueryServiceGrpc.MutinyShippingQueryServiceStub shippingQueryService;
+    ShippingAddressPort shippingAddressPort;
 
     private final OrderQueryRepository orderQueryRepository;
     private final OrderCommandRepository orderCommandRepository;
@@ -130,35 +117,21 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         }
 
         CreateOrderItemRequest itemReq = items.get(index);
-        return productQueryService
-                .findById(pb.product.ProductCommon.FindByIdProductRequest.newBuilder().setId(itemReq.getProductId())
-                        .build())
-                .chain(prodResponse -> {
-                    if (prodResponse == null || !prodResponse.hasData() || prodResponse.getData().getId() == 0) {
-                        throw new ResourceNotFoundException("Product not found with id=" + itemReq.getProductId());
-                    }
-                    pb.product.ProductCommon.ProductResponse product = prodResponse.getData();
-                    if (itemReq.getQuantity() <= 0 || product.getCountInStock() < itemReq.getQuantity()) {
+        return productPort.findById(itemReq.getProductId())
+                .chain(product -> {
+                    if (itemReq.getQuantity() <= 0 || product.countInStock() < itemReq.getQuantity()) {
                         throw new InvalidRequestException(
                                 "Insufficient stock or invalid quantity for product id=" + itemReq.getProductId());
                     }
 
-                    int authoritativePrice = product.getPrice();
-                    var createReq = pb.order_item.OrderItemCommand.CreateOrderItemRecordRequest.newBuilder()
-                            .setOrderId(order.id.intValue())
-                            .setProductId(itemReq.getProductId())
-                            .setQuantity(itemReq.getQuantity())
-                            .setPrice(authoritativePrice)
-                            .build();
+                    int authoritativePrice = product.price();
 
-                    return adjustStock(
-                            pb.product.ProductCommand.AdjustProductStockRequest.newBuilder()
-                                    .setProductId(itemReq.getProductId())
-                                    .setDelta(-itemReq.getQuantity())
-                                    .build())
+                    return productPort.adjustStock(itemReq.getProductId(), -itemReq.getQuantity())
                             .chain(stockResponse -> {
                                 reserved.add(itemReq);
-                                return orderItemCommandServiceGrpc.createOrderItem(createReq)
+                                return orderItemPort.create(new OrderItemPort.CreateData(
+                                        order.id.intValue(), itemReq.getProductId(), itemReq.getQuantity(),
+                                        authoritativePrice))
                                         .replaceWithVoid();
                             })
                             .chain(() -> processCreateOrderItemsInternal(items, order, index + 1,
@@ -168,9 +141,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
     private Uni<Void> rollbackCreatedOrder(Long orderId, List<CreateOrderItemRequest> reserved) {
         return compensateStock(reserved)
-                .chain(() -> orderItemCommandServiceGrpc.deleteOrderItemByOrderRollback(
-                        pb.order_item.OrderItemCommon.FindByIdOrderItemRequest.newBuilder()
-                                .setId(orderId.intValue()).build()))
+                .chain(() -> orderItemPort.deleteByOrderIdRollback(orderId.intValue()))
                 .replaceWithVoid();
     }
 
@@ -187,14 +158,6 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .chain(() -> Uni.createFrom().failure(original));
     }
 
-    private Uni<pb.product.ProductCommon.ApiResponseProduct> adjustStock(
-            pb.product.ProductCommand.AdjustProductStockRequest request) {
-        Uni<pb.product.ProductCommon.ApiResponseProduct> adjusted = productCommandService.adjustStock(request);
-        return adjusted != null
-                ? adjusted
-                : Uni.createFrom().item(pb.product.ProductCommon.ApiResponseProduct.getDefaultInstance());
-    }
-
     private Uni<Void> compensateStock(List<CreateOrderItemRequest> reserved) {
         if (reserved == null || reserved.isEmpty()) {
             return Uni.createFrom().voidItem();
@@ -202,11 +165,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         Uni<Void> compensation = Uni.createFrom().voidItem();
         for (int i = reserved.size() - 1; i >= 0; i--) {
             CreateOrderItemRequest item = reserved.get(i);
-            compensation = compensation.chain(() -> adjustStock(
-                    pb.product.ProductCommand.AdjustProductStockRequest.newBuilder()
-                            .setProductId(item.getProductId())
-                            .setDelta(item.getQuantity())
-                            .build()).replaceWithVoid());
+            compensation = compensation.chain(() -> productPort
+                    .adjustStock(item.getProductId(), item.getQuantity()).replaceWithVoid());
         }
         return compensation
                 .invoke(() -> recordStockCompensation("success", reserved.size()))
@@ -221,15 +181,9 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
 
     private Uni<Void> ensureOrderDeletable(Long orderId) {
-        if (transactionQueryService == null) {
-            return Uni.createFrom().voidItem();
-        }
-        return transactionQueryService.findByOrderId(
-                pb.transaction.TransactionQuery.FindByOrderIdTransactionRequest.newBuilder()
-                        .setOrderId(orderId.intValue()).build())
-                .chain(response -> {
-                    if (response != null && response.hasData()
-                            && "success".equalsIgnoreCase(response.getData().getPaymentStatus())) {
+        return transactionPort.findByOrderId(orderId.intValue())
+                .chain(transaction -> {
+                    if (transaction != null && "success".equalsIgnoreCase(transaction.paymentStatus())) {
                         throw new InvalidRequestException("Paid order cannot be permanently deleted");
                     }
                     return Uni.createFrom().voidItem();
@@ -237,48 +191,37 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     private Uni<Void> adjustOrderStock(Long orderId, int direction) {
-        if (orderItemQueryServiceGrpc == null) {
-            return Uni.createFrom().voidItem();
-        }
-        return orderItemQueryServiceGrpc.findOrderItemByOrder(
-                pb.order_item.OrderItemCommon.FindByIdOrderItemRequest.newBuilder()
-                        .setId(orderId.intValue()).build())
-                .chain(response -> {
-                    List<pb.order_item.OrderItemCommon.OrderItemResponse> items = response == null
+        return orderItemPort.findOrderItemByOrder(orderId.intValue())
+                .chain(orderItems -> {
+                    List<com.sanedge.common.adapter.model.OrderItem> items = orderItems == null
                             ? List.of()
-                            : response.getDataList();
+                            : orderItems;
                     List<CreateOrderItemRequest> adjusted = new ArrayList<>();
                     return adjustOrderStock(items, 0, direction, adjusted)
                             .onFailure().call(error -> {
                                 Uni<Void> rollback = Uni.createFrom().voidItem();
                                 for (int i = adjusted.size() - 1; i >= 0; i--) {
                                     var item = adjusted.get(i);
-                                    rollback = rollback.chain(() -> adjustStock(
-                                            pb.product.ProductCommand.AdjustProductStockRequest.newBuilder()
-                                                    .setProductId(item.getProductId())
-                                                    .setDelta(-direction * item.getQuantity())
-                                                    .build()).replaceWithVoid());
+                                    rollback = rollback.chain(() -> productPort
+                                            .adjustStock(item.getProductId(), -direction * item.getQuantity())
+                                            .replaceWithVoid());
                                 }
                                 return rollback;
                             });
                 });
     }
 
-    private Uni<Void> adjustOrderStock(List<pb.order_item.OrderItemCommon.OrderItemResponse> items,
+    private Uni<Void> adjustOrderStock(List<com.sanedge.common.adapter.model.OrderItem> items,
             int index, int direction, List<CreateOrderItemRequest> adjusted) {
         if (index >= items.size()) {
             return Uni.createFrom().voidItem();
         }
         var item = items.get(index);
-        return adjustStock(
-                pb.product.ProductCommand.AdjustProductStockRequest.newBuilder()
-                        .setProductId(item.getProductId())
-                        .setDelta(direction * item.getQuantity())
-                        .build())
+        return productPort.adjustStock(item.productId(), direction * item.quantity())
                 .invoke(() -> {
                     CreateOrderItemRequest marker = new CreateOrderItemRequest();
-                    marker.setProductId(item.getProductId());
-                    marker.setQuantity(item.getQuantity());
+                    marker.setProductId(item.productId());
+                    marker.setQuantity(item.quantity());
                     adjusted.add(marker);
                 })
                 .replaceWithVoid()
@@ -294,47 +237,36 @@ public class OrderCommandServiceImpl implements OrderCommandService {
             return Uni.createFrom().item(new UpdatedOrderItems(currentTotalPrice, new ArrayList<>()));
         }
         List<CreateOrderItemRequest> adjustments = new ArrayList<>();
-        Uni<pb.order_item.OrderItemCommon.ApiResponsesOrderItem> existingItems =
-                orderItemQueryServiceGrpc == null ? null : orderItemQueryServiceGrpc.findOrderItemByOrder(
-                        pb.order_item.OrderItemCommon.FindByIdOrderItemRequest.newBuilder()
-                                .setId(order.id.intValue()).build());
-        Uni<UpdatedOrderItems> operation = existingItems == null
-                ? processUpdateOrderItemsInternal(items, order, index, currentTotalPrice, List.of(), adjustments)
-                : existingItems.chain(response -> processUpdateOrderItemsInternal(items, order, index,
-                        currentTotalPrice, response == null ? List.of() : response.getDataList(), adjustments));
+        Uni<List<com.sanedge.common.adapter.model.OrderItem>> existingItems =
+                orderItemPort.findOrderItemByOrder(order.id.intValue());
+        Uni<UpdatedOrderItems> operation = existingItems
+                .chain(orderItems -> processUpdateOrderItemsInternal(items, order, index, currentTotalPrice,
+                        orderItems == null ? List.of() : orderItems, adjustments));
         return operation.onFailure().recoverWithUni(error -> preserveFailure(error,
                 compensateAdjustments(adjustments)));
     }
 
 
     private Uni<UpdatedOrderItems> processUpdateOrderItemsInternal(List<UpdateOrderItemRequest> items, Order order, int index,
-            int currentTotalPrice, List<pb.order_item.OrderItemCommon.OrderItemResponse> existingItems,
+            int currentTotalPrice, List<com.sanedge.common.adapter.model.OrderItem> existingItems,
             List<CreateOrderItemRequest> adjustments) {
         if (index >= items.size()) {
             return Uni.createFrom().item(new UpdatedOrderItems(currentTotalPrice, adjustments));
         }
 
         UpdateOrderItemRequest itemReq = items.get(index);
-        return productQueryService
-                .findById(pb.product.ProductCommon.FindByIdProductRequest.newBuilder().setId(itemReq.getProductId())
-                        .build())
-                .chain(prodResponse -> {
-                    if (prodResponse == null || !prodResponse.hasData() || prodResponse.getData().getId() == 0) {
-                        throw new ResourceNotFoundException("Product not found with id=" + itemReq.getProductId());
-                    }
-                    pb.product.ProductCommon.ProductResponse product = prodResponse.getData();
+        return productPort.findById(itemReq.getProductId())
+                .chain(product -> {
                     int stockDelta;
-                    int oldQuantity = 0;
                     if (itemReq.getOrderItemId() != null && itemReq.getOrderItemId() > 0) {
                         var existingItem = existingItems.stream()
-                                .filter(existing -> existing.getId() == itemReq.getOrderItemId())
+                                .filter(existing -> existing.id() == itemReq.getOrderItemId())
                                 .findFirst().orElseThrow(() -> new ResourceNotFoundException(
                                         "Order item not found with id=" + itemReq.getOrderItemId()));
-                        if (existingItem.getProductId() != itemReq.getProductId()) {
+                        if (existingItem.productId() != itemReq.getProductId()) {
                             throw new InvalidRequestException("Order item product cannot be changed");
                         }
-                        oldQuantity = existingItem.getQuantity();
-                        stockDelta = oldQuantity - itemReq.getQuantity();
+                        stockDelta = existingItem.quantity() - itemReq.getQuantity();
                     } else {
                         stockDelta = -itemReq.getQuantity();
                     }
@@ -342,11 +274,9 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                         throw new InvalidRequestException("Order item quantity must be positive");
                     }
 
-                    var stockRequest = pb.product.ProductCommand.AdjustProductStockRequest.newBuilder()
-                            .setProductId(itemReq.getProductId()).setDelta(stockDelta).build();
                     Uni<Void> persistUnit = (stockDelta == 0
                             ? Uni.createFrom().voidItem()
-                            : adjustStock(stockRequest).invoke(() -> {
+                            : productPort.adjustStock(itemReq.getProductId(), stockDelta).invoke(() -> {
                                 CreateOrderItemRequest marker = new CreateOrderItemRequest();
                                 marker.setProductId(itemReq.getProductId());
                                 marker.setQuantity(stockDelta);
@@ -354,21 +284,17 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                             }).replaceWithVoid())
                             .chain(() -> {
                                 if (itemReq.getOrderItemId() != null && itemReq.getOrderItemId() > 0) {
-                                    return orderItemCommandServiceGrpc.updateOrderItem(
-                                            pb.order_item.OrderItemCommand.UpdateOrderItemRecordRequest.newBuilder()
-                                                    .setOrderItemId(itemReq.getOrderItemId())
-                                                    .setQuantity(itemReq.getQuantity())
-                                                    .setPrice(product.getPrice()).build()).replaceWithVoid();
+                                    return orderItemPort.update(new OrderItemPort.UpdateData(
+                                            itemReq.getOrderItemId(), itemReq.getQuantity(), product.price()))
+                                            .replaceWithVoid();
                                 }
-                                return orderItemCommandServiceGrpc.createOrderItem(
-                                        pb.order_item.OrderItemCommand.CreateOrderItemRecordRequest.newBuilder()
-                                                .setOrderId(order.id.intValue()).setProductId(itemReq.getProductId())
-                                                .setQuantity(itemReq.getQuantity()).setPrice(product.getPrice()).build())
-                                        .replaceWithVoid();
+                                return orderItemPort.create(new OrderItemPort.CreateData(
+                                        order.id.intValue(), itemReq.getProductId(), itemReq.getQuantity(),
+                                        product.price())).replaceWithVoid();
                             });
                     return persistUnit
                             .chain(() -> processUpdateOrderItemsInternal(items, order, index + 1,
-                                    currentTotalPrice + (itemReq.getQuantity() * product.getPrice()), existingItems,
+                                    currentTotalPrice + (itemReq.getQuantity() * product.price()), existingItems,
                                     adjustments));
                 });
     }
@@ -380,10 +306,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
         Uni<Void> compensation = Uni.createFrom().voidItem();
         for (int i = adjustments.size() - 1; i >= 0; i--) {
             CreateOrderItemRequest adjustment = adjustments.get(i);
-            compensation = compensation.chain(() -> adjustStock(
-                    pb.product.ProductCommand.AdjustProductStockRequest.newBuilder()
-                            .setProductId(adjustment.getProductId())
-                            .setDelta(-adjustment.getQuantity()).build()).replaceWithVoid());
+            compensation = compensation.chain(() -> productPort
+                    .adjustStock(adjustment.getProductId(), -adjustment.getQuantity()).replaceWithVoid());
         }
         return compensation
                 .invoke(() -> recordStockCompensation("success", adjustments.size()))
@@ -408,23 +332,10 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                 .put("user.id", request.getUserId() != null ? request.getUserId().toString() : "null")
                 .build();
 
-        return tracingMetrics.traceAndMeasure("createOrder", "create_order", attributes, () -> merchantQueryService
-                .findById(pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder().setId(request.getMerchantId())
-                        .build())
-                .chain(merchantResponse -> {
-                    if (merchantResponse == null || !merchantResponse.hasData()
-                            || merchantResponse.getData().getId() == 0) {
-                        throw new ResourceNotFoundException("Merchant not found");
-                    }
-                    return userQueryService
-                            .findById(pb.user.UserCommon.FindByIdUserRequest.newBuilder().setId(request.getUserId())
-                                    .build());
-                })
-                .chain(userResponse -> {
-                    if (userResponse == null || !userResponse.hasData() || userResponse.getData().getId() == 0) {
-                        throw new ResourceNotFoundException("User not found");
-                    }
-
+        return tracingMetrics.traceAndMeasure("createOrder", "create_order", attributes, () -> merchantPort
+                .findById(request.getMerchantId())
+                .chain(merchant -> userPort.findById(request.getUserId()))
+                .chain(user -> {
                     Order order = new Order();
                     order.setMerchantId(request.getMerchantId());
                     order.setUserId(request.getUserId());
@@ -436,23 +347,20 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                     List<CreateOrderItemRequest> reserved = new ArrayList<>();
                     return processCreateOrderItemsInternal(request.getItems(), savedOrder, 0, 0, reserved)
                             .chain(totalPrice -> {
-                                var createShippingReq = pb.shipping_address.ShippingAddressCommand.CreateShippingAddressRequest.newBuilder()
-                                        .setOrderId(savedOrder.id.intValue())
-                                        .setAlamat(request.getShippingAddress().getAlamat() == null ? "" : request.getShippingAddress().getAlamat())
-                                        .setProvinsi(request.getShippingAddress().getProvinsi() == null ? "" : request.getShippingAddress().getProvinsi())
-                                        .setKota(request.getShippingAddress().getKota() == null ? "" : request.getShippingAddress().getKota())
-                                        .setCourier(request.getShippingAddress().getCourier() == null ? "" : request.getShippingAddress().getCourier())
-                                        .setShippingMethod(request.getShippingAddress().getShippingMethod() == null ? "" : request.getShippingAddress().getShippingMethod())
-                                        .setShippingCost(request.getShippingAddress().getShippingCost() != null ? request.getShippingAddress().getShippingCost() : 0)
-                                        .setNegara(request.getShippingAddress().getNegara() == null ? "" : request.getShippingAddress().getNegara())
-                                        .build();
-
                                 int shippingCost = request.getShippingAddress().getShippingCost() != null
                                         ? request.getShippingAddress().getShippingCost() : 0;
                                 int subtotalWithShipping = totalPrice + shippingCost;
                                 savedOrder.setTotalPrice(subtotalWithShipping + (subtotalWithShipping * 11 / 100));
                                 return Uni.combine().all().unis(
-                                        shippingCommandService.createShipping(createShippingReq),
+                                        shippingAddressPort.create(new ShippingAddressPort.CreateData(
+                                                savedOrder.id.intValue(),
+                                                request.getShippingAddress().getAlamat() == null ? "" : request.getShippingAddress().getAlamat(),
+                                                request.getShippingAddress().getProvinsi() == null ? "" : request.getShippingAddress().getProvinsi(),
+                                                request.getShippingAddress().getKota() == null ? "" : request.getShippingAddress().getKota(),
+                                                request.getShippingAddress().getNegara() == null ? "" : request.getShippingAddress().getNegara(),
+                                                request.getShippingAddress().getCourier() == null ? "" : request.getShippingAddress().getCourier(),
+                                                request.getShippingAddress().getShippingMethod() == null ? "" : request.getShippingAddress().getShippingMethod(),
+                                                shippingCost)),
                                         orderCommandRepository.updateTotalPrice(savedOrder.id, savedOrder.getTotalPrice())
                                                 .chain(updated -> updated == 1
                                                         ? Uni.createFrom().item(updated)
@@ -501,15 +409,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                             if (optOrder.isEmpty()) {
                                 throw new ResourceNotFoundException("Order not found");
                             }
-                            return userQueryService
-                                    .findById(pb.user.UserCommon.FindByIdUserRequest.newBuilder()
-                                            .setId(request.getUserId())
-                                            .build())
-                                    .map(userResponse -> {
-                                        if (userResponse == null || !userResponse.hasData()
-                                                || userResponse.getData().getId() == 0) {
-                                            throw new ResourceNotFoundException("User not found");
-                                        }
+                            return userPort.findById(request.getUserId())
+                                    .map(user -> {
                                         Order existingOrder = optOrder.get();
                                         if (!request.getUserId().equals(existingOrder.getUserId())) {
                                             throw new ForbiddenException("You are not allowed to update this order");
@@ -521,27 +422,12 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                             return processUpdateOrderItems(request.getItems(), existingOrder, 0, 0)
                                     .<ApiResponse<OrderResponse>>chain(updatedItems -> {
                                         int totalPrice = updatedItems.totalPrice();
-                                        Uni<io.smallrye.mutiny.tuples.Tuple2<pb.shipping_address.ShippingAddressCommon.ApiResponseShipping, Order>> businessUpdate =
-                                                shippingQueryService.findById(pb.shipping_address.ShippingAddressCommon.FindByIdShippingRequest.newBuilder()
-                                                        .setId(request.getShippingAddress().getShippingId())
-                                                        .build())
-                                                        .chain(shippingResp -> {
-                                                            if (shippingResp == null || !shippingResp.hasData()
-                                                                    || shippingResp.getData().getId() == 0) {
+                                        Uni<io.smallrye.mutiny.tuples.Tuple2<com.sanedge.common.adapter.model.ShippingAddress, Order>> businessUpdate =
+                                                shippingAddressPort.findById(request.getShippingAddress().getShippingId())
+                                                        .chain(shipping -> {
+                                                            if (shipping == null || shipping.id() == 0) {
                                                                 throw new ResourceNotFoundException("Shipping address not found");
                                                             }
-
-                                                            var updateShippingReq = pb.shipping_address.ShippingAddressCommand.UpdateShippingAddressRequest.newBuilder()
-                                                                    .setShippingId(request.getShippingAddress().getShippingId())
-                                                                    .setOrderId(existingOrder.id.intValue())
-                                                                    .setAlamat(request.getShippingAddress().getAlamat() == null ? "" : request.getShippingAddress().getAlamat())
-                                                                    .setProvinsi(request.getShippingAddress().getProvinsi() == null ? "" : request.getShippingAddress().getProvinsi())
-                                                                    .setKota(request.getShippingAddress().getKota() == null ? "" : request.getShippingAddress().getKota())
-                                                                    .setCourier(request.getShippingAddress().getCourier() == null ? "" : request.getShippingAddress().getCourier())
-                                                                    .setShippingMethod(request.getShippingAddress().getShippingMethod() == null ? "" : request.getShippingAddress().getShippingMethod())
-                                                                    .setShippingCost(request.getShippingAddress().getShippingCost() != null ? request.getShippingAddress().getShippingCost() : 0)
-                                                                    .setNegara(request.getShippingAddress().getNegara() == null ? "" : request.getShippingAddress().getNegara())
-                                                                    .build();
 
                                                             int shippingCost = request.getShippingAddress().getShippingCost() != null
                                                                     ? request.getShippingAddress().getShippingCost() : 0;
@@ -550,7 +436,15 @@ public class OrderCommandServiceImpl implements OrderCommandService {
                                                                     + (subtotalWithShipping * 11 / 100));
 
                                                             return Uni.combine().all().unis(
-                                                                    shippingCommandService.updateShipping(updateShippingReq),
+                                                                    shippingAddressPort.update(new ShippingAddressPort.UpdateData(
+                                                                            request.getShippingAddress().getShippingId(),
+                                                                            request.getShippingAddress().getAlamat() == null ? "" : request.getShippingAddress().getAlamat(),
+                                                                            request.getShippingAddress().getProvinsi() == null ? "" : request.getShippingAddress().getProvinsi(),
+                                                                            request.getShippingAddress().getKota() == null ? "" : request.getShippingAddress().getKota(),
+                                                                            request.getShippingAddress().getNegara() == null ? "" : request.getShippingAddress().getNegara(),
+                                                                            request.getShippingAddress().getCourier() == null ? "" : request.getShippingAddress().getCourier(),
+                                                                            request.getShippingAddress().getShippingMethod() == null ? "" : request.getShippingAddress().getShippingMethod(),
+                                                                            shippingCost)),
                                                                     orderCommandRepository.persist(existingOrder)).asTuple();
                                                         });
 

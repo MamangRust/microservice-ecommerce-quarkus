@@ -5,7 +5,7 @@
 Production is deployed only through:
 
 ```text
-deployments/gitops/argocd/root-app.yaml
+deployments/gitops/argocd/production-root.yaml
   -> deployments/gitops/argocd/production/kustomization.yaml
   -> deployments/gitops/argocd/production/production.yaml
   -> deployments/kubernetes/overlays/production
@@ -54,7 +54,7 @@ Review the rendered diff, then commit the promoted SHA. CI must publish all
 kubectl apply --server-side --dry-run=server \
   -k deployments/kubernetes/overlays/production
 kubectl diff -k deployments/kubernetes/overlays/production
-kubectl apply -f deployments/gitops/argocd/root-app.yaml
+kubectl apply -f deployments/gitops/argocd/production-root.yaml
 ```
 
 ArgoCD ordering:

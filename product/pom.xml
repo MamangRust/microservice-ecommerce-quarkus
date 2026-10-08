@@ -110,10 +110,6 @@
             <artifactId>mutiny-test-utils</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.sanedge</groupId>
-            <artifactId>merchant</artifactId>
-        </dependency>
 
         <!-- Testcontainers (used by PostgreSqlResource from common) -->
         <dependency>

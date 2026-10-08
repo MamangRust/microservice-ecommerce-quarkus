@@ -2,11 +2,12 @@ package com.sanedge.auth.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.eq;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -30,48 +31,33 @@ import com.sanedge.auth.repository.RefreshTokenRepository;
 import com.sanedge.auth.repository.ResetTokenRepository;
 import com.sanedge.auth.service.AuthService;
 import com.sanedge.auth.service.KafkaService;
+import com.sanedge.common.adapter.model.Role;
+import com.sanedge.common.adapter.model.User;
+import com.sanedge.common.adapter.model.UserRole;
+import com.sanedge.common.adapter.role.RolePort;
+import com.sanedge.common.adapter.user.UserPort;
+import com.sanedge.common.adapter.user_role.UserRolePort;
 import com.sanedge.common.config.RedisService;
+import com.sanedge.common.exception.ResourceNotFoundException;
 import com.sanedge.common.observability.TracingMetrics;
 import com.sanedge.common.utils.JwtUtil;
+import com.sanedge.common.utils.PasswordUtil;
 
 import io.opentelemetry.api.common.Attributes;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.json.JsonObject;
-import pb.role.MutinyRoleCommandServiceGrpc;
-import pb.role.RoleCommon.ApiResponseRole;
-import pb.role.RoleCommon.ApiResponseUserRole;
-import pb.role.RoleCommon.ApiResponsesRole;
-import pb.role.RoleCommon.AssignRoleToUserRequest;
-import pb.role.RoleCommon.RoleResponse;
-import pb.role.MutinyRoleQueryServiceGrpc;
-import pb.role.RoleQuery.FindByIdUserRoleRequest;
-import pb.role.RoleQuery.FindByNameRoleRequest;
-import pb.user.UserCommand.CreateUserRequest;
-import pb.user.UserCommand.UpdateUserRequest;
-import pb.user.UserCommand.VerifyPasswordRequest;
-import pb.user.UserCommand.VerifyPasswordResponse;
-import pb.user.UserCommandService;
-import pb.user.UserCommon.ApiResponsePaginationUser;
-import pb.user.UserCommon.ApiResponseUser;
-import pb.user.UserCommon.FindByIdUserRequest;
-import pb.user.UserCommon.UserResponse;
-import pb.user.UserQuery.FindAllUserRequest;
-import pb.user.UserQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
 
         @Mock
-        UserQueryService userQueryService;
+        UserPort userPort;
 
         @Mock
-        UserCommandService userCommandService;
+        RolePort rolePort;
 
         @Mock
-        MutinyRoleQueryServiceGrpc.MutinyRoleQueryServiceStub roleService;
-
-        @Mock
-        MutinyRoleCommandServiceGrpc.MutinyRoleCommandServiceStub roleCommandService;
+        UserRolePort userRolePort;
 
         @Mock
         RefreshTokenRepository refreshTokenRepository;
@@ -92,13 +78,16 @@ class AuthServiceImplTest {
         JwtUtil jwtUtil;
 
         @Mock
+        PasswordUtil passwordUtil;
+
+        @Mock
         TracingMetrics tracingMetrics;
 
         @InjectMocks
         AuthService authServiceUnderTest;
 
         private RegisterRequest registerReq;
-        private UserResponse userResponse;
+        private User user;
 
         @BeforeEach
         void setUp() {
@@ -109,12 +98,7 @@ class AuthServiceImplTest {
                                 .password("SecurePass123!")
                                 .build();
 
-                userResponse = UserResponse.newBuilder()
-                                .setId(1)
-                                .setFirstname("John")
-                                .setLastname("Doe")
-                                .setEmail("john@example.com")
-                                .build();
+                user = new User(1, "John", "Doe", "john@example.com", "hashedPassword", null, null);
 
                 lenient().doAnswer(invokeSupplier())
                                 .when(tracingMetrics).traceAndMeasure(anyString(), anyString(), any());
@@ -135,11 +119,10 @@ class AuthServiceImplTest {
                 lenient().when(authOutboxRepository.persist(any(AuthOutbox.class)))
                                 .thenAnswer(inv -> Uni.createFrom().item((AuthOutbox) inv.getArgument(0)));
 
-                lenient().when(roleService.findByUserId(any(FindByIdUserRoleRequest.class)))
-                                .thenReturn(Uni.createFrom().item(ApiResponsesRole.newBuilder()
-                                                .setStatus("success")
-                                                .addData(RoleResponse.newBuilder().setId(1).setName("ROLE_USER").build())
-                                                .build()));
+                lenient().when(userRolePort.findByUserId(anyInt()))
+                                .thenReturn(Uni.createFrom().item(List.of(new Role(1, "ROLE_USER", null, null))));
+
+                lenient().when(passwordUtil.verifyPassword(anyString(), anyString())).thenReturn(true);
 
                 lenient().when(jwtUtil.generateToken(anyString(), any(), any(Long.class)))
                                 .thenReturn("access-token-john");
@@ -151,45 +134,28 @@ class AuthServiceImplTest {
 
         @Test
         void registerUser_shouldSucceed() {
-                ApiResponsePaginationUser findAllResp = ApiResponsePaginationUser.newBuilder()
-                                .setStatus("success")
-                                .build();
-                when(userQueryService.findAll(any(FindAllUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findAllResp));
+                when(userPort.findByEmail("john@example.com"))
+                                .thenReturn(Uni.createFrom().failure(new ResourceNotFoundException("User not found")));
+                when(userPort.createUser(any(UserPort.RegisterData.class)))
+                                .thenReturn(Uni.createFrom().item(user));
+                when(rolePort.findByName("ROLE_USER"))
+                                .thenReturn(Uni.createFrom().item(new Role(1, "ROLE_USER", null, null)));
+                when(userRolePort.assignRoleToUser(anyInt(), anyInt()))
+                                .thenReturn(Uni.createFrom().item(new UserRole(1, 1, 1, null, null)));
 
-                ApiResponseUser createResp = ApiResponseUser.newBuilder()
-                                .setStatus("success")
-                                .setData(userResponse)
-                                .build();
-                when(userCommandService.create(any(CreateUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(createResp));
-
-                ApiResponseRole roleResp = ApiResponseRole.newBuilder()
-                                .setData(RoleResponse.newBuilder().setId(1).build())
-                                .build();
-                when(roleService.findByNameRole(any(FindByNameRoleRequest.class)))
-                                .thenReturn(Uni.createFrom().item(roleResp));
-                when(roleCommandService.assignRoleToUser(any(AssignRoleToUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(ApiResponseUserRole.getDefaultInstance()));
-
-                UserResponse result = authServiceUnderTest.register(registerReq).await().indefinitely();
+                User result = authServiceUnderTest.register(registerReq).await().indefinitely();
 
                 assertThat(result).isNotNull();
-                assertThat(result.getEmail()).isEqualTo("john@example.com");
-                assertThat(result.getFirstname()).isEqualTo("John");
-                verify(userQueryService).findAll(any(FindAllUserRequest.class));
-                verify(userCommandService).create(any(CreateUserRequest.class));
+                assertThat(result.email()).isEqualTo("john@example.com");
+                assertThat(result.firstname()).isEqualTo("John");
+                verify(userPort).createUser(any(UserPort.RegisterData.class));
                 verify(authOutboxRepository).persist(any(AuthOutbox.class));
         }
 
         @Test
         void registerUser_shouldFail_whenEmailAlreadyExists() {
-                ApiResponsePaginationUser findAllResp = ApiResponsePaginationUser.newBuilder()
-                                .setStatus("success")
-                                .addData(userResponse)
-                                .build();
-                when(userQueryService.findAll(any(FindAllUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findAllResp));
+                when(userPort.findByEmail("john@example.com"))
+                                .thenReturn(Uni.createFrom().item(user));
 
                 try {
                         authServiceUnderTest.register(registerReq).await().indefinitely();
@@ -200,12 +166,8 @@ class AuthServiceImplTest {
 
         @Test
         void login_shouldSucceed() {
-                VerifyPasswordResponse verifyResp = VerifyPasswordResponse.newBuilder()
-                                .setValid(true)
-                                .setUser(userResponse)
-                                .build();
-                when(userCommandService.verifyPassword(any(VerifyPasswordRequest.class)))
-                                .thenReturn(Uni.createFrom().item(verifyResp));
+                when(userPort.findByEmailAndVerify("john@example.com"))
+                                .thenReturn(Uni.createFrom().item(user));
 
                 lenient().when(refreshTokenRepository.deleteByUserId(1L)).thenReturn(Uni.createFrom().item(1L));
                 lenient().when(refreshTokenRepository.persist(any(RefreshToken.class)))
@@ -221,19 +183,13 @@ class AuthServiceImplTest {
 
         @Test
         void login_shouldCarryRealRolesFromDatabase() {
-                VerifyPasswordResponse verifyResp = VerifyPasswordResponse.newBuilder()
-                                .setValid(true)
-                                .setUser(userResponse)
-                                .build();
-                when(userCommandService.verifyPassword(any(VerifyPasswordRequest.class)))
-                                .thenReturn(Uni.createFrom().item(verifyResp));
+                when(userPort.findByEmailAndVerify("john@example.com"))
+                                .thenReturn(Uni.createFrom().item(user));
 
-                when(roleService.findByUserId(any(FindByIdUserRoleRequest.class)))
-                                .thenReturn(Uni.createFrom().item(ApiResponsesRole.newBuilder()
-                                                .setStatus("success")
-                                                .addData(RoleResponse.newBuilder().setId(1).setName("ROLE_ADMIN").build())
-                                                .addData(RoleResponse.newBuilder().setId(2).setName("ROLE_USER").build())
-                                                .build()));
+                when(userRolePort.findByUserId(1))
+                                .thenReturn(Uni.createFrom().item(List.of(
+                                                new Role(1, "ROLE_ADMIN", null, null),
+                                                new Role(2, "ROLE_USER", null, null))));
 
                 lenient().when(refreshTokenRepository.deleteByUserId(1L)).thenReturn(Uni.createFrom().item(1L));
                 lenient().when(refreshTokenRepository.persist(any(RefreshToken.class)))
@@ -260,11 +216,9 @@ class AuthServiceImplTest {
 
         @Test
         void login_shouldFail_withInvalidCredentials() {
-                VerifyPasswordResponse verifyResp = VerifyPasswordResponse.newBuilder()
-                                .setValid(false)
-                                .build();
-                when(userCommandService.verifyPassword(any(VerifyPasswordRequest.class)))
-                                .thenReturn(Uni.createFrom().item(verifyResp));
+                when(userPort.findByEmailAndVerify("john@example.com"))
+                                .thenReturn(Uni.createFrom().item(user));
+                when(passwordUtil.verifyPassword("wrong", "hashedPassword")).thenReturn(false);
 
                 try {
                         authServiceUnderTest.login("john@example.com", "wrong").await().indefinitely();
@@ -285,12 +239,7 @@ class AuthServiceImplTest {
                 when(refreshTokenRepository.persist(any(RefreshToken.class)))
                                 .thenAnswer(inv -> Uni.createFrom().item((RefreshToken) inv.getArgument(0)));
 
-                ApiResponseUser findByIdResp = ApiResponseUser.newBuilder()
-                                .setStatus("success")
-                                .setData(userResponse)
-                                .build();
-                when(userQueryService.findById(any(FindByIdUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findByIdResp));
+                when(userPort.findById(1)).thenReturn(Uni.createFrom().item(user));
 
                 String[] tokens = authServiceUnderTest.refresh("old-refresh-token").await().indefinitely();
 
@@ -324,12 +273,8 @@ class AuthServiceImplTest {
 
         @Test
         void forgotPassword_shouldSucceed() {
-                ApiResponsePaginationUser findAllResp = ApiResponsePaginationUser.newBuilder()
-                                .setStatus("success")
-                                .addData(userResponse)
-                                .build();
-                when(userQueryService.findAll(any(FindAllUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findAllResp));
+                when(userPort.findByEmail("john@example.com"))
+                                .thenReturn(Uni.createFrom().item(user));
 
                 lenient().when(resetTokenRepository.deleteByUserId(1L)).thenReturn(Uni.createFrom().item(1L));
                 lenient().when(resetTokenRepository.persist(any(ResetToken.class)))
@@ -343,11 +288,9 @@ class AuthServiceImplTest {
 
         @Test
         void forgotPassword_shouldFail_whenUserNotFound() {
-                ApiResponsePaginationUser findAllResp = ApiResponsePaginationUser.newBuilder()
-                                .setStatus("success")
-                                .build();
-                when(userQueryService.findAll(any(FindAllUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findAllResp));
+                when(userPort.findByEmail("unknown@example.com"))
+                                .thenReturn(Uni.createFrom()
+                                                .failure(new ResourceNotFoundException("User not found: unknown@example.com")));
 
                 try {
                         authServiceUnderTest.forgotPassword("unknown@example.com").await().indefinitely();
@@ -366,18 +309,8 @@ class AuthServiceImplTest {
                 when(resetTokenRepository.findByToken("valid-reset-token"))
                                 .thenReturn(Uni.createFrom().item(resetToken));
 
-                ApiResponseUser findByIdResp = ApiResponseUser.newBuilder()
-                                .setStatus("success")
-                                .setData(userResponse)
-                                .build();
-                when(userQueryService.findById(any(FindByIdUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findByIdResp));
-
-                ApiResponseUser updateResp = ApiResponseUser.newBuilder()
-                                .setStatus("success")
-                                .build();
-                when(userCommandService.update(any(UpdateUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(updateResp));
+                when(userPort.findById(1)).thenReturn(Uni.createFrom().item(user));
+                when(userPort.updatePassword(1, "NewPass123!")).thenReturn(Uni.createFrom().item(user));
 
                 lenient().when(resetTokenRepository.delete(any(ResetToken.class)))
                                 .thenReturn(Uni.createFrom().voidItem());
@@ -390,7 +323,7 @@ class AuthServiceImplTest {
 
                 authServiceUnderTest.resetPassword(req).await().indefinitely();
 
-                verify(userCommandService).update(any(UpdateUserRequest.class));
+                verify(userPort).updatePassword(1, "NewPass123!");
         }
 
         @Test
@@ -443,27 +376,20 @@ class AuthServiceImplTest {
 
         @Test
         void getMe_shouldReturnUser() {
-                ApiResponseUser findByIdResp = ApiResponseUser.newBuilder()
-                                .setStatus("success")
-                                .setData(userResponse)
-                                .build();
-                when(userQueryService.findById(any(FindByIdUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findByIdResp));
+                when(userPort.findById(1)).thenReturn(Uni.createFrom().item(user));
 
-                UserResponse result = authServiceUnderTest.getMe(1L).await().indefinitely();
+                User result = authServiceUnderTest.getMe(1L).await().indefinitely();
 
                 assertThat(result).isNotNull();
-                assertThat(result.getId()).isEqualTo(1);
-                assertThat(result.getEmail()).isEqualTo("john@example.com");
+                assertThat(result.id()).isEqualTo(1);
+                assertThat(result.email()).isEqualTo("john@example.com");
         }
 
         @Test
         void getMe_shouldFail_whenUserNotFound() {
-                ApiResponseUser findByIdResp = ApiResponseUser.newBuilder()
-                                .setStatus("error")
-                                .build();
-                when(userQueryService.findById(any(FindByIdUserRequest.class)))
-                                .thenReturn(Uni.createFrom().item(findByIdResp));
+                when(userPort.findById(999))
+                                .thenReturn(Uni.createFrom()
+                                                .failure(new ResourceNotFoundException("User not found: 999")));
 
                 try {
                         authServiceUnderTest.getMe(999L).await().indefinitely();

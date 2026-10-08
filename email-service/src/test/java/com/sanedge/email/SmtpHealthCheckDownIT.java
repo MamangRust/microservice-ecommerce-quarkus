@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import com.sanedge.common.test.KafkaResource;
+import com.sanedge.common.test.PostgreSqlResource;
 import com.sanedge.common.test.RedisResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
@@ -28,6 +29,7 @@ import io.quarkus.test.junit.TestProfile;
 @QuarkusTest
 @QuarkusTestResource(value = KafkaResource.class, restrictToAnnotatedClass = true)
 @QuarkusTestResource(value = RedisResource.class, restrictToAnnotatedClass = true)
+@QuarkusTestResource(value = PostgreSqlResource.class, restrictToAnnotatedClass = true)
 @TestProfile(SmtpHealthCheckDownIT.SmtpDownProfile.class)
 class SmtpHealthCheckDownIT {
 

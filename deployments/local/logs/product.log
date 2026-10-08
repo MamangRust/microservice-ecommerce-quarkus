@@ -1,0 +1,179 @@
+2026/08/21 17:30:18 Go runtime metrics collection started
+2026/08/21 17:30:18 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:18 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.221+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_PRODUCT","dbname":"product_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.221+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"product_db","prefix":"DB_PRODUCT"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250807000002
+{"level":"info","ts":"2026-08-21T17:30:19.507+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.514+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50058,"address":"[::]:50058"}
+2026/08/21 17:30:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.517+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.7 MB"}
+2026/08/21 17:30:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.536+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.6 MB"}
+{"level":"info","ts":"2026-08-21T17:31:24.513+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Create","request_id":"req_1787308284512496222_NAAKZNDY","duration":"881.619µs","error":"rpc error: code = InvalidArgument desc = validation failed: invalid create product request"}
+{"level":"info","ts":"2026-08-21T17:31:24.521+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:24.543+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted all trashed products"}
+{"level":"info","ts":"2026-08-21T17:31:24.543+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/DeleteAllProductPermanent","request_id":"req_1787308284521385386_imGix89c","duration":"22.385963ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.553+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:24.567+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:24.567+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted product","productID":1}
+{"level":"info","ts":"2026-08-21T17:31:24.568+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/DeleteProductPermanent","request_id":"req_1787308284552900680_T2CX7ym0","duration":"15.341728ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.576+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:24.578+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all trashed products"}
+{"level":"info","ts":"2026-08-21T17:31:24.578+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/RestoreAllProduct","request_id":"req_1787308284576060766_LDRo1a2R","duration":"2.830104ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.596+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:24.600+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"aa6f12b6c5a646d8adb2fa0ccf946b0d","status_code":404,"product_id":1,"error":"[NOT_FOUND] product not found"}
+{"level":"info","ts":"2026-08-21T17:31:24.602+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/RestoreProduct","request_id":"req_1787308284596053036_TAPasjJV","duration":"5.898739ms","error":"rpc error: code = NotFound desc = product not found"}
+{"level":"info","ts":"2026-08-21T17:31:24.608+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:24.631+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:24.631+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed product","productID":1}
+{"level":"info","ts":"2026-08-21T17:31:24.633+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/TrashedProduct","request_id":"req_1787308284608527436_AFzPnqlm","duration":"24.834886ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.642+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Update","request_id":"req_1787308284641964542_zuk54460","duration":"911.968µs","error":"rpc error: code = InvalidArgument desc = validation failed: invalid update product request"}
+{"level":"info","ts":"2026-08-21T17:31:24.653+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:24.673+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:24.673+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all products","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:24.675+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindAll","request_id":"req_1787308284653321964_DByEx8EH","duration":"21.751658ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.687+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:24.734+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:24.734+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active products","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:24.734+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByActive","request_id":"req_1787308284687494660_vf6yBpEv","duration":"47.407933ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.754+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByCategory"}
+{"level":"debug","ts":"2026-08-21T17:31:24.826+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:category:1:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:24.826+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched category products","totalRecords":0,"page":1,"pageSize":10,"category_name":"1"}
+{"level":"info","ts":"2026-08-21T17:31:24.827+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByCategory","request_id":"req_1787308284754047994_6vV3Exuz","duration":"73.008333ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.838+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByMerchant"}
+{"level":"debug","ts":"2026-08-21T17:31:24.850+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:merchant:1:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:24.850+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchant products","totalRecords":0,"page":1,"pageSize":10,"merchant_id":1}
+{"level":"info","ts":"2026-08-21T17:31:24.851+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByMerchant","request_id":"req_1787308284838662882_6ghVhuMQ","duration":"12.591505ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.876+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:24.885+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:24.886+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed products","totalRecords":1,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:24.887+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByTrashed","request_id":"req_1787308284876038121_1VPT4ZLw","duration":"11.009795ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.895+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:24.899+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"baa5fb968ecff16b109e2a3f3397ece6","status_code":404,"productID":1,"error":"no rows in result set"}
+{"level":"info","ts":"2026-08-21T17:31:24.900+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308284895697138_6eFDh52m","duration":"4.470565ms","error":"rpc error: code = NotFound desc = product not found"}
+{"level":"info","ts":"2026-08-21T17:31:24.933+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:24.938+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"8b21b56f9fb743d4087972cea8d951d0","status_code":404,"productID":0,"error":"no rows in result set"}
+{"level":"info","ts":"2026-08-21T17:31:24.939+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308284933524947_SgJirBye","duration":"5.848097ms","error":"rpc error: code = NotFound desc = product not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.394+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByMerchant"}
+{"level":"debug","ts":"2026-08-21T17:31:25.401+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:merchant:1:page:1:pageSize:100000:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.401+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchant products","totalRecords":0,"page":1,"pageSize":100000,"merchant_id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.401+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByMerchant","request_id":"req_1787308285393975259_PyfATejw","duration":"7.782641ms"}
+2026/08/21 17:31:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:37.495+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:37.619+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":6}
+{"level":"info","ts":"2026-08-21T17:31:37.619+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created product","productID":9,"slug":"hurl-cart-product-nr7v"}
+{"level":"info","ts":"2026-08-21T17:31:37.619+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Create","request_id":"req_1787308297495432227_EbICFZe4","duration":"124.422105ms"}
+{"level":"info","ts":"2026-08-21T17:31:37.641+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:37.647+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:id:9","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:37.648+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product by ID","productID":9}
+{"level":"info","ts":"2026-08-21T17:31:37.648+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308297641085427_yCpDMDlY","duration":"7.35753ms"}
+{"level":"info","ts":"2026-08-21T17:31:37.746+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"info","ts":"2026-08-21T17:31:37.748+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully retrieved product by ID from cache","productID":9}
+{"level":"info","ts":"2026-08-21T17:31:37.749+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308297746159503_4SYEKWMC","duration":"3.404853ms"}
+2026/08/21 17:31:38 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:46.807+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:46.830+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":1}
+{"level":"info","ts":"2026-08-21T17:31:46.830+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created product","productID":10,"slug":"hurl-order-product-w5ql"}
+{"level":"info","ts":"2026-08-21T17:31:46.830+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Create","request_id":"req_1787308306806728610_R7dr58UY","duration":"24.239323ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.853+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:46.858+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:id:10","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:46.859+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product by ID","productID":10}
+{"level":"info","ts":"2026-08-21T17:31:46.859+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308306853647764_K9us3qYr","duration":"5.89009ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.863+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AdjustProductStock"}
+{"level":"info","ts":"2026-08-21T17:31:46.898+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":1}
+{"level":"info","ts":"2026-08-21T17:31:46.898+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully adjusted product stock","product_id":10,"delta":-2}
+{"level":"info","ts":"2026-08-21T17:31:46.898+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/AdjustProductStock","request_id":"req_1787308306863375840_zL326Vzs","duration":"35.290974ms"}
+{"level":"info","ts":"2026-08-21T17:31:47.094+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AdjustProductStock"}
+{"level":"info","ts":"2026-08-21T17:31:47.107+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:47.108+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully adjusted product stock","product_id":10,"delta":2}
+{"level":"info","ts":"2026-08-21T17:31:47.109+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/AdjustProductStock","request_id":"req_1787308307094313659_2QTMT1ZS","duration":"15.010909ms"}
+{"level":"info","ts":"2026-08-21T17:31:47.134+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AdjustProductStock"}
+{"level":"info","ts":"2026-08-21T17:31:47.143+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:47.144+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully adjusted product stock","product_id":10,"delta":-2}
+{"level":"info","ts":"2026-08-21T17:31:47.144+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/AdjustProductStock","request_id":"req_1787308307134330468_Peio5tU7","duration":"10.103719ms"}
+2026/08/21 17:31:48 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.517+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"1.8 MB"}
+2026/08/21 17:31:49 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:50.140+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:50.196+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:50.197+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created product","productID":11,"slug":"hurl-product-hurl-product-1787308277atexample-com-9b0d"}
+{"level":"info","ts":"2026-08-21T17:31:50.198+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Create","request_id":"req_1787308310140200999_m3Ij0pa6","duration":"57.717747ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.213+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:50.218+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:50.218+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all products","totalRecords":10,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:50.219+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindAll","request_id":"req_1787308310212831650_9YOXyUKB","duration":"6.440862ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.228+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:50.237+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:50.238+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active products","totalRecords":10,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:50.239+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByActive","request_id":"req_1787308310228457260_11u1qJBo","duration":"11.193915ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.253+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:50.259+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:id:11","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:50.259+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product by ID","productID":11}
+{"level":"info","ts":"2026-08-21T17:31:50.260+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308310252753399_O7Xwil13","duration":"7.308198ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.267+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByMerchant"}
+{"level":"debug","ts":"2026-08-21T17:31:50.274+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:merchant:12:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:50.275+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchant products","totalRecords":1,"page":1,"pageSize":10,"merchant_id":12}
+{"level":"info","ts":"2026-08-21T17:31:50.275+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByMerchant","request_id":"req_1787308310267556330_qHqQ9Ijs","duration":"7.941083ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.282+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Update"}
+{"level":"info","ts":"2026-08-21T17:31:50.305+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":4}
+{"level":"info","ts":"2026-08-21T17:31:50.305+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully updated product","productID":11,"slug":"hurl-product-updated-axv5"}
+{"level":"info","ts":"2026-08-21T17:31:50.305+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Update","request_id":"req_1787308310281915966_BL7YLKQQ","duration":"23.697227ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.319+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:50.324+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:50.325+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed product","productID":11}
+{"level":"info","ts":"2026-08-21T17:31:50.326+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/TrashedProduct","request_id":"req_1787308310319640502_Zf8Lt4Vl","duration":"6.481993ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.334+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:50.339+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:50.339+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed products","totalRecords":2,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:50.340+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByTrashed","request_id":"req_1787308310334005727_ZomZhGGM","duration":"5.989547ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.349+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"info","ts":"2026-08-21T17:31:50.355+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":1}
+{"level":"info","ts":"2026-08-21T17:31:50.355+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored product","productID":11}
+{"level":"info","ts":"2026-08-21T17:31:50.355+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/RestoreProduct","request_id":"req_1787308310348864495_XfWAo9qp","duration":"7.101776ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.311+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:53.345+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:53.347+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created product","productID":12,"slug":"hurl-review-product-qsyj"}
+{"level":"info","ts":"2026-08-21T17:31:53.347+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Create","request_id":"req_1787308313311211046_GxlQjJzG","duration":"36.102687ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.364+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:53.369+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:id:12","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:53.369+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product by ID","productID":12}
+{"level":"info","ts":"2026-08-21T17:31:53.370+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308313364308187_SpOd47ac","duration":"5.975996ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.417+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByMerchant"}
+{"level":"debug","ts":"2026-08-21T17:31:53.424+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:merchant:13:page:1:pageSize:100000:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:53.425+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched merchant products","totalRecords":1,"page":1,"pageSize":100000,"merchant_id":13}
+{"level":"info","ts":"2026-08-21T17:31:53.427+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindByMerchant","request_id":"req_1787308313417504332_6DVS2apj","duration":"9.939512ms"}
+2026/08/21 17:31:58 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:09 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:10.163+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:32:10.179+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":2}
+{"level":"info","ts":"2026-08-21T17:32:10.180+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created product","productID":13,"slug":"hurl-txn-product-h91a"}
+{"level":"info","ts":"2026-08-21T17:32:10.180+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/Create","request_id":"req_1787308330163196132_Hfgjq7al","duration":"17.425601ms"}
+{"level":"info","ts":"2026-08-21T17:32:10.194+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:32:10.199+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"product:id:13","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:32:10.199+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched product by ID","productID":13}
+{"level":"info","ts":"2026-08-21T17:32:10.200+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductQueryService/FindById","request_id":"req_1787308330194339223_mga0pc6Y","duration":"5.743243ms"}
+{"level":"info","ts":"2026-08-21T17:32:10.202+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AdjustProductStock"}
+{"level":"info","ts":"2026-08-21T17:32:10.210+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"product:*","count":1}
+{"level":"info","ts":"2026-08-21T17:32:10.210+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully adjusted product stock","product_id":13,"delta":-2}
+{"level":"info","ts":"2026-08-21T17:32:10.211+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ProductCommandService/AdjustProductStock","request_id":"req_1787308330201884588_eDvcQLGn","duration":"9.183734ms"}
+2026/08/21 17:32:13 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.522+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":182,"hit_rate":64.34108527131784,"memory_used":"2.3 MB"}
+2026/08/21 17:32:19 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:23 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:43.021+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:43.023+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:43.024+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:43.034+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:43.034+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:43.034+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:43.035+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:53 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:53.888+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:53.889+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

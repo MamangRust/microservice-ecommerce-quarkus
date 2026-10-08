@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.sanedge.common.domain.response.ApiResponse;
+import com.sanedge.common.domain.response.ApiResponsePagination;
 import com.sanedge.order_item.domain.requests.FindAllOrderItemRequest;
 import com.sanedge.order_item.domain.response.OrderItemResponse;
 import com.sanedge.order_item.service.OrderItemQueryService;
@@ -35,7 +35,8 @@ class OrderItemQueryGrpcHandlerTest {
 
     @Test
     void findAll_Success() {
-        ApiResponse<List<OrderItemResponse>> resp = ApiResponse.success("Order items retrieved successfully", List.of());
+        ApiResponsePagination<List<OrderItemResponse>> resp = new ApiResponsePagination<>(
+                "success", "Order items retrieved successfully", List.of(), null);
         lenient().when(orderItemQueryService.findAll(any(FindAllOrderItemRequest.class)))
                 .thenReturn(Uni.createFrom().item(resp));
         var result = orderItemQueryGrpcHandler.findAll(

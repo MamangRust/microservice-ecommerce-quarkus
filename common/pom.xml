@@ -123,6 +123,12 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-grpc-stubs</artifactId>
         </dependency>
+        <!-- SmallRye Fault Tolerance: padanan DependencyGuard Go
+             (@Timeout/@CircuitBreaker/@Bulkhead) untuk adapter di common/adapter. -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
+        </dependency>
         <!-- Kafka admin client used by the shared producer connectivity health
              check; version is managed by the Quarkus platform BOM. -->
         <dependency>

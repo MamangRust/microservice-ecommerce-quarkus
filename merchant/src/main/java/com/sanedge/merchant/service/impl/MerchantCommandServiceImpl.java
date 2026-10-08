@@ -19,19 +19,19 @@ import com.sanedge.merchant.repository.MerchantCommandRepository;
 import com.sanedge.merchant.repository.MerchantQueryRepository;
 import com.sanedge.merchant.service.MerchantCommandService;
 
+import com.sanedge.common.adapter.user.UserPort;
+
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import pb.user.UserQueryService;
 
 @ApplicationScoped
 public class MerchantCommandServiceImpl implements MerchantCommandService {
         private static final Logger logger = LoggerFactory.getLogger(MerchantCommandServiceImpl.class);
 
-        private final UserQueryService userQueryService;
+        private final UserPort userPort;
         private final MerchantQueryRepository merchantQueryRepository;
         private final MerchantCommandRepository merchantCommandRepository;
         private final RedisService redisService;
@@ -39,12 +39,12 @@ public class MerchantCommandServiceImpl implements MerchantCommandService {
 
         @Inject
         public MerchantCommandServiceImpl(
-                        @GrpcClient("user") UserQueryService userQueryService,
+                        UserPort userPort,
                         MerchantQueryRepository merchantQueryRepository,
                         MerchantCommandRepository merchantCommandRepository,
                         RedisService redisService,
                         TracingMetrics tracingMetrics) {
-                this.userQueryService = userQueryService;
+                this.userPort = userPort;
                 this.merchantQueryRepository = merchantQueryRepository;
                 this.merchantCommandRepository = merchantCommandRepository;
                 this.redisService = redisService;
@@ -62,16 +62,8 @@ public class MerchantCommandServiceImpl implements MerchantCommandService {
                 logger.info("Creating merchant | Name: {}, UserId: {}", req.getName(), req.getUserId());
 
                 return tracingMetrics.traceAndMeasure("createMerchant", "create_merchant", attrs,
-                                () -> userQueryService.findById(pb.user.UserCommon.FindByIdUserRequest.newBuilder()
-                                                .setId(req.getUserId().intValue()).build())
-                                                .chain(response -> {
-                                                        if (response == null || !response.hasData()) {
-                                                                logger.error("User not found with id {}",
-                                                                                req.getUserId());
-                                                                throw new ResourceNotFoundException("User not found");
-                                                        }
-                                                        return merchantQueryRepository.existsByName(req.getName());
-                                                })
+                                () -> userPort.findById(req.getUserId().intValue())
+                                                .chain(user -> merchantQueryRepository.existsByName(req.getName()))
                                                 .chain(nameExists -> {
                                                         if (nameExists) {
                                                                 logger.error("Merchant name already taken | Name: {}",
@@ -122,22 +114,10 @@ public class MerchantCommandServiceImpl implements MerchantCommandService {
 
                                                         Uni<Void> userCheckUni = Uni.createFrom().nullItem();
                                                         if (req.getUserId() != null) {
-                                                                userCheckUni = userQueryService
-                                                                                .findById(pb.user.UserCommon.FindByIdUserRequest
-                                                                                                .newBuilder()
-                                                                                                .setId(req.getUserId()
-                                                                                                                .intValue())
-                                                                                                .build())
-                                                                                .chain(response -> {
-                                                                                        if (response == null
-                                                                                                        || !response.hasData()) {
-                                                                                                logger.error("User not found with id {}",
-                                                                                                                req.getUserId());
-                                                                                                throw new ResourceNotFoundException(
-                                                                                                                "User not found");
-                                                                                        }
-                                                                                        merchant.setUserId(req
-                                                                                                        .getUserId()
+                                                                userCheckUni = userPort
+                                                                                .findById(req.getUserId().intValue())
+                                                                                .chain(user -> {
+                                                                                        merchant.setUserId(req.getUserId()
                                                                                                         .intValue());
                                                                                         return Uni.createFrom()
                                                                                                         .nullItem();

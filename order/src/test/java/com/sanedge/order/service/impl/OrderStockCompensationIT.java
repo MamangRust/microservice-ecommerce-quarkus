@@ -14,7 +14,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -22,7 +21,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import com.sanedge.common.adapter.merchant.MerchantPort;
+import com.sanedge.common.adapter.model.Merchant;
+import com.sanedge.common.adapter.model.OrderItem;
+import com.sanedge.common.adapter.model.Product;
+import com.sanedge.common.adapter.model.ShippingAddress;
+import com.sanedge.common.adapter.model.User;
+import com.sanedge.common.adapter.order_item.OrderItemPort;
+import com.sanedge.common.adapter.product.ProductPort;
+import com.sanedge.common.adapter.shipping_address.ShippingAddressPort;
+import com.sanedge.common.adapter.transaction.TransactionPort;
+import com.sanedge.common.adapter.user.UserPort;
 import com.sanedge.common.config.RedisService;
+import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.observability.TracingMetrics;
 import com.sanedge.common.test.PostgreSqlResource;
 import com.sanedge.common.test.RedisResource;
@@ -30,7 +41,6 @@ import com.sanedge.order.domain.requests.CreateOrderItemRequest;
 import com.sanedge.order.domain.requests.CreateOrderRequest;
 import com.sanedge.order.domain.requests.CreateShippingAddressRequest;
 import com.sanedge.order.domain.response.OrderResponse;
-import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.order.repository.OrderCommandRepository;
 import com.sanedge.order.repository.OrderQueryRepository;
 
@@ -50,9 +60,9 @@ import jakarta.validation.Validator;
  * remains in the database.
  *
  * <p>The service under test is assembled manually with the real Panache
- * repositories (PostgreSQL via Testcontainers) and Mockito gRPC clients
- * assigned to the package-private fields, because the generated gRPC client
- * beans cannot be replaced via {@code @InjectMock}.</p>
+ * repositories (PostgreSQL via Testcontainers) and Mockito port beans
+ * assigned to the package-private fields, because the shared gRPC adapters
+ * cannot be replaced via {@code @InjectMock}.</p>
  */
 @QuarkusTest
 @QuarkusTestResource(value = PostgreSqlResource.class, restrictToAnnotatedClass = true)
@@ -71,15 +81,12 @@ class OrderStockCompensationIT {
 
     private RedisService redisService;
     private TracingMetrics tracingMetrics;
-    private pb.merchant.MerchantQueryService merchantQueryService;
-    private pb.user.UserQueryService userQueryService;
-    private pb.product.ProductQueryService productQueryService;
-    private pb.product.ProductCommandService productCommandService;
-    private pb.order_item.OrderItemCommandService orderItemCommandServiceGrpc;
-    private pb.order_item.OrderItemQueryService orderItemQueryServiceGrpc;
-    private pb.shipping_address.MutinyShippingCommandServiceGrpc.MutinyShippingCommandServiceStub shippingCommandService;
-    private pb.shipping_address.MutinyShippingQueryServiceGrpc.MutinyShippingQueryServiceStub shippingQueryService;
-    private pb.transaction.TransactionQueryService transactionQueryService;
+    private MerchantPort merchantPort;
+    private UserPort userPort;
+    private ProductPort productPort;
+    private OrderItemPort orderItemPort;
+    private TransactionPort transactionPort;
+    private ShippingAddressPort shippingAddressPort;
 
     private OrderCommandServiceImpl service;
 
@@ -87,27 +94,21 @@ class OrderStockCompensationIT {
     void setUp() {
         redisService = mock(RedisService.class);
         tracingMetrics = mock(TracingMetrics.class);
-        merchantQueryService = mock(pb.merchant.MerchantQueryService.class);
-        userQueryService = mock(pb.user.UserQueryService.class);
-        productQueryService = mock(pb.product.ProductQueryService.class);
-        productCommandService = mock(pb.product.ProductCommandService.class);
-        orderItemCommandServiceGrpc = mock(pb.order_item.OrderItemCommandService.class);
-        orderItemQueryServiceGrpc = mock(pb.order_item.OrderItemQueryService.class);
-        shippingCommandService = mock(pb.shipping_address.MutinyShippingCommandServiceGrpc.MutinyShippingCommandServiceStub.class);
-        shippingQueryService = mock(pb.shipping_address.MutinyShippingQueryServiceGrpc.MutinyShippingQueryServiceStub.class);
-        transactionQueryService = mock(pb.transaction.TransactionQueryService.class);
+        merchantPort = mock(MerchantPort.class);
+        userPort = mock(UserPort.class);
+        productPort = mock(ProductPort.class);
+        orderItemPort = mock(OrderItemPort.class);
+        transactionPort = mock(TransactionPort.class);
+        shippingAddressPort = mock(ShippingAddressPort.class);
 
         service = new OrderCommandServiceImpl(orderQueryRepo, orderCommandRepo, validator,
                 redisService, tracingMetrics);
-        service.merchantQueryService = merchantQueryService;
-        service.userQueryService = userQueryService;
-        service.productQueryService = productQueryService;
-        service.productCommandService = productCommandService;
-        service.orderItemCommandServiceGrpc = orderItemCommandServiceGrpc;
-        service.orderItemQueryServiceGrpc = orderItemQueryServiceGrpc;
-        service.shippingCommandService = shippingCommandService;
-        service.shippingQueryService = shippingQueryService;
-        service.transactionQueryService = transactionQueryService;
+        service.merchantPort = merchantPort;
+        service.userPort = userPort;
+        service.productPort = productPort;
+        service.orderItemPort = orderItemPort;
+        service.transactionPort = transactionPort;
+        service.shippingAddressPort = shippingAddressPort;
 
         lenient().doAnswer(invocation -> {
             Supplier<?> supplier = null;
@@ -139,50 +140,36 @@ class OrderStockCompensationIT {
     }
 
     private void mockHappyPath() {
-        pb.merchant.MerchantCommon.ApiResponseMerchant merchant = pb.merchant.MerchantCommon.ApiResponseMerchant
-                .newBuilder()
-                .setData(pb.merchant.MerchantCommon.MerchantResponse.newBuilder().setId(100).build())
-                .build();
-        when(merchantQueryService.findById(any()))
-                .thenReturn(Uni.createFrom().item(merchant));
+        when(merchantPort.findById(anyInt()))
+                .thenReturn(Uni.createFrom().item(
+                        new Merchant(100, 1, "Merchant", "desc", "addr", "mail@example.com", "0800", "active", null,
+                                null)));
 
-        pb.user.UserCommon.ApiResponseUser user = pb.user.UserCommon.ApiResponseUser.newBuilder()
-                .setData(pb.user.UserCommon.UserResponse.newBuilder().setId(100).build())
-                .build();
-        when(userQueryService.findById(any()))
-                .thenReturn(Uni.createFrom().item(user));
+        when(userPort.findById(anyInt()))
+                .thenReturn(Uni.createFrom().item(
+                        new User(100, "John", "Doe", "john@example.com", null, null, null)));
 
         // Product 1 has stock 100 (reserved OK); product 2 has stock 0 (fails).
-        when(productQueryService.findById(any()))
+        when(productPort.findById(anyInt()))
                 .thenAnswer(invocation -> {
-                    pb.product.ProductCommon.FindByIdProductRequest req = invocation.getArgument(0);
-                    pb.product.ProductCommon.ProductResponse.Builder b = pb.product.ProductCommon.ProductResponse
-                            .newBuilder().setId(req.getId()).setPrice(500);
-                    if (req.getId() == 1) {
-                        b.setCountInStock(100);
-                    } else {
-                        b.setCountInStock(0);
-                    }
-                    return Uni.createFrom().item(pb.product.ProductCommon.ApiResponseProduct.newBuilder()
-                            .setData(b.build()).build());
+                    int id = invocation.getArgument(0);
+                    return Uni.createFrom().item(new Product(id, 100, 1, "Product " + id, "desc", 500,
+                            id == 1 ? 100 : 0, "brand", 0, 0f, "slug", "image", null, null));
                 });
 
-        when(productCommandService.adjustStock(any()))
-                .thenReturn(Uni.createFrom().item(pb.product.ProductCommon.ApiResponseProduct
-                        .getDefaultInstance()));
+        when(productPort.adjustStock(anyInt(), anyInt()))
+                .thenReturn(Uni.createFrom().item(new Product(1, 100, 1, "Product", "desc", 500, 100, "brand", 0, 0f,
+                        "slug", "image", null, null)));
 
-        when(orderItemCommandServiceGrpc.createOrderItem(any()))
-                .thenReturn(Uni.createFrom().item(pb.order_item.OrderItemCommon.ApiResponseOrderItem
-                        .getDefaultInstance()));
-        when(shippingCommandService.createShipping(any()))
-                .thenReturn(Uni.createFrom().item(pb.shipping_address.ShippingAddressCommon.ApiResponseShipping
-                        .getDefaultInstance()));
-        when(orderItemCommandServiceGrpc.deleteOrderItemByOrderRollback(any()))
-                .thenReturn(Uni.createFrom().item(pb.order_item.OrderItemCommon.ApiResponseOrderItemDelete
-                        .getDefaultInstance()));
-        when(orderItemQueryServiceGrpc.findOrderItemByOrder(any()))
-                .thenReturn(Uni.createFrom().item(pb.order_item.OrderItemCommon.ApiResponsesOrderItem
-                        .getDefaultInstance()));
+        when(orderItemPort.create(any()))
+                .thenReturn(Uni.createFrom().item(new OrderItem(1, 1, 1, 2, 500, null, null)));
+        when(shippingAddressPort.create(any()))
+                .thenReturn(Uni.createFrom().item(
+                        new ShippingAddress(1, 1, "addr", "prov", "negara", "kota", "REG", 1000, null, null)));
+        when(orderItemPort.deleteByOrderIdRollback(anyInt()))
+                .thenReturn(Uni.createFrom().item(true));
+        when(orderItemPort.findOrderItemByOrder(anyInt()))
+                .thenReturn(Uni.createFrom().item(List.of()));
     }
 
     private CreateOrderRequest requestWithItems(boolean withFailingSecond) {
@@ -234,17 +221,14 @@ class OrderStockCompensationIT {
                 .chain(() -> Panache.withSession(() -> orderQueryRepo.count()))
                 .invoke(count -> assertThat(count).isZero())
                 .invoke(() -> {
-                    ArgumentCaptor<pb.product.ProductCommand.AdjustProductStockRequest> captor =
-                            ArgumentCaptor.forClass(pb.product.ProductCommand.AdjustProductStockRequest.class);
-                    verify(productCommandService, times(2)).adjustStock(captor.capture());
-                    List<pb.product.ProductCommand.AdjustProductStockRequest> calls = captor.getAllValues();
-                    assertThat(calls).hasSize(2);
-                    assertThat(calls.get(0).getProductId()).isEqualTo(1);
-                    assertThat(calls.get(0).getDelta()).isEqualTo(-2);
-                    assertThat(calls.get(1).getProductId()).isEqualTo(1);
-                    assertThat(calls.get(1).getDelta()).isEqualTo(2);
-                    verify(orderItemCommandServiceGrpc, atLeastOnce())
-                            .deleteOrderItemByOrderRollback(any());
+                    ArgumentCaptor<Integer> productIdCaptor = ArgumentCaptor.forClass(Integer.class);
+                    ArgumentCaptor<Integer> deltaCaptor = ArgumentCaptor.forClass(Integer.class);
+                    verify(productPort, times(2)).adjustStock(productIdCaptor.capture(), deltaCaptor.capture());
+                    List<Integer> productIds = productIdCaptor.getAllValues();
+                    List<Integer> deltas = deltaCaptor.getAllValues();
+                    assertThat(productIds).containsExactly(1, 1);
+                    assertThat(deltas).containsExactly(-2, 2);
+                    verify(orderItemPort, atLeastOnce()).deleteByOrderIdRollback(anyInt());
                     verify(tracingMetrics, atLeastOnce())
                             .recordStockCompensation(eq("success"), eq(1));
                 })
@@ -261,7 +245,7 @@ class OrderStockCompensationIT {
                 .chain(() -> Panache.withSession(() -> orderQueryRepo.count()))
                 .invoke(count -> assertThat(count).isEqualTo(1))
                 .invoke(() -> {
-                    verify(productCommandService, times(1)).adjustStock(any());
+                    verify(productPort, times(1)).adjustStock(anyInt(), anyInt());
                     verify(tracingMetrics, never()).recordStockCompensation(any(), any());
                 })
                 .replaceWithVoid();

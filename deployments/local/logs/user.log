@@ -1,0 +1,292 @@
+2026/08/21 17:30:18 Go runtime metrics collection started
+2026/08/21 17:30:18 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:18 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:18.748+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_USER","dbname":"user_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:18.748+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"user_db","prefix":"DB_USER"}
+2026/08/21 17:30:18 goose: no migrations to run. current version: 20250212095513
+{"level":"info","ts":"2026-08-21T17:30:18.875+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:18.891+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50053,"address":"[::]:50053"}
+2026/08/21 17:30:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:48.910+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.4 MB"}
+2026/08/21 17:30:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:18.894+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.4 MB"}
+{"level":"info","ts":"2026-08-21T17:31:20.112+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:20.141+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"68cbf3ded69a19acdcbde7c4edf47958","status_code":404,"email":"hurl.all-endpoints.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:20.152+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308280111867235_nVP39rEx","duration":"40.626492ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:20.253+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:20.253+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.all-endpoints.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Test","email":"hurl.all-endpoints.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:20.598+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.all-endpoints.1787308277@example.com","user_id":11}
+{"level":"info","ts":"2026-08-21T17:31:20.601+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308280252174662_ptLqdEHk","duration":"349.415969ms"}
+{"level":"info","ts":"2026-08-21T17:31:20.678+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:20.687+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.all-endpoints.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:20.687+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308280672391480_wDAi38GY","duration":"15.463738ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.237+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:21.246+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:11","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:21.246+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":11}
+{"level":"info","ts":"2026-08-21T17:31:21.247+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308281237464938_MB7d0iOL","duration":"9.685885ms"}
+{"level":"info","ts":"2026-08-21T17:31:24.921+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"info","ts":"2026-08-21T17:31:24.925+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully retrieved user record from cache","user.id":11}
+{"level":"info","ts":"2026-08-21T17:31:24.925+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308284921098001_2K8czV4S","duration":"4.35359ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.999+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308285999316500_vyAqbexN","duration":"175.848µs","error":"rpc error: code = NotFound desc = Invalid User ID"}
+{"level":"info","ts":"2026-08-21T17:31:27.813+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"debug","ts":"2026-08-21T17:31:27.814+0700","caller":"service/userCommandService.go:302","msg":"Permanently deleting all users"}
+{"level":"info","ts":"2026-08-21T17:31:27.833+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted all users permanently"}
+{"level":"info","ts":"2026-08-21T17:31:27.834+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/DeleteAllUserPermanent","request_id":"req_1787308287813709787_3PlqUqzR","duration":"20.826563ms"}
+{"level":"info","ts":"2026-08-21T17:31:27.847+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"debug","ts":"2026-08-21T17:31:27.847+0700","caller":"service/userCommandService.go:246","msg":"Deleting user permanently","user_id":1}
+{"level":"info","ts":"2026-08-21T17:31:27.850+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted user permanently","user_id":1}
+{"level":"info","ts":"2026-08-21T17:31:27.851+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/DeleteUserPermanent","request_id":"req_1787308287847211481_UgGH67hi","duration":"4.075038ms"}
+{"level":"info","ts":"2026-08-21T17:31:27.867+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"debug","ts":"2026-08-21T17:31:27.876+0700","caller":"service/userCommandService.go:275","msg":"Restoring all users"}
+{"level":"info","ts":"2026-08-21T17:31:27.878+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all users"}
+{"level":"info","ts":"2026-08-21T17:31:27.879+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/RestoreAllUser","request_id":"req_1787308287866985951_AGEyFWRx","duration":"12.56471ms"}
+{"level":"info","ts":"2026-08-21T17:31:27.886+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"debug","ts":"2026-08-21T17:31:27.929+0700","caller":"service/userCommandService.go:216","msg":"Restoring user","user_id":1}
+{"level":"error","ts":"2026-08-21T17:31:27.933+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"64bb9ad5389a15c227cc2f5d40113dab","status_code":404,"user_id":1,"error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:27.935+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/RestoreUser","request_id":"req_1787308287886604527_cfOv0frM","duration":"48.448437ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:27.952+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:27.986+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:27.986+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","totalRecords":6,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:27.988+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindAll","request_id":"req_1787308287952541707_8Jz2GGXr","duration":"35.504458ms"}
+{"level":"info","ts":"2026-08-21T17:31:28.066+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:28.074+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:28.074+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active user","totalRecords":6,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:28.075+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByActive","request_id":"req_1787308288066404242_3OrKSk0Y","duration":"8.812322ms"}
+{"level":"info","ts":"2026-08-21T17:31:28.101+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:28.108+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:28.108+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed user","totalRecords":0,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:28.109+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByTrashed","request_id":"req_1787308288101019704_CvCTrWk6","duration":"8.037756ms"}
+{"level":"info","ts":"2026-08-21T17:31:28.117+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:28.122+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:1","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:28.123+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":1}
+{"level":"info","ts":"2026-08-21T17:31:28.124+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308288116951617_Yu9mRpYq","duration":"7.033479ms"}
+2026/08/21 17:31:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:30.246+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:30.249+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"6b7d88876878f367d1ba322a05f3e2b6","status_code":404,"email":"hurl.auth.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:30.250+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308290245840806_JlueKf9M","duration":"4.315052ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:30.260+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:30.260+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.auth.1787308277@example.com","request":{"firstname":"John","lastname":"Doe","email":"hurl.auth.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:30.605+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.auth.1787308277@example.com","user_id":12}
+{"level":"info","ts":"2026-08-21T17:31:30.606+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308290259844488_aZ4DNKYG","duration":"346.543411ms"}
+{"level":"info","ts":"2026-08-21T17:31:30.647+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:30.651+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.auth.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:30.651+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308290647573078_3oUHPQBi","duration":"3.977223ms"}
+{"level":"info","ts":"2026-08-21T17:31:30.993+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:30.997+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:12","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:30.998+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":12}
+{"level":"info","ts":"2026-08-21T17:31:30.998+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308290993181282_nS5NpoLT","duration":"5.202072ms"}
+{"level":"info","ts":"2026-08-21T17:31:33.138+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:33.151+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"e9e530fcf9b5ff2328cf11a857cabc8a","status_code":404,"email":"hurl.banner.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:33.155+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308293138001084_Yuk9He7W","duration":"17.441686ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:33.172+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:33.173+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.banner.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Banner","email":"hurl.banner.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+2026/08/21 17:31:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:33.619+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.banner.1787308277@example.com","user_id":13}
+{"level":"info","ts":"2026-08-21T17:31:33.619+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308293169926402_nqEiBSxz","duration":"449.866235ms"}
+{"level":"info","ts":"2026-08-21T17:31:33.667+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:33.671+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.banner.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:33.672+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308293667601072_7uvUParJ","duration":"4.419583ms"}
+{"level":"info","ts":"2026-08-21T17:31:36.563+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:36.566+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"e70622bb31c3de0da1c0fde21429a0dd","status_code":404,"email":"hurl.cart.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:36.566+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308296563558057_y60QXIs1","duration":"3.366087ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:36.573+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:36.573+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.cart.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Cart","email":"hurl.cart.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:36.898+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.cart.1787308277@example.com","user_id":14}
+{"level":"info","ts":"2026-08-21T17:31:36.902+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308296572701517_wWS9ZbXw","duration":"329.505123ms"}
+{"level":"info","ts":"2026-08-21T17:31:36.942+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:36.945+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.cart.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:36.945+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308296942184972_wVCBslgB","duration":"3.378733ms"}
+{"level":"info","ts":"2026-08-21T17:31:37.434+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:37.449+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:14","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:37.450+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":14}
+{"level":"info","ts":"2026-08-21T17:31:37.450+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308297433720681_12OY5EFF","duration":"17.073864ms"}
+{"level":"info","ts":"2026-08-21T17:31:37.657+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"info","ts":"2026-08-21T17:31:37.659+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully retrieved user record from cache","user.id":14}
+{"level":"info","ts":"2026-08-21T17:31:37.659+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308297656548311_4LEuyXcK","duration":"3.287101ms"}
+{"level":"info","ts":"2026-08-21T17:31:37.755+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"info","ts":"2026-08-21T17:31:37.759+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully retrieved user record from cache","user.id":14}
+{"level":"info","ts":"2026-08-21T17:31:37.759+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308297755589862_chMhAvQc","duration":"4.359004ms"}
+2026/08/21 17:31:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:39.907+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:39.911+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"883afc17a28f63650cbfd4af9ca5a17c","status_code":404,"email":"hurl.category.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:39.911+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308299907369280_DZdXPsa6","duration":"4.117865ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:39.925+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:39.926+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.category.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Category","email":"hurl.category.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:40.334+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.category.1787308277@example.com","user_id":15}
+{"level":"info","ts":"2026-08-21T17:31:40.334+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308299925036785_sx097G0L","duration":"409.831654ms"}
+{"level":"info","ts":"2026-08-21T17:31:40.464+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:40.469+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.category.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:40.470+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308300464243035_yhe3kBXs","duration":"6.065943ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.059+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:43.068+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"7bcb3857ed525086b1ee772b843b26c8","status_code":404,"email":"hurl.merchant.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:43.068+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308303059508698_KJveJen5","duration":"9.352949ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:43.082+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:43.083+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.merchant.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Merchant","email":"hurl.merchant.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:43.498+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.merchant.1787308277@example.com","user_id":16}
+{"level":"info","ts":"2026-08-21T17:31:43.498+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308303082045851_yqDfFkAD","duration":"416.911012ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.529+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:43.531+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.merchant.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:43.531+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308303528911473_Zp9fOt78","duration":"2.99961ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.871+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:43.876+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:16","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:43.877+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":16}
+{"level":"info","ts":"2026-08-21T17:31:43.878+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308303870865159_S3T0ooz7","duration":"7.132216ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.059+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:46.062+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"685f7004b0df58efa1b3a9b5f98b1e80","status_code":404,"email":"hurl.order.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:46.062+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308306058902598_AqmV7k9V","duration":"3.747909ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:46.072+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:46.075+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.order.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Order","email":"hurl.order.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:46.383+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.order.1787308277@example.com","user_id":17}
+{"level":"info","ts":"2026-08-21T17:31:46.384+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308306071834492_sDmzX21Z","duration":"312.382297ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.407+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:46.408+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.order.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:46.409+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308306407199552_XdYmKsPg","duration":"2.171115ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.777+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:46.787+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:17","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:46.790+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":17}
+{"level":"info","ts":"2026-08-21T17:31:46.790+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308306777213984_d41xrVC3","duration":"13.287009ms"}
+2026/08/21 17:31:48 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:48.895+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.409961685823754,"memory_used":"1.8 MB"}
+{"level":"info","ts":"2026-08-21T17:31:49.244+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:49.248+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"77eace250d9850ea5688732768ab223f","status_code":404,"email":"hurl.product.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:49.249+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308309244512585_S7TrETEC","duration":"5.115696ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:49.268+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:49.268+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.product.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Product","email":"hurl.product.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+2026/08/21 17:31:49 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.663+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.product.1787308277@example.com","user_id":18}
+{"level":"info","ts":"2026-08-21T17:31:49.663+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308309267576682_BlkAkFIF","duration":"396.40025ms"}
+{"level":"info","ts":"2026-08-21T17:31:49.712+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:49.715+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.product.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:49.716+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308309712312602_urGogo9G","duration":"4.422728ms"}
+{"level":"info","ts":"2026-08-21T17:31:50.112+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:50.115+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:18","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:50.116+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":18}
+{"level":"info","ts":"2026-08-21T17:31:50.116+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308310112581202_fxUxEKhg","duration":"3.700976ms"}
+{"level":"info","ts":"2026-08-21T17:31:52.464+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:52.470+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"1c2afe7f50c82e1509775da36dc90e1d","status_code":404,"email":"hurl.review.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:52.472+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308312464703251_gix4vKKc","duration":"7.88338ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:52.485+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:52.485+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.review.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Review","email":"hurl.review.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:52.862+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.review.1787308277@example.com","user_id":19}
+{"level":"info","ts":"2026-08-21T17:31:52.862+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308312484217843_0wxMpOjS","duration":"378.182021ms"}
+{"level":"info","ts":"2026-08-21T17:31:52.896+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:52.898+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.review.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:52.899+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308312895889335_7iys0aCE","duration":"3.644979ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.283+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:53.290+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:19","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:53.291+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":19}
+{"level":"info","ts":"2026-08-21T17:31:53.291+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308313283380495_HBHgclYz","duration":"8.061205ms"}
+{"level":"info","ts":"2026-08-21T17:31:53.358+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"info","ts":"2026-08-21T17:31:53.360+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully retrieved user record from cache","user.id":19}
+{"level":"info","ts":"2026-08-21T17:31:53.361+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308313358178277_vCnJphUg","duration":"3.02651ms"}
+{"level":"info","ts":"2026-08-21T17:31:55.675+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:55.678+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"03ded3dacdd3fd6beca9463bbc4c6514","status_code":404,"email":"admin.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:55.679+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308315675401752_Lx0lV8Em","duration":"3.886468ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:55.707+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:55.707+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"admin.1787308277@example.com","request":{"firstname":"Rules","lastname":"Admin","email":"admin.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:56.106+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"admin.1787308277@example.com","user_id":20}
+{"level":"info","ts":"2026-08-21T17:31:56.107+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308315707065630_U4ddIS7M","duration":"400.007604ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.165+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:56.168+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"admin.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:56.168+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308316165638962_mnbNyNki","duration":"2.753812ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.543+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:56.550+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"user_7ebd94b0-5787-4325-af35-cb2952b6ec96@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:56.550+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308316543690720_VAYHCA2Z","duration":"7.007962ms"}
+{"level":"info","ts":"2026-08-21T17:31:59.000+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:31:59.025+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"55bb8a0e7ee13803ab09ea2d4dc56447","status_code":404,"email":"hurl.shipping_address.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:31:59.025+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308319000368920_hR1WWna4","duration":"25.301272ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:31:59.079+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:31:59.079+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.shipping_address.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Shipping","email":"hurl.shipping_address.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:31:59.415+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.shipping_address.1787308277@example.com","user_id":21}
+{"level":"info","ts":"2026-08-21T17:31:59.415+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308319078614695_FUqnyija","duration":"337.281728ms"}
+{"level":"info","ts":"2026-08-21T17:31:59.449+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:31:59.454+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.shipping_address.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:59.454+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308319449526221_roL7fxnc","duration":"5.39191ms"}
+2026/08/21 17:31:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:02.144+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:32:02.147+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"e9ed651671e3a195d0712ca6141d6c29","status_code":404,"email":"hurl.slider.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:32:02.148+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308322144560077_npYK2hzv","duration":"3.882875ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:32:02.156+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:32:02.157+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.slider.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Slider","email":"hurl.slider.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:32:02.489+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.slider.1787308277@example.com","user_id":22}
+{"level":"info","ts":"2026-08-21T17:32:02.489+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308322156396210_TTUz5UPw","duration":"333.315601ms"}
+{"level":"info","ts":"2026-08-21T17:32:02.520+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:32:02.522+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.slider.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:02.522+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308322519980300_WoEoj2NI","duration":"2.865414ms"}
+2026/08/21 17:32:03 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:05.183+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:32:05.186+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"30bb59d93593e562f9901704d516c5ac","status_code":404,"email":"hurl.stats_strict.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:32:05.186+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308325183037481_iv5QYO4d","duration":"3.703092ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:32:05.193+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:32:05.193+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.stats_strict.1787308277@example.com","request":{"firstname":"Stats","lastname":"Tester","email":"hurl.stats_strict.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:32:05.534+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.stats_strict.1787308277@example.com","user_id":23}
+{"level":"info","ts":"2026-08-21T17:32:05.535+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308325192918314_XaYr9jSI","duration":"342.458289ms"}
+{"level":"info","ts":"2026-08-21T17:32:05.558+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:32:05.560+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.stats_strict.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:05.560+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308325558502971_69ikKfY9","duration":"2.387957ms"}
+{"level":"info","ts":"2026-08-21T17:32:09.374+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:32:09.377+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"038e20a562c20b0fb61574fb036d2fba","status_code":404,"email":"hurl.transaction.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:32:09.378+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308329373917012_2xGwrI0d","duration":"4.382369ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:32:09.394+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:32:09.394+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.transaction.1787308277@example.com","request":{"firstname":"Hurl","lastname":"Transaction","email":"hurl.transaction.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+2026/08/21 17:32:09 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:09.741+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.transaction.1787308277@example.com","user_id":24}
+{"level":"info","ts":"2026-08-21T17:32:09.741+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308329389562371_0dp7sgYU","duration":"352.121453ms"}
+{"level":"info","ts":"2026-08-21T17:32:09.785+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:32:09.787+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.transaction.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:09.787+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308329785420779_aMZxAfNe","duration":"2.097394ms"}
+{"level":"info","ts":"2026-08-21T17:32:10.144+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:32:10.148+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"user:id:24","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:32:10.148+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user","user_id":24}
+{"level":"info","ts":"2026-08-21T17:32:10.148+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308330144500428_4L7roGFH","duration":"3.892023ms"}
+{"level":"info","ts":"2026-08-21T17:32:10.274+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"info","ts":"2026-08-21T17:32:10.277+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully retrieved user record from cache","user.id":24}
+{"level":"info","ts":"2026-08-21T17:32:10.277+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindById","request_id":"req_1787308330274175971_FPQ8JiSf","duration":"3.580991ms"}
+{"level":"info","ts":"2026-08-21T17:32:12.660+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"error","ts":"2026-08-21T17:32:12.664+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByEmailWithPassword","trace.id":"a5ac2d82a300946cb715394dc0908bdb","status_code":404,"email":"hurl.user.1787308277@example.com","error":"[NOT_FOUND] User not found"}
+{"level":"info","ts":"2026-08-21T17:32:12.665+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308332659613671_mqC8M1KM","duration":"5.535306ms","error":"rpc error: code = NotFound desc = User not found"}
+{"level":"info","ts":"2026-08-21T17:32:12.677+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:32:12.678+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"hurl.user.1787308277@example.com","request":{"firstname":"Hurl","lastname":"User","email":"hurl.user.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:32:13.009+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"hurl.user.1787308277@example.com","user_id":25}
+{"level":"info","ts":"2026-08-21T17:32:13.010+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308332677103497_Mf9HyLWm","duration":"333.50781ms"}
+{"level":"info","ts":"2026-08-21T17:32:13.178+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByEmailWithPassword"}
+{"level":"info","ts":"2026-08-21T17:32:13.189+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched user by email","email":"hurl.user.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:13.193+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserQueryService/FindByEmail","request_id":"req_1787308333178453453_I98Rh3cs","duration":"15.396394ms"}
+{"level":"info","ts":"2026-08-21T17:32:13.539+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"debug","ts":"2026-08-21T17:32:13.539+0700","caller":"service/userCommandService.go:61","msg":"Creating new user","email":"alice.hurl.user.1787308277@example.com","request":{"firstname":"Alice","lastname":"Smith","email":"alice.hurl.user.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:32:13.864+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created new user","email":"alice.hurl.user.1787308277@example.com","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:13.864+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Create","request_id":"req_1787308333538146818_PswhhElI","duration":"326.756255ms"}
+{"level":"info","ts":"2026-08-21T17:32:13.910+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Update"}
+{"level":"debug","ts":"2026-08-21T17:32:13.910+0700","caller":"service/userCommandService.go:114","msg":"Updating user","user_id":26,"request":{"user_id":26,"firstname":"Alicia","lastname":"Smith","email":"alice.hurl.user.1787308277@example.com","password":"HurlPass123","confirm_password":"HurlPass123"}}
+{"level":"info","ts":"2026-08-21T17:32:14.242+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully updated user","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.243+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/Update","request_id":"req_1787308333910174461_gPZJcH5S","duration":"332.824512ms"}
+{"level":"info","ts":"2026-08-21T17:32:14.254+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"debug","ts":"2026-08-21T17:32:14.254+0700","caller":"service/userCommandService.go:186","msg":"Trashing user","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.258+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed user","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.259+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/TrashedUser","request_id":"req_1787308334254366000_BFZ6dplA","duration":"4.859394ms"}
+{"level":"info","ts":"2026-08-21T17:32:14.270+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"debug","ts":"2026-08-21T17:32:14.271+0700","caller":"service/userCommandService.go:216","msg":"Restoring user","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.274+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored user","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.276+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/RestoreUser","request_id":"req_1787308334270760270_o1TkLix5","duration":"6.181226ms"}
+{"level":"info","ts":"2026-08-21T17:32:14.283+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"debug","ts":"2026-08-21T17:32:14.283+0700","caller":"service/userCommandService.go:246","msg":"Deleting user permanently","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.286+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted user permanently","user_id":26}
+{"level":"info","ts":"2026-08-21T17:32:14.287+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.UserCommandService/DeleteUserPermanent","request_id":"req_1787308334283128883_pirHyZZD","duration":"3.923814ms"}
+2026/08/21 17:32:18 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:18.902+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":1,"total_keys":182,"hit_rate":33.056133056133056,"memory_used":"1.7 MB"}
+2026/08/21 17:32:19 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:41.859+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:41.859+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:41.863+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:41.880+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:41.882+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:41.885+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:41.898+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:52 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:52.513+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:52.526+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

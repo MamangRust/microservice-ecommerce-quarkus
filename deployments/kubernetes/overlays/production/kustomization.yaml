@@ -4,64 +4,73 @@ kind: Kustomization
 namespace: ecommerce
 
 resources:
-  - ../../base
-  - dns-egress.yaml
-  - email-smtp-egress.yaml
+  - ../../core
+  - ../../security
+  - ../../database
+  - ../../messaging
+  - ../../cache
+  - ../../observability
+  - ../../networking
+  - ../../services
 
 images:
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/apigateway
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/apigateway
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/auth
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/auth
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/banner
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/banner
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/cart
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/cart
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/category
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/category
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/db-migration
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/db-migration
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/email
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/email
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/merchant
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/merchant
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/merchant_award
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/merchant_award
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/merchant_business
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/merchant_business
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/merchant_detail
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/merchant_detail
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/merchant_policy
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/merchant_policy
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/order
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/order
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/order_item
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/order_item
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/product
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/product
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/review
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/review
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/review_detail
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/review_detail
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/role
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/role
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/shipping_address
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/shipping_address
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/slider
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/slider
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/transaction
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/stats_reader
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
-  - name: ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/user
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/stats_writer
+    newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/transaction
+    newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
+  - name: ghcr.io/__GHCR_OWNER__/vertx-ecommerce/user
     newTag: c5cc38c7e4e0f230684e94cce1d351ddf6f6225e
 
 # GHCR image owner templating.
 #
-# The base manifests reference images as ghcr.io/__GHCR_OWNER__/quarkus-ecommerce/<svc>.
+# The base manifests reference images as ghcr.io/__GHCR_OWNER__/vertx-ecommerce/<svc>.
 # The `images` block above matches that placeholder (so newTag is pinned here),
 # and this `replacements` block substitutes the real owner (from the app-config
 # ConfigMap key GHCR_OWNER) into the <owner> segment of each image field.
 # GHCR_OWNER must match github.repository_owner (lowercase) of the repository
-# whose CI pushes to ghcr.io/<owner>/quarkus-ecommerce/... — on a fork, only this
+# whose CI pushes to ghcr.io/<owner>/vertx-ecommerce/... — on a fork, only this
 # ConfigMap value needs to change.
 replacements:
   - source:
@@ -71,7 +80,7 @@ replacements:
     targets:
       - select:
           kind: Deployment
-          name: "^(apigateway|auth|banner|cart|category|email|merchant|merchant-award|merchant-business|merchant-detail|merchant-policy|order|order-item|product|review|review-detail|role|shipping-address|slider|transaction|user)$"
+          name: "^(apigateway|auth|banner|cart|category|email|merchant|merchant-award|merchant-business|merchant-detail|merchant-policy|order|order-item|product|review|review-detail|role|shipping-address|slider|stats-reader|stats-writer|transaction|user)$"
         fieldPaths:
           - spec.template.spec.containers.0.image
         options:
@@ -79,12 +88,15 @@ replacements:
           index: 1
       - select:
           kind: Job
-          name: migrate
+          name: "^(migrate|stats-backfill)$"
         fieldPaths:
           - spec.template.spec.containers.0.image
         options:
           delimiter: "/"
           index: 1
+
+components:
+  - ../../components/image-pull-secret
 
 patches:
   - path: migration-hook.yaml
@@ -98,4 +110,16 @@ patches:
       group: apps
       version: v1
       kind: Deployment
-      name: "^(apigateway|auth|banner|cart|category|email|merchant|merchant-award|merchant-business|merchant-detail|merchant-policy|order|order-item|product|review|review-detail|role|shipping-address|slider|transaction|user)$"
+      name: "^(apigateway|auth|banner|cart|category|email|merchant|merchant-award|merchant-business|merchant-detail|merchant-policy|order|order-item|product|review|review-detail|role|shipping-address|slider|stats-reader|stats-writer|transaction|user)$"
+  - path: postgres-wave.yaml
+    target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+      name: "^(postgres-identity|postgres-merchant|postgres-catalog|postgres-sales|postgres-experience|postgres-email)$"
+  - path: pgbouncer-wave.yaml
+    target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: "^(pgbouncer-identity|pgbouncer-merchant|pgbouncer-catalog|pgbouncer-sales|pgbouncer-experience|pgbouncer-email)$"

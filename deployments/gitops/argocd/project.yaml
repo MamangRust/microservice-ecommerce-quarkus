@@ -6,7 +6,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  description: E-Commerce modular monolith project
+  description: E-Commerce modular microservice project
   sourceRepos:
   - '*'
   destinations:

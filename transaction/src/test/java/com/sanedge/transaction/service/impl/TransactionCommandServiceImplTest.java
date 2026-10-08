@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -25,6 +26,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.sanedge.common.adapter.merchant.MerchantPort;
+import com.sanedge.common.adapter.model.Merchant;
+import com.sanedge.common.adapter.model.Order;
+import com.sanedge.common.adapter.model.OrderItem;
+import com.sanedge.common.adapter.model.ShippingAddress;
+import com.sanedge.common.adapter.model.User;
+import com.sanedge.common.adapter.order_item.OrderItemPort;
+import com.sanedge.common.adapter.order.OrderPort;
+import com.sanedge.common.adapter.shipping_address.ShippingAddressPort;
+import com.sanedge.common.adapter.user.UserPort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.InvalidRequestException;
@@ -42,11 +53,6 @@ import com.sanedge.transaction.service.KafkaService;
 
 import io.opentelemetry.api.common.Attributes;
 import io.smallrye.mutiny.Uni;
-import pb.merchant.MerchantQueryService;
-import pb.order.OrderQueryService;
-import pb.order_item.OrderItemQueryService;
-import pb.shipping_address.ShippingQueryService;
-import pb.user.UserQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionCommandServiceImplTest {
@@ -58,19 +64,19 @@ class TransactionCommandServiceImplTest {
         private TransactionCommandRepository transactionCommandRepo;
 
         @Mock
-        private MerchantQueryService merchantQueryService;
+        private MerchantPort merchantPort;
 
         @Mock
-        private OrderQueryService orderQueryService;
+        private OrderPort orderPort;
 
         @Mock
-        private OrderItemQueryService orderItemQueryService;
+        private OrderItemPort orderItemPort;
 
         @Mock
-        private ShippingQueryService shippingQueryService;
+        private ShippingAddressPort shippingAddressPort;
 
         @Mock
-        private UserQueryService userQueryService;
+        private UserPort userPort;
 
         @Mock
         private RedisService redisService;
@@ -91,11 +97,11 @@ class TransactionCommandServiceImplTest {
                                 redisService,
                                 tracingMetrics);
 
-                setField(service, "merchantQueryService", merchantQueryService);
-                setField(service, "orderQueryService", orderQueryService);
-                setField(service, "orderItemQueryService", orderItemQueryService);
-                setField(service, "shippingQueryService", shippingQueryService);
-                setField(service, "userQueryService", userQueryService);
+                setField(service, "merchantPort", merchantPort);
+                setField(service, "orderPort", orderPort);
+                setField(service, "orderItemPort", orderItemPort);
+                setField(service, "shippingAddressPort", shippingAddressPort);
+                setField(service, "userPort", userPort);
 
                 setField(service, "kafkaService", kafkaService);
 
@@ -167,62 +173,24 @@ class TransactionCommandServiceImplTest {
         }
 
         private void mockCreateDependencies() {
-                when(merchantQueryService.findById(
-                                any(pb.merchant.MerchantCommon.FindByIdMerchantRequest.class)))
-                                .thenReturn(Uni.createFrom().item(
-                                                pb.merchant.MerchantCommon.ApiResponseMerchant.newBuilder()
-                                                                .setData(pb.merchant.MerchantCommon.MerchantResponse
-                                                                                .newBuilder()
-                                                                                .setId(1)
-                                                                                .setUserId(100)
-                                                                                .build())
-                                                                .build()));
+                when(merchantPort.findById(anyInt()))
+                                .thenReturn(Uni.createFrom().item(new Merchant(1, 100, "Merchant", "desc", "addr",
+                                                "mail@example.com", "0800", "active", null, null)));
 
-                when(orderQueryService.findById(
-                                any(pb.order.OrderCommon.FindByIdOrderRequest.class)))
-                                .thenReturn(Uni.createFrom().item(
-                                                pb.order.OrderCommon.ApiResponseOrder.newBuilder()
-                                                                .setData(pb.order.OrderCommon.OrderResponse
-                                                                                .newBuilder()
-                                                                                .setId(1)
-                                                                                .setUserId(100)
-                                                                                .build())
-                                                                .build()));
+                when(orderPort.findById(anyInt()))
+                                .thenReturn(Uni.createFrom().item(new Order(1, 1, 100, 0, null, null)));
 
-                when(orderItemQueryService.findOrderItemByOrder(
-                                any(pb.order_item.OrderItemCommon.FindByIdOrderItemRequest.class)))
+                when(orderItemPort.findOrderItemByOrder(anyInt()))
                                 .thenReturn(Uni.createFrom().item(
-                                                pb.order_item.OrderItemCommon.ApiResponsesOrderItem.newBuilder()
-                                                                .addData(pb.order_item.OrderItemCommon.OrderItemResponse
-                                                                                .newBuilder()
-                                                                                .setPrice(50000)
-                                                                                .setQuantity(3)
-                                                                                .build())
-                                                                .build()));
+                                                List.of(new OrderItem(1, 1, 1, 3, 50000, null, null))));
 
-                when(shippingQueryService.findByOrder(
-                                any(pb.shipping_address.ShippingAddressCommon.FindByIdShippingRequest.class)))
-                                .thenReturn(Uni.createFrom().item(
-                                                pb.shipping_address.ShippingAddressCommon.ApiResponseShipping
-                                                                .newBuilder()
-                                                                .setData(pb.shipping_address.ShippingAddressCommon.ShippingResponse
-                                                                                .newBuilder()
-                                                                                .setId(1)
-                                                                                .setShippingCost(10000)
-                                                                                .build())
-                                                                .build()));
+                when(shippingAddressPort.findByOrder(anyInt()))
+                                .thenReturn(Uni.createFrom().item(new ShippingAddress(1, 1, "addr", "prov", "negara",
+                                                "kota", "REG", 10000, null, null)));
 
-                when(userQueryService.findById(
-                                any(pb.user.UserCommon.FindByIdUserRequest.class)))
+                when(userPort.findById(anyInt()))
                                 .thenReturn(Uni.createFrom().item(
-                                                pb.user.UserCommon.ApiResponseUser.newBuilder()
-                                                                .setStatus("success")
-                                                                .setData(pb.user.UserCommon.UserResponse.newBuilder()
-                                                                                .setEmail("test@test.com")
-                                                                                .setFirstname("Test")
-                                                                                .setLastname("User")
-                                                                                .build())
-                                                                .build()));
+                                                new User(100, "Test", "User", "test@test.com", null, null, null)));
 
                 lenient().when(kafkaService.sendMessage(anyString(), anyString(), any()))
                                 .thenReturn(Uni.createFrom().voidItem());
@@ -284,50 +252,20 @@ class TransactionCommandServiceImplTest {
                         when(transactionQueryRepo.findTransactionById(1L))
                                         .thenReturn(Uni.createFrom().item(Optional.of(existing)));
 
-                        when(merchantQueryService.findById(
-                                        any(pb.merchant.MerchantCommon.FindByIdMerchantRequest.class)))
-                                        .thenReturn(Uni.createFrom().item(
-                                                        pb.merchant.MerchantCommon.ApiResponseMerchant.newBuilder()
-                                                                        .setData(pb.merchant.MerchantCommon.MerchantResponse
-                                                                                        .newBuilder()
-                                                                                        .setId(1)
-                                                                                        .setUserId(100)
-                                                                                        .build())
-                                                                        .build()));
+                        when(merchantPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom().item(new Merchant(1, 100, "Merchant", "desc",
+                                                        "addr", "mail@example.com", "0800", "active", null, null)));
 
-                        when(orderQueryService.findById(
-                                        any(pb.order.OrderCommon.FindByIdOrderRequest.class)))
-                                        .thenReturn(Uni.createFrom().item(
-                                                        pb.order.OrderCommon.ApiResponseOrder.newBuilder()
-                                                                        .setData(pb.order.OrderCommon.OrderResponse
-                                                                                        .newBuilder()
-                                                                                        .setId(1)
-                                                                                        .setUserId(100)
-                                                                                        .build())
-                                                                        .build()));
+                        when(orderPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom().item(new Order(1, 1, 100, 0, null, null)));
 
-                        when(orderItemQueryService.findOrderItemByOrder(
-                                        any(pb.order_item.OrderItemCommon.FindByIdOrderItemRequest.class)))
+                        when(orderItemPort.findOrderItemByOrder(anyInt()))
                                         .thenReturn(Uni.createFrom().item(
-                                                        pb.order_item.OrderItemCommon.ApiResponsesOrderItem.newBuilder()
-                                                                        .addData(pb.order_item.OrderItemCommon.OrderItemResponse
-                                                                                        .newBuilder()
-                                                                                        .setPrice(50000)
-                                                                                        .setQuantity(4)
-                                                                                        .build())
-                                                                        .build()));
+                                                        List.of(new OrderItem(1, 1, 1, 4, 50000, null, null))));
 
-                        when(shippingQueryService.findByOrder(
-                                        any(pb.shipping_address.ShippingAddressCommon.FindByIdShippingRequest.class)))
-                                        .thenReturn(Uni.createFrom().item(
-                                                        pb.shipping_address.ShippingAddressCommon.ApiResponseShipping
-                                                                        .newBuilder()
-                                                                        .setData(pb.shipping_address.ShippingAddressCommon.ShippingResponse
-                                                                                        .newBuilder()
-                                                                                        .setId(1)
-                                                                                        .setShippingCost(10000)
-                                                                                        .build())
-                                                                        .build()));
+                        when(shippingAddressPort.findByOrder(anyInt()))
+                                        .thenReturn(Uni.createFrom().item(new ShippingAddress(1, 1, "addr", "prov",
+                                                        "negara", "kota", "REG", 10000, null, null)));
                         when(transactionCommandRepo.persist(any(Transaction.class)))
                                         .thenAnswer(inv -> {
                                                 Transaction t = inv.getArgument(0);

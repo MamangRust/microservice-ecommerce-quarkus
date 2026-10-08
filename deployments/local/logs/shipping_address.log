@@ -1,0 +1,97 @@
+2026/08/21 17:30:19 Go runtime metrics collection started
+2026/08/21 17:30:19 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:19 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.473+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_SHIPPING_ADDRESS","dbname":"shipping_address_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.473+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"shipping_address_db","prefix":"DB_SHIPPING_ADDRESS"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250213033046
+{"level":"info","ts":"2026-08-21T17:30:19.585+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.602+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50063,"address":"[::]:50063"}
+2026/08/21 17:30:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.635+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"2.0 MB"}
+2026/08/21 17:31:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.612+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.7 MB"}
+{"level":"info","ts":"2026-08-21T17:31:25.708+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:25.722+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.722+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted all trashed shipping addresses"}
+{"level":"info","ts":"2026-08-21T17:31:25.723+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/DeleteAllShippingPermanent","request_id":"req_1787308285708730577_ingqtRS7","duration":"14.627673ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.729+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:25.733+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.734+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully permanently deleted shipping address","shipping_id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.734+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/DeleteShippingPermanent","request_id":"req_1787308285728856153_CXvRS9kf","duration":"5.733054ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.740+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:25.743+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all trashed shipping addresses"}
+{"level":"info","ts":"2026-08-21T17:31:25.743+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/RestoreAllShipping","request_id":"req_1787308285740714611_w8JLYrjl","duration":"2.756803ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.747+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:25.750+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"70f8d61754ab2247cadb2c7a4e92d546","status_code":404,"shipping_id":1,"error":"[NOT_FOUND] shipping address not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.751+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/RestoreShipping","request_id":"req_1787308285747554328_NzSxZLL6","duration":"3.910575ms","error":"rpc error: code = NotFound desc = shipping address not found"}
+{"level":"info","ts":"2026-08-21T17:31:25.756+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:25.762+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":0}
+{"level":"info","ts":"2026-08-21T17:31:25.763+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed shipping address","shipping_id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.763+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/TrashedShipping","request_id":"req_1787308285755893910_7T8nUq2G","duration":"7.653529ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.771+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:25.789+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"shipping_address:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.791+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all shipping addresses","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.791+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindAll","request_id":"req_1787308285771660644_elO1ePtZ","duration":"20.220559ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.799+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:25.810+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"shipping_address:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.810+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active shipping addresses","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.811+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindByActive","request_id":"req_1787308285799661918_Wf4a6ahD","duration":"11.79726ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.818+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindShippingAddressByOrder"}
+{"level":"error","ts":"2026-08-21T17:31:25.822+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindShippingAddressByOrder","trace.id":"59e4a8490535705daf71c38b8553841e","status_code":404,"order_id":1,"error":"[NOT_FOUND] failed to find shipping address by order ID"}
+{"level":"info","ts":"2026-08-21T17:31:25.822+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindByOrder","request_id":"req_1787308285818583497_ytBE6JO3","duration":"4.371684ms","error":"rpc error: code = NotFound desc = failed to find shipping address by order ID"}
+{"level":"info","ts":"2026-08-21T17:31:25.829+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:25.836+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"shipping_address:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.836+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed shipping addresses","totalRecords":1,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.837+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindByTrashed","request_id":"req_1787308285829232134_86HH5VXw","duration":"7.970788ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.845+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:25.850+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"c63719de49daef5ab68c54a0c612a813","status_code":404,"shipping_id":1,"error":"[NOT_FOUND] failed to find shipping address by ID"}
+{"level":"info","ts":"2026-08-21T17:31:25.850+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindById","request_id":"req_1787308285845043168_Rx5JncY0","duration":"5.772539ms","error":"rpc error: code = NotFound desc = failed to find shipping address by ID"}
+2026/08/21 17:31:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:39 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:40 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:46.967+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:46.985+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":3}
+{"level":"info","ts":"2026-08-21T17:31:46.985+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created shipping address"}
+{"level":"info","ts":"2026-08-21T17:31:46.987+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/CreateShipping","request_id":"req_1787308306966827732_SMsJXwpz","duration":"20.229635ms"}
+{"level":"info","ts":"2026-08-21T17:31:49.617+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"1.9 MB"}
+2026/08/21 17:31:57 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:59 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:59.886+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:59.955+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"shipping_address:id:8","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:59.956+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched shipping address by ID","shipping_id":8}
+{"level":"info","ts":"2026-08-21T17:31:59.956+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindById","request_id":"req_1787308319886529518_XckMd4fk","duration":"70.325683ms"}
+{"level":"info","ts":"2026-08-21T17:31:59.974+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:32:00.024+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":1}
+{"level":"info","ts":"2026-08-21T17:32:00.024+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed shipping address","shipping_id":8}
+{"level":"info","ts":"2026-08-21T17:32:00.024+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/TrashedShipping","request_id":"req_1787308319974515297_WgxKjrmb","duration":"50.294202ms"}
+{"level":"info","ts":"2026-08-21T17:32:00.036+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"info","ts":"2026-08-21T17:32:00.050+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":0}
+{"level":"info","ts":"2026-08-21T17:32:00.050+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored shipping address","shipping_id":8}
+{"level":"info","ts":"2026-08-21T17:32:00.051+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/RestoreShipping","request_id":"req_1787308320036609998_E3msIEGr","duration":"14.631347ms"}
+2026/08/21 17:32:07 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:10.242+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:32:10.248+0700","caller":"cache/redis_cache.go:208","msg":"Invalidated cache keys","pattern":"shipping_address:*","count":0}
+{"level":"info","ts":"2026-08-21T17:32:10.248+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created shipping address"}
+{"level":"info","ts":"2026-08-21T17:32:10.248+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingCommandService/CreateShipping","request_id":"req_1787308330241817243_0H1Fdn7a","duration":"7.002098ms"}
+{"level":"info","ts":"2026-08-21T17:32:10.325+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindShippingAddressByOrder"}
+{"level":"debug","ts":"2026-08-21T17:32:10.330+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"shipping_address:order_id:10","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:32:10.330+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched shipping address by order ID","order_id":10}
+{"level":"info","ts":"2026-08-21T17:32:10.331+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.ShippingQueryService/FindByOrder","request_id":"req_1787308330325646055_GHGJBkRk","duration":"5.431798ms"}
+2026/08/21 17:32:14 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:17 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.674+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":1,"total_keys":182,"hit_rate":70.26777469990766,"memory_used":"2.6 MB"}
+2026/08/21 17:32:24 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:27 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:37 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:44.263+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:44.264+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:44.265+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:44.273+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:44.274+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:44.274+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:44.274+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:55 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:55.119+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:55.119+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

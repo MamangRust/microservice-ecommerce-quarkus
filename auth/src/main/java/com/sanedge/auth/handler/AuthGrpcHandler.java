@@ -86,7 +86,7 @@ public class AuthGrpcHandler extends pb.MutinyAuthServiceGrpc.AuthServiceImplBas
                 .map(user -> ApiResponseRegister.newBuilder()
                         .setStatus("success")
                         .setMessage("User registered successfully. Verification email sent.")
-                        .setData(user)
+                        .setData(toProtoUser(user))
                         .build())
                 .onFailure().recoverWithItem(err -> ApiResponseRegister.newBuilder()
                         .setStatus("failed")
@@ -138,11 +138,25 @@ public class AuthGrpcHandler extends pb.MutinyAuthServiceGrpc.AuthServiceImplBas
                 .map(user -> ApiResponseGetMe.newBuilder()
                         .setStatus("success")
                         .setMessage("Profile retrieved successfully")
-                        .setData(user)
+                        .setData(toProtoUser(user))
                         .build())
                 .onFailure().recoverWithItem(err -> ApiResponseGetMe.newBuilder()
                         .setStatus("failed")
                         .setMessage(err.getMessage())
                         .build());
+    }
+
+    private static pb.user.UserCommon.UserResponse toProtoUser(com.sanedge.common.adapter.model.User u) {
+        if (u == null) {
+            return pb.user.UserCommon.UserResponse.getDefaultInstance();
+        }
+        return pb.user.UserCommon.UserResponse.newBuilder()
+                .setId(u.id())
+                .setFirstname(u.firstname() != null ? u.firstname() : "")
+                .setLastname(u.lastname() != null ? u.lastname() : "")
+                .setEmail(u.email() != null ? u.email() : "")
+                .setCreatedAt(u.createdAt() != null ? u.createdAt().toString() : "")
+                .setUpdatedAt(u.updatedAt() != null ? u.updatedAt().toString() : "")
+                .build();
     }
 }

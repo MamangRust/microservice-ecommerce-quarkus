@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sanedge.auth.service.AuthService;
+import com.sanedge.common.adapter.model.User;
 
 import io.smallrye.mutiny.Uni;
 import pb.Auth;
@@ -21,7 +22,6 @@ import pb.Auth.LoginRequest;
 import pb.Auth.RefreshTokenRequest;
 import pb.Auth.RegisterRequest;
 import pb.Auth.VerifyCodeRequest;
-import pb.user.UserCommon.UserResponse;
 
 @ExtendWith(MockitoExtension.class)
 class AuthGrpcHandlerTest {
@@ -32,22 +32,17 @@ class AuthGrpcHandlerTest {
         @InjectMocks
         AuthGrpcHandler handler;
 
-        private UserResponse userResponse;
+        private User user;
 
         @BeforeEach
         void setUp() {
-                userResponse = UserResponse.newBuilder()
-                                .setId(1)
-                                .setFirstname("John")
-                                .setLastname("Doe")
-                                .setEmail("john@example.com")
-                                .build();
+                user = new User(1, "John", "Doe", "john@example.com", null, null, null);
         }
 
         @Test
         void registerUser_returnsSuccessResponse() {
                 when(authService.register(any()))
-                                .thenReturn(Uni.createFrom().item(userResponse));
+                                .thenReturn(Uni.createFrom().item(user));
 
                 RegisterRequest request = RegisterRequest.newBuilder()
                                 .setFirstname("John")
@@ -167,7 +162,7 @@ class AuthGrpcHandlerTest {
         @Test
         void getMe_returnsUserProfile() {
                 when(authService.getMe(1L))
-                                .thenReturn(Uni.createFrom().item(userResponse));
+                                .thenReturn(Uni.createFrom().item(user));
 
                 GetMeRequest request = GetMeRequest.newBuilder()
                                 .setUserId(1)

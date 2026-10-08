@@ -10,7 +10,7 @@ metadata:
 spec:
   project: ecommerce
   source:
-    repoURL: https://github.com/MamangRust/modular-monolith-ecommerce-quarkus.git
+    repoURL: https://github.com/MamangRust/modular-monolith-vertx-ecommerce.git
     targetRevision: main
     path: deployments/gitops/argocd/production
   destination:

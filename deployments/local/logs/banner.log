@@ -1,0 +1,82 @@
+2026/08/21 17:30:19 Go runtime metrics collection started
+2026/08/21 17:30:19 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:19 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:19.526+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_BANNER","dbname":"banner_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:19.560+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"banner_db","prefix":"DB_BANNER"}
+2026/08/21 17:30:19 goose: no migrations to run. current version: 20250213033318
+{"level":"info","ts":"2026-08-21T17:30:19.613+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:19.618+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50064,"address":"[::]:50064"}
+2026/08/21 17:30:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:49.626+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"2.0 MB"}
+2026/08/21 17:31:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:19.622+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.7 MB"}
+{"level":"info","ts":"2026-08-21T17:31:21.283+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeleteAll"}
+{"level":"info","ts":"2026-08-21T17:31:21.305+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted all trashed banners permanently"}
+{"level":"info","ts":"2026-08-21T17:31:21.305+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/DeleteAll","request_id":"req_1787308281283201000_Fub1pTxS","duration":"22.360035ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.316+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:21.324+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted banner permanently","bannerID":1}
+{"level":"info","ts":"2026-08-21T17:31:21.325+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/DeletePermanent","request_id":"req_1787308281315553586_bED8Pzed","duration":"10.299498ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.333+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:21.334+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all trashed banners"}
+{"level":"info","ts":"2026-08-21T17:31:21.335+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/RestoreAll","request_id":"req_1787308281332930828_PPahchGY","duration":"2.334203ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.343+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"error","ts":"2026-08-21T17:31:21.350+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"Restore","trace.id":"72f2d9d1aba0deec14b4354aec6e0738","status_code":404,"banner_id":1,"error":"[NOT_FOUND] banner not found"}
+{"level":"info","ts":"2026-08-21T17:31:21.351+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/Restore","request_id":"req_1787308281343748004_0aOou33k","duration":"7.443954ms","error":"rpc error: code = NotFound desc = banner not found"}
+{"level":"info","ts":"2026-08-21T17:31:21.357+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:21.366+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed banner","bannerID":1}
+{"level":"info","ts":"2026-08-21T17:31:21.366+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/Trash","request_id":"req_1787308281357763495_Er3n6yVu","duration":"9.096651ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.384+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+{"level":"debug","ts":"2026-08-21T17:31:21.422+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"banner:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:21.423+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all banners","totalRecords":8,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:21.423+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerQueryService/FindAll","request_id":"req_1787308281384363242_JfGvAzyw","duration":"39.066542ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.433+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:21.445+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"banner:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:21.445+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active banners","totalRecords":7,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:21.446+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerQueryService/FindByActive","request_id":"req_1787308281433790125_3BTiI5Do","duration":"12.301967ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.455+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:21.463+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"banner:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:21.463+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed banners","totalRecords":1,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:21.464+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerQueryService/FindByTrashed","request_id":"req_1787308281455389303_IMgCxt6h","duration":"8.678554ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.477+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"error","ts":"2026-08-21T17:31:21.495+0700","caller":"errorhandler/errorhandler.go:47","msg":"request failed","method":"FindByID","trace.id":"687d7c445a9329fab4e9c09341fb86d5","status_code":404,"banner_id":1,"error":"[NOT_FOUND] banner not found: no rows in result set"}
+{"level":"info","ts":"2026-08-21T17:31:21.496+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerQueryService/FindById","request_id":"req_1787308281477541340_pb6Ccdjh","duration":"19.019809ms","error":"rpc error: code = NotFound desc = Banner not found"}
+2026/08/21 17:31:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:34.298+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Create"}
+{"level":"info","ts":"2026-08-21T17:31:34.308+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully created banner","bannerID":9}
+{"level":"info","ts":"2026-08-21T17:31:34.308+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/Create","request_id":"req_1787308294298267266_a5kCIMCP","duration":"10.658815ms"}
+{"level":"info","ts":"2026-08-21T17:31:34.325+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:34.334+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"banner:id:9","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:34.335+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched banner","bannerID":9}
+{"level":"info","ts":"2026-08-21T17:31:34.335+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerQueryService/FindById","request_id":"req_1787308294325337459_aGTtRknM","duration":"10.508083ms"}
+{"level":"info","ts":"2026-08-21T17:31:34.356+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Update"}
+{"level":"info","ts":"2026-08-21T17:31:34.400+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully updated banner","bannerID":9}
+{"level":"info","ts":"2026-08-21T17:31:34.405+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/Update","request_id":"req_1787308294356434109_H64vSpYt","duration":"48.506576ms"}
+{"level":"info","ts":"2026-08-21T17:31:34.424+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:34.433+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed banner","bannerID":9}
+{"level":"info","ts":"2026-08-21T17:31:34.434+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/Trash","request_id":"req_1787308294423999937_iAXu0y3C","duration":"10.643711ms"}
+{"level":"info","ts":"2026-08-21T17:31:34.452+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Restore"}
+{"level":"info","ts":"2026-08-21T17:31:34.456+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored banner","bannerID":9}
+{"level":"info","ts":"2026-08-21T17:31:34.456+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.BannerCommandService/Restore","request_id":"req_1787308294452014762_RAPDWWL7","duration":"4.872249ms"}
+2026/08/21 17:31:34 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:40 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:44 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.622+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.740458015267176,"memory_used":"2.0 MB"}
+2026/08/21 17:31:50 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:54 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:00 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:09 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:10 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:19.686+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":1,"total_keys":182,"hit_rate":71.40319715808171,"memory_used":"2.6 MB"}
+2026/08/21 17:32:29 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:30 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:44.511+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:44.512+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:44.512+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:44.514+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:44.514+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:44.515+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:44.515+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:55 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:55.437+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:55.437+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

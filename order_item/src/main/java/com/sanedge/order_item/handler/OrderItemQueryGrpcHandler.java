@@ -47,6 +47,9 @@ public class OrderItemQueryGrpcHandler extends MutinyOrderItemQueryServiceGrpc.O
                                 .map(this::toProto)
                                 .collect(Collectors.toList()));
                     }
+                    if (apiResp.pagination() != null) {
+                        builder.setPagination(toProto(apiResp.pagination()));
+                    }
                     return builder.build();
                 })
                 .onFailure().transform(e -> GrpcErrorMapper.toStatusRuntimeException(e));
@@ -70,6 +73,9 @@ public class OrderItemQueryGrpcHandler extends MutinyOrderItemQueryServiceGrpc.O
                                 .map(this::toProto)
                                 .collect(Collectors.toList()));
                     }
+                    if (apiResp.pagination() != null) {
+                        builder.setPagination(toProto(apiResp.pagination()));
+                    }
                     return builder.build();
                 })
                 .onFailure().transform(e -> GrpcErrorMapper.toStatusRuntimeException(e));
@@ -92,6 +98,9 @@ public class OrderItemQueryGrpcHandler extends MutinyOrderItemQueryServiceGrpc.O
                         builder.addAllData(apiResp.data().stream()
                                 .map(this::toProto)
                                 .collect(Collectors.toList()));
+                    }
+                    if (apiResp.pagination() != null) {
+                        builder.setPagination(toProto(apiResp.pagination()));
                     }
                     return builder.build();
                 })
@@ -122,6 +131,18 @@ public class OrderItemQueryGrpcHandler extends MutinyOrderItemQueryServiceGrpc.O
                     }
                     return GrpcErrorMapper.toStatusRuntimeException(e);
                 });
+    }
+
+    private pb.Api.PaginationMeta toProto(com.sanedge.common.domain.response.PaginationMeta m) {
+        if (m == null) {
+            return pb.Api.PaginationMeta.getDefaultInstance();
+        }
+        return pb.Api.PaginationMeta.newBuilder()
+                .setCurrentPage(m.currentPage())
+                .setPageSize(m.pageSize())
+                .setTotalPages(m.totalPages())
+                .setTotalRecords(m.totalRecords())
+                .build();
     }
 
     private pb.order_item.OrderItemCommon.OrderItemResponse toProto(OrderItemResponse r) {

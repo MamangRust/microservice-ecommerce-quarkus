@@ -21,7 +21,6 @@ import com.sanedge.merchant_policy.repository.MerchantPolicyCommandRepository;
 import com.sanedge.merchant_policy.service.MerchantPolicyCommandService;
 
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +28,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-import pb.merchant.MerchantQueryService;
+import com.sanedge.common.adapter.merchant.MerchantPort;
 
 @ApplicationScoped
 public class MerchantPolicyCommandServiceImpl implements MerchantPolicyCommandService {
@@ -39,7 +38,7 @@ public class MerchantPolicyCommandServiceImpl implements MerchantPolicyCommandSe
     private final Validator validator;
     private final RedisService redisService;
     private final TracingMetrics tracingMetrics;
-    private final MerchantQueryService merchantQueryService;
+    private final MerchantPort merchantPort;
 
     @Inject
     public MerchantPolicyCommandServiceImpl(
@@ -47,12 +46,12 @@ public class MerchantPolicyCommandServiceImpl implements MerchantPolicyCommandSe
             Validator validator,
             RedisService redisService,
             TracingMetrics tracingMetrics,
-            @GrpcClient("merchant") MerchantQueryService merchantQueryService) {
+            MerchantPort merchantPort) {
         this.merchantPolicyCommandRepository = merchantPolicyCommandRepository;
         this.validator = validator;
         this.redisService = redisService;
         this.tracingMetrics = tracingMetrics;
-        this.merchantQueryService = merchantQueryService;
+        this.merchantPort = merchantPort;
     }
 
     private <T> void validateRequest(T req) {
@@ -88,18 +87,8 @@ public class MerchantPolicyCommandServiceImpl implements MerchantPolicyCommandSe
 
         return tracingMetrics.traceAndMeasure("createMerchantPolicy", "create_policy",
                 Attributes.builder().put("merchant.id", request.getMerchantId().toString()).build(),
-                () -> merchantQueryService.findById(
-                        pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder()
-                                .setId(request.getMerchantId())
-                                .build())
-                        .chain(merchantResponse -> {
-                            if (merchantResponse == null || !merchantResponse.hasData()
-                                    || merchantResponse.getData().getId() == 0) {
-                                logger.warn("Merchant not found with id {}", request.getMerchantId());
-                                throw new ResourceNotFoundException(
-                                        "Merchant not found with id " + request.getMerchantId());
-                            }
-
+                () -> merchantPort.findById(request.getMerchantId())
+                        .chain(merchant -> {
                             MerchantPolicy policy = new MerchantPolicy();
                             policy.setMerchantId(request.getMerchantId());
                             policy.setPolicyType(request.getPolicyType());

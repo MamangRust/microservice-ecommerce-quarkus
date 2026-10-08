@@ -1,0 +1,350 @@
+2026/08/21 17:30:18 Go runtime metrics collection started
+2026/08/21 17:30:18 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:18 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:18.608+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_AUTH","dbname":"auth_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:18.611+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"auth_db","prefix":"DB_AUTH"}
+2026/08/21 17:30:18 goose: no migrations to run. current version: 20250212095807
+{"level":"info","ts":"2026-08-21T17:30:18.687+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:18.711+0700","caller":"kafka/kafka.go:83","msg":"Kafka producer connected successfully"}
+{"level":"info","ts":"2026-08-21T17:30:18.722+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50051,"address":"[::]:50051"}
+{"level":"error","ts":"2026-08-21T17:30:23.721+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","ts":"2026-08-21T17:30:28.722+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:30:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:30:33.721+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","ts":"2026-08-21T17:30:38.726+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:30:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:30:43.726+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","ts":"2026-08-21T17:30:48.734+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:30:48.739+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.3 MB"}
+2026/08/21 17:30:49 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:30:53.723+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","ts":"2026-08-21T17:30:58.775+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:30:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:31:03.721+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","ts":"2026-08-21T17:31:08.748+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:31:09 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:31:13.742+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:31:18.724+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.3 MB"}
+{"level":"error","ts":"2026-08-21T17:31:18.783+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:31:19 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:20.022+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.all-endpoints.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:20.026+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:20.646+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.all-endpoints.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:20.649+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.all-endpoints.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:20.650+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.all-endpoints.1787308277@example.com","first_name":"Hurl","last_name":"Test"}
+{"level":"info","ts":"2026-08-21T17:31:20.651+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:20.651+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308280022413494_v4Vr5GWH","duration":"629.119959ms"}
+{"level":"info","ts":"2026-08-21T17:31:20.667+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.all-endpoints.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:20.668+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:21.139+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:21.140+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":11}
+{"level":"info","ts":"2026-08-21T17:31:21.142+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:21.205+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":11}
+{"level":"info","ts":"2026-08-21T17:31:21.208+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.all-endpoints.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:21.209+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:21.209+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308280666899787_WfLueW2k","duration":"542.673952ms"}
+{"level":"info","ts":"2026-08-21T17:31:21.228+0700","caller":"handler/auth.go:136","msg":"GetMe called"}
+{"level":"info","ts":"2026-08-21T17:31:21.231+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: GetMe"}
+{"level":"debug","ts":"2026-08-21T17:31:21.231+0700","caller":"service/identityService.go:179","msg":"Fetching user details","user.id":11}
+{"level":"debug","ts":"2026-08-21T17:31:21.252+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"identity:user_info:%!s(int32=11)","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:21.252+0700","caller":"observability/tracing_metrics.go:122","msg":"User details fetched successfully","user.id":11}
+{"level":"info","ts":"2026-08-21T17:31:21.252+0700","caller":"handler/auth.go:144","msg":"GetMe successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:21.253+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/GetMe","request_id":"req_1787308281228646105_kYkTBqYi","duration":"24.798861ms"}
+{"level":"error","ts":"2026-08-21T17:31:23.728+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:31:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:31:28.725+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:31:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:30.244+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.auth.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:30.244+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:30.630+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.auth.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:30.633+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.auth.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:30.633+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.auth.1787308277@example.com","first_name":"John","last_name":"Doe"}
+{"level":"info","ts":"2026-08-21T17:31:30.634+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:30.635+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308290244313639_9E6ELaOA","duration":"390.906528ms"}
+{"level":"info","ts":"2026-08-21T17:31:30.643+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.auth.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:30.644+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:30.974+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:30.975+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":12}
+{"level":"info","ts":"2026-08-21T17:31:30.976+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:30.981+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":12}
+{"level":"info","ts":"2026-08-21T17:31:30.982+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.auth.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:30.983+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:30.983+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308290643718010_1qVvh3Uo","duration":"339.734146ms"}
+{"level":"info","ts":"2026-08-21T17:31:30.991+0700","caller":"handler/auth.go:136","msg":"GetMe called"}
+{"level":"info","ts":"2026-08-21T17:31:30.991+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: GetMe"}
+{"level":"debug","ts":"2026-08-21T17:31:30.991+0700","caller":"service/identityService.go:179","msg":"Fetching user details","user.id":12}
+{"level":"debug","ts":"2026-08-21T17:31:31.000+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"identity:user_info:%!s(int32=12)","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:31.000+0700","caller":"observability/tracing_metrics.go:122","msg":"User details fetched successfully","user.id":12}
+{"level":"info","ts":"2026-08-21T17:31:31.000+0700","caller":"handler/auth.go:144","msg":"GetMe successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:31.000+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/GetMe","request_id":"req_1787308290991231537_fQz8WaZO","duration":"9.703132ms"}
+{"level":"info","ts":"2026-08-21T17:31:31.010+0700","caller":"handler/auth.go:115","msg":"RefreshToken called"}
+{"level":"info","ts":"2026-08-21T17:31:31.010+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:31.028+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:31.028+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":12}
+{"level":"info","ts":"2026-08-21T17:31:31.028+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:31.034+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":12}
+{"level":"debug","ts":"2026-08-21T17:31:31.039+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"identity:refresh_token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMiIsImF1ZCI6WyJyZWZyZXNoIl0sImV4cCI6MTc4NzM1MTQ5MX0.OKyvDK8WJF8yOnMxEJEQHCBUl0v6xAtPZeVyNm68pXk","expiration":"23h59m59.996256771s"}
+{"level":"info","ts":"2026-08-21T17:31:31.039+0700","caller":"observability/tracing_metrics.go:122","msg":"Refresh token refreshed successfully","user.id":12}
+{"level":"info","ts":"2026-08-21T17:31:31.039+0700","caller":"handler/auth.go:123","msg":"RefreshToken successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:31.039+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RefreshToken","request_id":"req_1787308291010372625_nlXRfIno","duration":"29.452165ms"}
+{"level":"info","ts":"2026-08-21T17:31:33.136+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.banner.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:33.136+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+2026/08/21 17:31:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:31:33.649+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.banner.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:33.654+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.banner.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:33.655+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.banner.1787308277@example.com","first_name":"Hurl","last_name":"Banner"}
+{"level":"info","ts":"2026-08-21T17:31:33.655+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:33.655+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308293136416035_x6zP2ghD","duration":"519.433429ms"}
+{"level":"info","ts":"2026-08-21T17:31:33.663+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.banner.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:33.664+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"error","ts":"2026-08-21T17:31:33.725+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:31:34.178+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:34.180+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":13}
+{"level":"info","ts":"2026-08-21T17:31:34.181+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:34.192+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":13}
+{"level":"info","ts":"2026-08-21T17:31:34.234+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.banner.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:34.234+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:34.235+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308293663692274_KOcFbeZ1","duration":"571.472388ms"}
+{"level":"info","ts":"2026-08-21T17:31:36.562+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.cart.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:36.562+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:36.927+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.cart.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:36.932+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.cart.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:36.932+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.cart.1787308277@example.com","first_name":"Hurl","last_name":"Cart"}
+{"level":"info","ts":"2026-08-21T17:31:36.932+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:36.933+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308296562172395_UYGXs0Bl","duration":"370.978238ms"}
+{"level":"info","ts":"2026-08-21T17:31:36.939+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.cart.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:36.939+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:37.302+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:37.303+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":14}
+{"level":"info","ts":"2026-08-21T17:31:37.303+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:37.310+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":14}
+{"level":"info","ts":"2026-08-21T17:31:37.313+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.cart.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:37.314+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:37.314+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308296939171950_5bs8LoAB","duration":"375.764348ms"}
+{"level":"error","ts":"2026-08-21T17:31:38.906+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:31:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:39.903+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.category.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:39.904+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:40.443+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.category.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:40.446+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.category.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:40.447+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.category.1787308277@example.com","first_name":"Hurl","last_name":"Category"}
+{"level":"info","ts":"2026-08-21T17:31:40.447+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:40.448+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308299903654715_apZdfKYt","duration":"544.831759ms"}
+{"level":"info","ts":"2026-08-21T17:31:40.460+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.category.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:40.461+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:40.789+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:40.789+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":15}
+{"level":"info","ts":"2026-08-21T17:31:40.790+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:40.794+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":15}
+{"level":"info","ts":"2026-08-21T17:31:40.795+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.category.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:40.796+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:40.796+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308300460653953_pN1X5pre","duration":"335.61226ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.055+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.merchant.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:43.056+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:43.513+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.merchant.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:43.517+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.merchant.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:43.517+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.merchant.1787308277@example.com","first_name":"Hurl","last_name":"Merchant"}
+{"level":"info","ts":"2026-08-21T17:31:43.517+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:43.518+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308303055407929_fLLGjkJ2","duration":"462.703688ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.526+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.merchant.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:43.527+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"error","ts":"2026-08-21T17:31:43.722+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:31:43.852+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:43.852+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":16}
+{"level":"info","ts":"2026-08-21T17:31:43.852+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:43.858+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":16}
+{"level":"info","ts":"2026-08-21T17:31:43.859+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.merchant.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:43.860+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:43.861+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308303526808823_CgXuQY8X","duration":"334.175496ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.056+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.order.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:46.057+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:46.394+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.order.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:46.396+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.order.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:46.397+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.order.1787308277@example.com","first_name":"Hurl","last_name":"Order"}
+{"level":"info","ts":"2026-08-21T17:31:46.397+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:46.397+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308306056740203_xJ7xfUo0","duration":"341.172277ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.404+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.order.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:46.405+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:46.730+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:46.731+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":17}
+{"level":"info","ts":"2026-08-21T17:31:46.732+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:46.739+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":17}
+{"level":"info","ts":"2026-08-21T17:31:46.741+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.order.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:46.741+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:46.741+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308306404798186_QOQd0YCN","duration":"336.579891ms"}
+2026/08/21 17:31:48 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:48.735+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.409961685823754,"memory_used":"1.7 MB"}
+{"level":"error","ts":"2026-08-21T17:31:48.738+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:31:49.242+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.product.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:49.243+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+2026/08/21 17:31:49 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:31:49.678+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.product.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:49.679+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.product.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:49.680+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.product.1787308277@example.com","first_name":"Hurl","last_name":"Product"}
+{"level":"info","ts":"2026-08-21T17:31:49.680+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:49.680+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308309242666069_v9d2fbUi","duration":"438.296733ms"}
+{"level":"info","ts":"2026-08-21T17:31:49.697+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.product.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:49.697+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:50.063+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:50.063+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":18}
+{"level":"info","ts":"2026-08-21T17:31:50.064+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:50.074+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":18}
+{"level":"info","ts":"2026-08-21T17:31:50.077+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.product.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:50.078+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:50.078+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308309697202081_r3GW9Np4","duration":"381.44267ms"}
+{"level":"info","ts":"2026-08-21T17:31:52.462+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.review.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:52.463+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:52.878+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.review.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:52.880+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.review.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:52.881+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.review.1787308277@example.com","first_name":"Hurl","last_name":"Review"}
+{"level":"info","ts":"2026-08-21T17:31:52.881+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:52.881+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308312462599249_zM1Si3X0","duration":"419.12116ms"}
+{"level":"info","ts":"2026-08-21T17:31:52.891+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.review.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:52.892+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:53.224+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:53.225+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":19}
+{"level":"info","ts":"2026-08-21T17:31:53.225+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:53.231+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":19}
+{"level":"info","ts":"2026-08-21T17:31:53.233+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.review.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:53.233+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:53.233+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308312891657944_GePoh7BC","duration":"342.250975ms"}
+{"level":"error","ts":"2026-08-21T17:31:53.724+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:31:55.649+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"admin.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:55.650+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:56.145+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"admin.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:56.152+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:admin.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:56.152+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"admin.1787308277@example.com","first_name":"Rules","last_name":"Admin"}
+{"level":"info","ts":"2026-08-21T17:31:56.152+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:56.152+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308315649439970_iR8cMx2U","duration":"503.477901ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.162+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"admin.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:56.162+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:56.460+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:56.460+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":20}
+{"level":"info","ts":"2026-08-21T17:31:56.461+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:56.466+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":20}
+{"level":"info","ts":"2026-08-21T17:31:56.468+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"admin.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:56.468+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:56.468+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308316162318378_j3xQuIQG","duration":"306.01092ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.541+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"user_7ebd94b0-5787-4325-af35-cb2952b6ec96@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:56.541+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:31:56.857+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:56.857+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":1}
+{"level":"info","ts":"2026-08-21T17:31:56.858+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:56.867+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":1}
+{"level":"info","ts":"2026-08-21T17:31:56.868+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"user_7ebd94b0-5787-4325-af35-cb2952b6ec96@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:56.869+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:56.869+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308316541147565_jVUjz9HW","duration":"328.635028ms"}
+{"level":"error","ts":"2026-08-21T17:31:58.728+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:31:58.999+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.shipping_address.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:58.999+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:31:59.432+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.shipping_address.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:31:59.435+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.shipping_address.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:31:59.436+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.shipping_address.1787308277@example.com","first_name":"Hurl","last_name":"Shipping"}
+{"level":"info","ts":"2026-08-21T17:31:59.436+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:59.436+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308318998926563_EYj64rFF","duration":"437.606511ms"}
+{"level":"info","ts":"2026-08-21T17:31:59.444+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.shipping_address.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:59.445+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+2026/08/21 17:31:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:59.845+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:31:59.845+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":21}
+{"level":"info","ts":"2026-08-21T17:31:59.845+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:31:59.852+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":21}
+{"level":"info","ts":"2026-08-21T17:31:59.858+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.shipping_address.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:31:59.858+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:31:59.858+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308319444745057_hIUXCd2a","duration":"413.871727ms"}
+{"level":"info","ts":"2026-08-21T17:32:02.141+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.slider.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:02.142+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:32:02.506+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.slider.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:32:02.509+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.slider.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:32:02.510+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.slider.1787308277@example.com","first_name":"Hurl","last_name":"Slider"}
+{"level":"info","ts":"2026-08-21T17:32:02.510+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:02.511+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308322141628634_xpZBLJrk","duration":"369.414784ms"}
+{"level":"info","ts":"2026-08-21T17:32:02.517+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.slider.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:02.518+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:32:02.903+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:32:02.903+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":22}
+{"level":"info","ts":"2026-08-21T17:32:02.903+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:32:02.912+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":22}
+{"level":"info","ts":"2026-08-21T17:32:02.914+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.slider.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:02.915+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:02.915+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308322517509431_XvYcZl6m","duration":"397.901778ms"}
+2026/08/21 17:32:03 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:03.723+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:32:05.181+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.stats_strict.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:05.181+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:32:05.546+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.stats_strict.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:32:05.548+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.stats_strict.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:32:05.548+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.stats_strict.1787308277@example.com","first_name":"Stats","last_name":"Tester"}
+{"level":"info","ts":"2026-08-21T17:32:05.548+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:05.548+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308325181043392_yosO8IKC","duration":"367.737141ms"}
+{"level":"info","ts":"2026-08-21T17:32:05.555+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.stats_strict.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:05.556+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:32:05.908+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:32:05.909+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":23}
+{"level":"info","ts":"2026-08-21T17:32:05.909+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:32:05.914+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":23}
+{"level":"info","ts":"2026-08-21T17:32:05.916+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.stats_strict.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:05.916+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:05.916+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308325555813250_VuIxOYvj","duration":"360.886743ms"}
+{"level":"error","ts":"2026-08-21T17:32:08.735+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:32:09.372+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.transaction.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:09.373+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+2026/08/21 17:32:09 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:09.762+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.transaction.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:32:09.763+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.transaction.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:32:09.765+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.transaction.1787308277@example.com","first_name":"Hurl","last_name":"Transaction"}
+{"level":"info","ts":"2026-08-21T17:32:09.765+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:09.766+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308329372570563_wobvr4oV","duration":"393.572762ms"}
+{"level":"info","ts":"2026-08-21T17:32:09.782+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.transaction.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:09.782+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:32:10.112+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:32:10.112+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":24}
+{"level":"info","ts":"2026-08-21T17:32:10.112+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:32:10.116+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":24}
+{"level":"info","ts":"2026-08-21T17:32:10.117+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.transaction.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:10.117+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:10.117+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308329782531261_aV5z2X1i","duration":"335.079105ms"}
+{"level":"info","ts":"2026-08-21T17:32:12.645+0700","caller":"handler/auth.go:161","msg":"RegisterUser called","email":"hurl.user.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:12.645+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Register"}
+{"level":"error","ts":"2026-08-21T17:32:13.060+0700","caller":"service/registerService.go:160","msg":"failed to enqueue registration email to outbox","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)","email":"hurl.user.1787308277@example.com"}
+{"level":"debug","ts":"2026-08-21T17:32:13.064+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"register:verify_code:hurl.user.1787308277@example.com","expiration":"15m0s"}
+{"level":"info","ts":"2026-08-21T17:32:13.066+0700","caller":"observability/tracing_metrics.go:122","msg":"User registered successfully","email":"hurl.user.1787308277@example.com","first_name":"Hurl","last_name":"User"}
+{"level":"info","ts":"2026-08-21T17:32:13.069+0700","caller":"handler/auth.go:177","msg":"RegisterUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:13.070+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/RegisterUser","request_id":"req_1787308332645577460_KN3KmZG8","duration":"424.722087ms"}
+{"level":"info","ts":"2026-08-21T17:32:13.104+0700","caller":"handler/auth.go:89","msg":"LoginUser called","email":"hurl.user.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:13.106+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Login"}
+{"level":"info","ts":"2026-08-21T17:32:13.522+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createAccessToken"}
+{"level":"info","ts":"2026-08-21T17:32:13.523+0700","caller":"observability/tracing_metrics.go:122","msg":"Created access token","userID":25}
+{"level":"info","ts":"2026-08-21T17:32:13.523+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: createRefreshToken"}
+{"level":"info","ts":"2026-08-21T17:32:13.527+0700","caller":"observability/tracing_metrics.go:122","msg":"Created refresh token","userID":25}
+{"level":"info","ts":"2026-08-21T17:32:13.529+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully logged in","email":"hurl.user.1787308277@example.com"}
+{"level":"info","ts":"2026-08-21T17:32:13.529+0700","caller":"handler/auth.go:102","msg":"LoginUser successful","success":true}
+{"level":"info","ts":"2026-08-21T17:32:13.529+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.AuthService/LoginUser","request_id":"req_1787308333104260576_kmvEX8iI","duration":"425.185308ms"}
+2026/08/21 17:32:13 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:13.724+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"info","ts":"2026-08-21T17:32:18.739+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":1,"total_keys":182,"hit_rate":18.68686868686869,"memory_used":"1.6 MB"}
+{"level":"error","ts":"2026-08-21T17:32:18.743+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:32:19 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:23 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:23.740+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:32:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:28.731+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:32:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:33.729+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","ts":"2026-08-21T17:32:38.728+0700","caller":"outbox/outbox.go:200","msg":"outbox relay cycle failed","error":"ERROR: relation \"outbox_events\" does not exist (SQLSTATE 42P01)"}
+2026/08/21 17:32:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:41.366+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:41.366+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:41.366+0700","caller":"outbox/outbox.go:196","msg":"outbox relay stopped"}
+{"level":"info","ts":"2026-08-21T17:32:41.366+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:41.371+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:41.372+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:41.372+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:41.372+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:48 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:49 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:33:09 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:33:09.612+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:33:09.612+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

@@ -5,12 +5,13 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sanedge.common.adapter.category.CategoryPort;
+import com.sanedge.common.adapter.merchant.MerchantPort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.ResourceNotFoundException;
 import com.sanedge.common.exception.InvalidRequestException;
 import com.sanedge.common.observability.TracingMetrics;
-import com.sanedge.merchant.repository.MerchantQueryRepository;
 import com.sanedge.product.domain.requests.CreateProductRequest;
 import com.sanedge.product.domain.requests.UpdateProductRequest;
 import com.sanedge.product.domain.response.ProductResponse;
@@ -35,7 +36,8 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
     private final ProductCommandRepository productCommandRepository;
     private final ProductQueryRepository productQueryRepository;
-    private final MerchantQueryRepository merchantQueryRepository;
+    private final MerchantPort merchantPort;
+    private final CategoryPort categoryPort;
     private final Validator validator;
     private final RedisService redisService;
     private final TracingMetrics tracingMetrics;
@@ -43,13 +45,15 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Inject
     public ProductCommandServiceImpl(ProductCommandRepository productCommandRepository,
             ProductQueryRepository productQueryRepository,
-            MerchantQueryRepository merchantQueryRepository,
+            MerchantPort merchantPort,
+            CategoryPort categoryPort,
             Validator validator,
             RedisService redisService,
             TracingMetrics tracingMetrics) {
         this.productCommandRepository = productCommandRepository;
         this.productQueryRepository = productQueryRepository;
-        this.merchantQueryRepository = merchantQueryRepository;
+        this.merchantPort = merchantPort;
+        this.categoryPort = categoryPort;
         this.validator = validator;
         this.redisService = redisService;
         this.tracingMetrics = tracingMetrics;
@@ -101,16 +105,17 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
         return tracingMetrics.traceAndMeasure("createProduct", "create_product",
                 Attributes.builder().put("product.name", req.getName()).build(),
-                () -> productCommandRepository.persist(product)
-                        .chain(saved -> {
-                            ProductResponse response = ProductResponse.from(saved);
+                () -> categoryPort.findById(req.getCategoryId())
+                        .chain(category -> productCommandRepository.persist(product)
+                                .chain(saved -> {
+                                    ProductResponse response = ProductResponse.from(saved);
 
-                            return invalidateCache(saved.id)
-                                    .map(v -> {
-                                        logger.info("Successfully created product with ID: {}", saved.id);
-                                        return ApiResponse.success("Product created successfully", response);
-                                    });
-                        })
+                                    return invalidateCache(saved.id)
+                                            .map(v -> {
+                                                logger.info("Successfully created product with ID: {}", saved.id);
+                                                return ApiResponse.success("Product created successfully", response);
+                                            });
+                                }))
                         .onFailure().invoke(e -> logger.error("Failed to create product: {}", req.getName(), e)));
     }
 
@@ -128,14 +133,9 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
         return tracingMetrics.traceAndMeasure("updateProduct", "update_product",
                 Attributes.builder().put("product.id", req.getProductId().toString()).build(),
-                () -> merchantQueryRepository.findMerchantById(req.getMerchantId().longValue())
-                        .chain(merchant -> {
-                            if (merchant == null) {
-                                throw new ResourceNotFoundException(
-                                        "Merchant not found with id " + req.getMerchantId());
-                            }
-                            return productQueryRepository.findProductById(req.getProductId().longValue());
-                        })
+                () -> merchantPort.findById(req.getMerchantId())
+                        .chain(merchant -> categoryPort.findById(req.getCategoryId()))
+                        .chain(category -> productQueryRepository.findProductById(req.getProductId().longValue()))
                         .chain(optProduct -> {
                             if (optProduct.isEmpty()) {
                                 throw new ResourceNotFoundException("Product not found");

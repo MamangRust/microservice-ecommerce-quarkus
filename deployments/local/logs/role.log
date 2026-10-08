@@ -1,0 +1,182 @@
+2026/08/21 17:30:18 Go runtime metrics collection started
+2026/08/21 17:30:18 Collecting metrics: GC, Memory, Goroutines, CPU, etc.
+2026/08/21 17:30:18 Runtime metrics initialized successfully (interval: 15s)
+{"level":"debug","ts":"2026-08-21T17:30:18.539+0700","caller":"database/database.go:122","msg":"Database connection pool established successfully","prefix":"DB_ROLE","dbname":"role_db","DB_DRIVER":"pgx","MaxConns":10,"MinConns":50,"MaxConnLifetime":"30m0s","MaxConnIdleTime":"30m0s","HealthCheckPeriod":"1m0s"}
+{"level":"info","ts":"2026-08-21T17:30:18.539+0700","caller":"database/migrate.go:65","msg":"Running database migrations","path":"./database/migration","dbname":"role_db","prefix":"DB_ROLE"}
+2026/08/21 17:30:18 goose: no migrations to run. current version: 20250212095536
+{"level":"info","ts":"2026-08-21T17:30:18.778+0700","caller":"database/migrate.go:75","msg":"Database migrations completed successfully"}
+{"level":"info","ts":"2026-08-21T17:30:18.924+0700","caller":"server/server.go:172","msg":"gRPC server starting","port":50052,"address":"[::]:50052"}
+2026/08/21 17:30:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:30:48.911+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.4 MB"}
+2026/08/21 17:30:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:18.891+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":0,"hit_rate":0,"memory_used":"1.3 MB"}
+{"level":"info","ts":"2026-08-21T17:31:20.168+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"debug","ts":"2026-08-21T17:31:20.245+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:name:ROLE_ADMIN","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:20.245+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:20.246+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308280168185707_GDQQO3ge","duration":"78.171639ms"}
+{"level":"info","ts":"2026-08-21T17:31:20.608+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:20.639+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":11,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:20.640+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308280608103606_mKFyL6gT","duration":"32.498905ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.544+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByUserId"}
+{"level":"debug","ts":"2026-08-21T17:31:25.565+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:user_id:11","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.565+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role by user ID","user.id":11}
+{"level":"info","ts":"2026-08-21T17:31:25.565+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByUserId","request_id":"req_1787308285543908193_3dXzkS95","duration":"21.807585ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.570+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/CreateRole","request_id":"req_1787308285570268451_OS231ciY","duration":"507.643µs","error":"rpc error: code = InvalidArgument desc = validation failed: invalid create Role request"}
+{"level":"info","ts":"2026-08-21T17:31:25.578+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: DeletePermanent"}
+{"level":"info","ts":"2026-08-21T17:31:25.581+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully deleted role permanently","role.id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.581+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/DeleteRolePermanent","request_id":"req_1787308285578015728_WSRCIkgj","duration":"3.813648ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.587+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: RestoreAll"}
+{"level":"info","ts":"2026-08-21T17:31:25.590+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully restored all roles"}
+{"level":"info","ts":"2026-08-21T17:31:25.591+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/RestoreAllRole","request_id":"req_1787308285587790163_j4hjUZje","duration":"3.462376ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.597+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: Trash"}
+{"level":"info","ts":"2026-08-21T17:31:25.603+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully trashed role","role.id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.603+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/TrashedRole","request_id":"req_1787308285597083494_vrinCUWh","duration":"6.852918ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.615+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/UpdateRole","request_id":"req_1787308285614786346_hMUyisJQ","duration":"589.544µs","error":"rpc error: code = InvalidArgument desc = validation failed: invalid update Role request"}
+{"level":"info","ts":"2026-08-21T17:31:25.622+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindAll"}
+DEBUG: FindAllRoles search=''
+DEBUG: FindAllRoles found 6 roles
+DEBUG: Role[0] Name: ROLE_USER
+{"level":"debug","ts":"2026-08-21T17:31:25.636+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:all:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.636+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched all roles","totalRecords":6,"page":1,"pageSize":10}
+{"level":"info","ts":"2026-08-21T17:31:25.636+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindAllRole","request_id":"req_1787308285622028370_iiYdyNVM","duration":"14.807515ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.644+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindActive"}
+{"level":"debug","ts":"2026-08-21T17:31:25.653+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:active:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.654+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched active role","page":1,"pageSize":10,"search":""}
+{"level":"info","ts":"2026-08-21T17:31:25.654+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByActive","request_id":"req_1787308285644507810_9rQbYmOo","duration":"10.138263ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.664+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindTrashed"}
+{"level":"debug","ts":"2026-08-21T17:31:25.672+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:trashed:page:1:pageSize:10:search:","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.672+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched trashed role","page":1,"pageSize":10,"search":""}
+{"level":"info","ts":"2026-08-21T17:31:25.672+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByTrashed","request_id":"req_1787308285664458247_j4g2cG81","duration":"8.470407ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.683+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByUserId"}
+{"level":"info","ts":"2026-08-21T17:31:25.688+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role by user ID","user.id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.688+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByUserId","request_id":"req_1787308285683037986_cvWm1Kdu","duration":"5.650757ms"}
+{"level":"info","ts":"2026-08-21T17:31:25.695+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:25.700+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:id:1","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:25.700+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role","role.id":1}
+{"level":"info","ts":"2026-08-21T17:31:25.700+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByIdRole","request_id":"req_1787308285695589249_kU2B7gIb","duration":"4.956282ms"}
+2026/08/21 17:31:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:31:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:30.253+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:30.255+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:30.256+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308290253270066_nlYS2ytm","duration":"3.01041ms"}
+{"level":"info","ts":"2026-08-21T17:31:30.612+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:30.619+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":12,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:30.621+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308290609647450_uBxfP18p","duration":"11.879928ms"}
+{"level":"info","ts":"2026-08-21T17:31:33.157+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:33.160+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:33.161+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308293157469705_gmfsy1Ws","duration":"4.197847ms"}
+2026/08/21 17:31:33 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:33.636+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:33.642+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":13,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:33.642+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308293635836954_Qf7DP5yl","duration":"6.557734ms"}
+{"level":"info","ts":"2026-08-21T17:31:36.569+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:36.570+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:36.571+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308296569625634_2EnFCSE0","duration":"1.562931ms"}
+{"level":"info","ts":"2026-08-21T17:31:36.909+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:36.918+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":14,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:36.920+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308296909484530_eQ6f3ux5","duration":"10.574514ms"}
+2026/08/21 17:31:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:39.915+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:39.917+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:39.920+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308299915255972_ZJcDZsjs","duration":"5.430784ms"}
+{"level":"info","ts":"2026-08-21T17:31:40.338+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:40.384+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":15,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:40.384+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308300338611757_tIGY2C30","duration":"45.965488ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.072+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:43.078+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:43.078+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308303071900528_BcL2TBtZ","duration":"6.940472ms"}
+{"level":"info","ts":"2026-08-21T17:31:43.501+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:43.507+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":16,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:43.508+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308303501583949_M4Ly4clG","duration":"6.83864ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.064+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:46.065+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:46.067+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308306064275092_NQE4bXsv","duration":"3.51023ms"}
+{"level":"info","ts":"2026-08-21T17:31:46.385+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:46.389+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":17,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:46.390+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308306385698849_vSpfA9WZ","duration":"4.524745ms"}
+2026/08/21 17:31:48 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:48.899+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":156,"hit_rate":13.409961685823754,"memory_used":"1.7 MB"}
+{"level":"info","ts":"2026-08-21T17:31:49.254+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:49.260+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:49.261+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308309253590861_C30qIHrT","duration":"7.802548ms"}
+2026/08/21 17:31:49 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:49.668+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:49.673+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":18,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:49.673+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308309668436015_YdqYZj1e","duration":"4.929398ms"}
+{"level":"info","ts":"2026-08-21T17:31:52.475+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:52.477+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:52.479+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308312475059194_wwlxKggg","duration":"4.509195ms"}
+{"level":"info","ts":"2026-08-21T17:31:52.866+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:52.872+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":19,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:52.872+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308312866145296_4wOI6b2k","duration":"6.631391ms"}
+{"level":"info","ts":"2026-08-21T17:31:55.681+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:55.702+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:55.702+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308315681225304_k07lzMYH","duration":"21.473642ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.115+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:56.123+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":20,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:56.124+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308316114937952_4VxT1ACw","duration":"9.792127ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.474+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByUserId"}
+{"level":"debug","ts":"2026-08-21T17:31:56.482+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:user_id:20","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:56.482+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role by user ID","user.id":20}
+{"level":"info","ts":"2026-08-21T17:31:56.483+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByUserId","request_id":"req_1787308316474688197_r55KU8cU","duration":"8.644246ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.509+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByID"}
+{"level":"debug","ts":"2026-08-21T17:31:56.513+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:id:3","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:56.513+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role","role.id":3}
+{"level":"info","ts":"2026-08-21T17:31:56.513+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByIdRole","request_id":"req_1787308316509380829_duSSHW2D","duration":"4.3679ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.520+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByUserId"}
+{"level":"debug","ts":"2026-08-21T17:31:56.526+0700","caller":"cache/redis_cache.go:98","msg":"Successfully cached data","cacheKey":"role:user_id:4","expiration":"5m0s"}
+{"level":"info","ts":"2026-08-21T17:31:56.527+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role by user ID","user.id":4}
+{"level":"info","ts":"2026-08-21T17:31:56.528+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByUserId","request_id":"req_1787308316520842336_Asyew5rC","duration":"7.65192ms"}
+{"level":"info","ts":"2026-08-21T17:31:56.880+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByUserId"}
+{"level":"info","ts":"2026-08-21T17:31:56.886+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully fetched role by user ID","user.id":1}
+{"level":"info","ts":"2026-08-21T17:31:56.887+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByUserId","request_id":"req_1787308316879976298_yamV8HmK","duration":"7.28477ms"}
+2026/08/21 17:31:58 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:31:59.027+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:31:59.073+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:31:59.074+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308319027358714_b6Q2y0cS","duration":"47.542002ms"}
+{"level":"info","ts":"2026-08-21T17:31:59.418+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:31:59.423+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":21,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:31:59.425+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308319418739790_IrO9brJW","duration":"6.473986ms"}
+2026/08/21 17:31:59 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:02.150+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:32:02.151+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:32:02.152+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308322149865700_yuCa8FyD","duration":"3.075184ms"}
+{"level":"info","ts":"2026-08-21T17:32:02.493+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:32:02.499+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":22,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:32:02.500+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308322491916679_TdiDJCc3","duration":"8.3255ms"}
+{"level":"info","ts":"2026-08-21T17:32:05.189+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:32:05.190+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:32:05.191+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308325189275818_gRZsJIAc","duration":"2.080768ms"}
+{"level":"info","ts":"2026-08-21T17:32:05.537+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:32:05.542+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":23,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:32:05.542+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308325536996803_Q6hKwnLq","duration":"5.740034ms"}
+{"level":"info","ts":"2026-08-21T17:32:09.383+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:32:09.386+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:32:09.386+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308329383550919_tVBOCSHk","duration":"3.349116ms"}
+2026/08/21 17:32:09 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:09.743+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:32:09.750+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":24,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:32:09.751+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308329743318622_CbvnLBnG","duration":"7.706366ms"}
+{"level":"info","ts":"2026-08-21T17:32:12.669+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: FindByName"}
+{"level":"info","ts":"2026-08-21T17:32:12.671+0700","caller":"observability/tracing_metrics.go:122","msg":"Data found in cache","role.name":"ROLE_ADMIN"}
+{"level":"info","ts":"2026-08-21T17:32:12.672+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleQueryService/FindByNameRole","request_id":"req_1787308332668684844_gy9bL9BB","duration":"3.381414ms"}
+{"level":"info","ts":"2026-08-21T17:32:13.015+0700","caller":"observability/tracing_metrics.go:105","msg":"Start: AssignRoleToUser"}
+{"level":"info","ts":"2026-08-21T17:32:13.048+0700","caller":"observability/tracing_metrics.go:122","msg":"Successfully assigned role to user","user_id":25,"role_id":1}
+{"level":"info","ts":"2026-08-21T17:32:13.050+0700","caller":"middleware/context.go:85","msg":"gRPC Request","method":"/pb.RoleCommandService/AssignRoleToUser","request_id":"req_1787308333015669473_e7AmdqeT","duration":"34.608115ms"}
+2026/08/21 17:32:13 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:18.891+0700","caller":"server/server.go:388","msg":"Cache statistics","ref_count":0,"total_keys":182,"hit_rate":32.63598326359833,"memory_used":"1.7 MB"}
+2026/08/21 17:32:19 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:28 failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:28 traces export: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:29 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+2026/08/21 17:32:39 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"info","ts":"2026-08-21T17:32:41.633+0700","caller":"server/server.go:183","msg":"Received shutdown signal","signal":"terminated"}
+{"level":"info","ts":"2026-08-21T17:32:41.633+0700","caller":"server/server.go:197","msg":"Starting graceful shutdown..."}
+{"level":"info","ts":"2026-08-21T17:32:41.633+0700","caller":"server/server.go:215","msg":"Background tasks stopped successfully"}
+{"level":"info","ts":"2026-08-21T17:32:41.639+0700","caller":"server/server.go:228","msg":"gRPC server stopped gracefully"}
+{"level":"info","ts":"2026-08-21T17:32:41.642+0700","caller":"server/server.go:234","msg":"Graceful shutdown completed"}
+{"level":"info","ts":"2026-08-21T17:32:41.642+0700","caller":"server/server.go:239","msg":"Cleaning up resources..."}
+{"level":"info","ts":"2026-08-21T17:32:41.645+0700","caller":"server/server.go:245","msg":"Redis connection closed"}
+2026/08/21 17:32:52 exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving
+{"level":"error","ts":"2026-08-21T17:32:52.495+0700","caller":"server/server.go:251","msg":"Failed to shutdown telemetry","error":"shutdown errors: [meter provider shutdown: failed to upload metrics: exporter export timeout: rpc error: code = Unavailable desc = dns: A record lookup error: lookup otel-collector on 127.0.0.53:53: server misbehaving]"}
+{"level":"info","ts":"2026-08-21T17:32:52.495+0700","caller":"server/server.go:257","msg":"Cleanup completed"}

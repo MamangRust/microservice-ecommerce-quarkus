@@ -3,6 +3,7 @@ package com.sanedge.order.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
@@ -25,6 +26,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.sanedge.common.adapter.merchant.MerchantPort;
+import com.sanedge.common.adapter.model.Merchant;
+import com.sanedge.common.adapter.model.OrderItem;
+import com.sanedge.common.adapter.model.Product;
+import com.sanedge.common.adapter.model.ShippingAddress;
+import com.sanedge.common.adapter.model.User;
+import com.sanedge.common.adapter.order_item.OrderItemPort;
+import com.sanedge.common.adapter.product.ProductPort;
+import com.sanedge.common.adapter.shipping_address.ShippingAddressPort;
+import com.sanedge.common.adapter.transaction.TransactionPort;
+import com.sanedge.common.adapter.user.UserPort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.ForbiddenException;
@@ -65,25 +77,22 @@ class OrderCommandServiceImplTest {
         private TracingMetrics tracingMetrics;
 
         @Mock
-        private pb.merchant.MerchantQueryService merchantQueryService;
+        private MerchantPort merchantPort;
 
         @Mock
-        private pb.user.UserQueryService userQueryService;
+        private UserPort userPort;
 
         @Mock
-        private pb.product.ProductQueryService productQueryService;
+        private ProductPort productPort;
 
         @Mock
-        private pb.product.ProductCommandService productCommandService;
+        private OrderItemPort orderItemPort;
 
         @Mock
-        private pb.order_item.OrderItemCommandService orderItemCommandServiceGrpc;
+        private TransactionPort transactionPort;
 
         @Mock
-        private pb.shipping_address.MutinyShippingCommandServiceGrpc.MutinyShippingCommandServiceStub shippingCommandService;
-
-        @Mock
-        private pb.shipping_address.MutinyShippingQueryServiceGrpc.MutinyShippingQueryServiceStub shippingQueryService;
+        private ShippingAddressPort shippingAddressPort;
 
         private OrderCommandServiceImpl service;
 
@@ -96,13 +105,12 @@ class OrderCommandServiceImplTest {
                                 redisService,
                                 tracingMetrics);
 
-                service.merchantQueryService = merchantQueryService;
-                service.userQueryService = userQueryService;
-                service.productQueryService = productQueryService;
-                service.productCommandService = productCommandService;
-                service.orderItemCommandServiceGrpc = orderItemCommandServiceGrpc;
-                service.shippingCommandService = shippingCommandService;
-                service.shippingQueryService = shippingQueryService;
+                service.merchantPort = merchantPort;
+                service.userPort = userPort;
+                service.productPort = productPort;
+                service.orderItemPort = orderItemPort;
+                service.transactionPort = transactionPort;
+                service.shippingAddressPort = shippingAddressPort;
 
                 lenient().doAnswer(invocation -> {
                         Supplier<Uni<?>> supplier = invocation.getArgument(3);
@@ -119,6 +127,11 @@ class OrderCommandServiceImplTest {
                 lenient().when(orderCommandRepository.updateTotalPrice(any(Long.class), any(Integer.class)))
                                 .thenReturn(Uni.createFrom().item(1));
                 lenient().when(validator.validate(any())).thenReturn(Collections.emptySet());
+
+                lenient().when(orderItemPort.findOrderItemByOrder(anyInt()))
+                                .thenReturn(Uni.createFrom().item(List.of()));
+                lenient().when(transactionPort.findByOrderId(anyInt()))
+                                .thenReturn(Uni.createFrom().nullItem());
         }
 
         private Order createTestOrder(Long id, Integer merchantId, Integer userId, Integer totalPrice) {
@@ -156,46 +169,46 @@ class OrderCommandServiceImplTest {
                 return request;
         }
 
-        private void mockMerchantAndUser() {
-                pb.merchant.MerchantCommon.ApiResponseMerchant merchantResponse = pb.merchant.MerchantCommon.ApiResponseMerchant
-                                .newBuilder()
-                                .setData(pb.merchant.MerchantCommon.MerchantResponse.newBuilder().setId(100).build())
-                                .build();
-                lenient().when(merchantQueryService.findById(any()))
-                                .thenReturn(Uni.createFrom().item(merchantResponse));
+        private static Merchant merchant(int id) {
+                return new Merchant(id, 1, "Merchant", "desc", "addr", "mail@example.com", "0800", "active", null, null);
+        }
 
-                pb.user.UserCommon.ApiResponseUser userResponse = pb.user.UserCommon.ApiResponseUser.newBuilder()
-                                .setData(pb.user.UserCommon.UserResponse.newBuilder().setId(100).build())
-                                .build();
-                lenient().when(userQueryService.findById(any()))
-                                .thenReturn(Uni.createFrom().item(userResponse));
+        private static User user(int id) {
+                return new User(id, "John", "Doe", "john@example.com", null, null, null);
+        }
+
+        private static Product product(int id, int price, int countInStock) {
+                return new Product(id, 100, 1, "Product " + id, "desc", price, countInStock, "brand", 0, 0f, "slug",
+                                "image", null, null);
+        }
+
+        private static OrderItem orderItem(int id, int orderId, int productId, int quantity, int price) {
+                return new OrderItem(id, orderId, productId, quantity, price, null, null);
+        }
+
+        private static ShippingAddress shipping(int id) {
+                return new ShippingAddress(id, 1, "addr", "prov", "negara", "kota", "method", 10000, null, null);
+        }
+
+        private void mockMerchantAndUser() {
+                lenient().when(merchantPort.findById(anyInt()))
+                                .thenReturn(Uni.createFrom().item(merchant(100)));
+                lenient().when(userPort.findById(anyInt()))
+                                .thenReturn(Uni.createFrom().item(user(100)));
         }
 
         private void mockProductAndOrderItem() {
-                pb.product.ProductCommon.ApiResponseProduct productResponse = pb.product.ProductCommon.ApiResponseProduct
-                                .newBuilder()
-                                .setData(pb.product.ProductCommon.ProductResponse.newBuilder()
-                                                .setId(1).setCountInStock(100).build())
-                                .build();
-                lenient().when(productQueryService.findById(any()))
-                                .thenReturn(Uni.createFrom().item(productResponse));
-
-                pb.order_item.OrderItemCommon.ApiResponseOrderItem orderItemResponse = pb.order_item.OrderItemCommon.ApiResponseOrderItem
-                                .newBuilder().build();
-                lenient().when(orderItemCommandServiceGrpc.createOrderItem(any()))
-                                .thenReturn(Uni.createFrom().item(orderItemResponse));
-
-                pb.product.ProductCommon.ApiResponseProduct stockResponse = pb.product.ProductCommon.ApiResponseProduct
-                                .newBuilder().build();
-                lenient().when(productCommandService.updateProductCountStock(any()))
-                                .thenReturn(Uni.createFrom().item(stockResponse));
+                lenient().when(productPort.findById(anyInt()))
+                                .thenReturn(Uni.createFrom().item(product(1, 100, 100)));
+                lenient().when(orderItemPort.create(any()))
+                                .thenReturn(Uni.createFrom().item(orderItem(1, 1, 1, 2, 100)));
+                lenient().when(productPort.adjustStock(anyInt(), anyInt()))
+                                .thenReturn(Uni.createFrom().item(product(1, 100, 98)));
         }
 
         private void mockShipping() {
-                pb.shipping_address.ShippingAddressCommon.ApiResponseShipping shippingResponse = pb.shipping_address.ShippingAddressCommon.ApiResponseShipping
-                                .newBuilder().build();
-                lenient().when(shippingCommandService.createShipping(any()))
-                                .thenReturn(Uni.createFrom().item(shippingResponse));
+                lenient().when(shippingAddressPort.create(any()))
+                                .thenReturn(Uni.createFrom().item(shipping(1)));
         }
 
         @Nested
@@ -210,7 +223,6 @@ class OrderCommandServiceImplTest {
                         mockProductAndOrderItem();
                         mockShipping();
 
-                        Order savedOrder = createTestOrder(null, 100, 100, 0);
                         when(orderCommandRepository.persistNew(any(Order.class)))
                                         .thenAnswer(inv -> {
                                                 Order o = inv.getArgument(0);
@@ -250,12 +262,9 @@ class OrderCommandServiceImplTest {
                 void createOrder_MerchantNotFound() {
                         CreateOrderRequest request = createValidCreateOrderRequest();
 
-                        pb.merchant.MerchantCommon.ApiResponseMerchant merchantResponse = pb.merchant.MerchantCommon.ApiResponseMerchant
-                                        .newBuilder()
-                                        .setData(pb.merchant.MerchantCommon.MerchantResponse.newBuilder().setId(0)
-                                                        .build())
-                                        .build();
-                        when(merchantQueryService.findById(any())).thenReturn(Uni.createFrom().item(merchantResponse));
+                        when(merchantPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom()
+                                                        .failure(new ResourceNotFoundException("Merchant not found")));
 
                         assertThatThrownBy(() -> service.create(request).await().indefinitely())
                                         .isInstanceOf(ResourceNotFoundException.class)
@@ -267,18 +276,11 @@ class OrderCommandServiceImplTest {
                 void createOrder_UserNotFound() {
                         CreateOrderRequest request = createValidCreateOrderRequest();
 
-                        pb.merchant.MerchantCommon.ApiResponseMerchant merchantResponse = pb.merchant.MerchantCommon.ApiResponseMerchant
-                                        .newBuilder()
-                                        .setData(pb.merchant.MerchantCommon.MerchantResponse.newBuilder().setId(100)
-                                                        .build())
-                                        .build();
-                        when(merchantQueryService.findById(any())).thenReturn(Uni.createFrom().item(merchantResponse));
-
-                        pb.user.UserCommon.ApiResponseUser userResponse = pb.user.UserCommon.ApiResponseUser
-                                        .newBuilder()
-                                        .setData(pb.user.UserCommon.UserResponse.newBuilder().setId(0).build())
-                                        .build();
-                        when(userQueryService.findById(any())).thenReturn(Uni.createFrom().item(userResponse));
+                        when(merchantPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom().item(merchant(100)));
+                        when(userPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom()
+                                                        .failure(new ResourceNotFoundException("User not found")));
 
                         assertThatThrownBy(() -> service.create(request).await().indefinitely())
                                         .isInstanceOf(ResourceNotFoundException.class)
@@ -291,7 +293,6 @@ class OrderCommandServiceImplTest {
                         CreateOrderRequest request = createValidCreateOrderRequest();
                         mockMerchantAndUser();
 
-                        Order savedOrder = createTestOrder(null, 100, 100, 0);
                         when(orderCommandRepository.persistNew(any(Order.class)))
                                         .thenAnswer(inv -> {
                                                 Order o = inv.getArgument(0);
@@ -300,11 +301,9 @@ class OrderCommandServiceImplTest {
                                                 return Uni.createFrom().item(o);
                                         });
 
-                        pb.product.ProductCommon.ApiResponseProduct productResponse = pb.product.ProductCommon.ApiResponseProduct
-                                        .newBuilder()
-                                        .setData(pb.product.ProductCommon.ProductResponse.newBuilder().setId(0).build())
-                                        .build();
-                        when(productQueryService.findById(any())).thenReturn(Uni.createFrom().item(productResponse));
+                        when(productPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom()
+                                                        .failure(new ResourceNotFoundException("Product not found")));
 
                         assertThatThrownBy(() -> service.create(request).await().indefinitely())
                                         .isInstanceOf(ResourceNotFoundException.class)
@@ -317,7 +316,6 @@ class OrderCommandServiceImplTest {
                         CreateOrderRequest request = createValidCreateOrderRequest();
                         mockMerchantAndUser();
 
-                        Order savedOrder = createTestOrder(null, 100, 100, 0);
                         when(orderCommandRepository.persistNew(any(Order.class)))
                                         .thenAnswer(inv -> {
                                                 Order o = inv.getArgument(0);
@@ -326,12 +324,8 @@ class OrderCommandServiceImplTest {
                                                 return Uni.createFrom().item(o);
                                         });
 
-                        pb.product.ProductCommon.ApiResponseProduct productResponse = pb.product.ProductCommon.ApiResponseProduct
-                                        .newBuilder()
-                                        .setData(pb.product.ProductCommon.ProductResponse.newBuilder()
-                                                        .setId(1).setCountInStock(1).build())
-                                        .build();
-                        when(productQueryService.findById(any())).thenReturn(Uni.createFrom().item(productResponse));
+                        when(productPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom().item(product(1, 100, 1)));
 
                         assertThatThrownBy(() -> service.create(request).await().indefinitely())
                                         .isInstanceOf(InvalidRequestException.class)
@@ -347,18 +341,12 @@ class OrderCommandServiceImplTest {
                 mockMerchantAndUser();
                 mockShipping();
 
-                pb.product.ProductCommon.ApiResponseProduct productResponse = pb.product.ProductCommon.ApiResponseProduct
-                                .newBuilder()
-                                .setData(pb.product.ProductCommon.ProductResponse.newBuilder()
-                                                .setId(1).setPrice(250).setCountInStock(100).build())
-                                .build();
-                when(productQueryService.findById(any())).thenReturn(Uni.createFrom().item(productResponse));
-                when(productCommandService.adjustStock(any()))
-                                .thenReturn(Uni.createFrom().item(pb.product.ProductCommon.ApiResponseProduct
-                                                .getDefaultInstance()));
-                when(orderItemCommandServiceGrpc.createOrderItem(any()))
-                                .thenReturn(Uni.createFrom().item(pb.order_item.OrderItemCommon.ApiResponseOrderItem
-                                                .getDefaultInstance()));
+                when(productPort.findById(anyInt()))
+                                .thenReturn(Uni.createFrom().item(product(1, 250, 100)));
+                when(productPort.adjustStock(anyInt(), anyInt()))
+                                .thenReturn(Uni.createFrom().item(product(1, 250, 98)));
+                when(orderItemPort.create(any()))
+                                .thenReturn(Uni.createFrom().item(orderItem(1, 1, 1, 2, 250)));
                 when(orderCommandRepository.persistNew(any(Order.class))).thenAnswer(invocation -> {
                         Order order = invocation.getArgument(0);
                         if (order.id == null) {
@@ -369,16 +357,16 @@ class OrderCommandServiceImplTest {
 
                 service.create(request).await().indefinitely();
 
-                ArgumentCaptor<pb.product.ProductCommand.AdjustProductStockRequest> stockCaptor =
-                                ArgumentCaptor.forClass(pb.product.ProductCommand.AdjustProductStockRequest.class);
-                verify(productCommandService).adjustStock(stockCaptor.capture());
-                assertThat(stockCaptor.getValue().getProductId()).isEqualTo(1);
-                assertThat(stockCaptor.getValue().getDelta()).isEqualTo(-2);
+                ArgumentCaptor<Integer> productIdCaptor = ArgumentCaptor.forClass(Integer.class);
+                ArgumentCaptor<Integer> deltaCaptor = ArgumentCaptor.forClass(Integer.class);
+                verify(productPort).adjustStock(productIdCaptor.capture(), deltaCaptor.capture());
+                assertThat(productIdCaptor.getValue()).isEqualTo(1);
+                assertThat(deltaCaptor.getValue()).isEqualTo(-2);
 
-                ArgumentCaptor<pb.order_item.OrderItemCommand.CreateOrderItemRecordRequest> itemCaptor =
-                                ArgumentCaptor.forClass(pb.order_item.OrderItemCommand.CreateOrderItemRecordRequest.class);
-                verify(orderItemCommandServiceGrpc).createOrderItem(itemCaptor.capture());
-                assertThat(itemCaptor.getValue().getPrice()).isEqualTo(250);
+                ArgumentCaptor<OrderItemPort.CreateData> itemCaptor = ArgumentCaptor
+                                .forClass(OrderItemPort.CreateData.class);
+                verify(orderItemPort).create(itemCaptor.capture());
+                assertThat(itemCaptor.getValue().price()).isEqualTo(250);
         }
 
         @Nested
@@ -446,11 +434,8 @@ class OrderCommandServiceImplTest {
                         when(orderQueryRepository.findOrderById(1L))
                                         .thenReturn(Uni.createFrom().item(Optional.of(existingOrder)));
 
-                        pb.user.UserCommon.ApiResponseUser userResponse = pb.user.UserCommon.ApiResponseUser
-                                        .newBuilder()
-                                        .setData(pb.user.UserCommon.UserResponse.newBuilder().setId(200).build())
-                                        .build();
-                        when(userQueryService.findById(any())).thenReturn(Uni.createFrom().item(userResponse));
+                        when(userPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom().item(user(200)));
 
                         assertThatThrownBy(() -> service.update(request).await().indefinitely())
                                         .isInstanceOf(ForbiddenException.class)
@@ -468,11 +453,9 @@ class OrderCommandServiceImplTest {
                         when(orderQueryRepository.findOrderById(1L))
                                         .thenReturn(Uni.createFrom().item(Optional.of(existingOrder)));
 
-                        pb.user.UserCommon.ApiResponseUser userResponse = pb.user.UserCommon.ApiResponseUser
-                                        .newBuilder()
-                                        .setData(pb.user.UserCommon.UserResponse.newBuilder().setId(0).build())
-                                        .build();
-                        when(userQueryService.findById(any())).thenReturn(Uni.createFrom().item(userResponse));
+                        when(userPort.findById(anyInt()))
+                                        .thenReturn(Uni.createFrom()
+                                                        .failure(new ResourceNotFoundException("User not found")));
 
                         assertThatThrownBy(() -> service.update(request).await().indefinitely())
                                         .isInstanceOf(ResourceNotFoundException.class)

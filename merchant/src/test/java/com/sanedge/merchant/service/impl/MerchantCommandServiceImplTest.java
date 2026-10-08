@@ -19,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
+import com.sanedge.common.adapter.model.User;
+import com.sanedge.common.adapter.user.UserPort;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.enums.Status;
@@ -36,14 +38,12 @@ import com.sanedge.merchant.repository.MerchantQueryRepository;
 
 import io.opentelemetry.api.common.Attributes;
 import io.smallrye.mutiny.Uni;
-import pb.user.UserCommon;
-import pb.user.UserQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class MerchantCommandServiceImplTest {
 
     @Mock
-    private UserQueryService userQueryService;
+    private UserPort userPort;
 
     @Mock
     private MerchantQueryRepository merchantQueryRepository;
@@ -62,7 +62,7 @@ class MerchantCommandServiceImplTest {
     @BeforeEach
     void setUp() {
         merchantCommandService = new MerchantCommandServiceImpl(
-                userQueryService,
+                userPort,
                 merchantQueryRepository,
                 merchantCommandRepository,
                 redisService,
@@ -92,19 +92,8 @@ class MerchantCommandServiceImplTest {
         return merchant;
     }
 
-    private UserCommon.ApiResponseUser createMockUserResponse() {
-        UserCommon.UserResponse userResponse = UserCommon.UserResponse.newBuilder()
-                .setId(1)
-                .setFirstname("John")
-                .setLastname("Doe")
-                .setEmail("john.doe@example.com")
-                .build();
-
-        return UserCommon.ApiResponseUser.newBuilder()
-                .setStatus("success")
-                .setMessage("User found")
-                .setData(userResponse)
-                .build();
+    private User createMockUser() {
+        return new User(1, "John", "Doe", "john.doe@example.com", null, null, null);
     }
 
     @Test
@@ -118,9 +107,8 @@ class MerchantCommandServiceImplTest {
         request.setContactPhone("081234567890");
         request.setStatus("PENDING");
 
-        lenient().when(userQueryService.findById(
-                UserCommon.FindByIdUserRequest.newBuilder().setId(1).build()))
-                .thenReturn(Uni.createFrom().item(createMockUserResponse()));
+        lenient().when(userPort.findById(1))
+                .thenReturn(Uni.createFrom().item(createMockUser()));
         lenient().when(merchantQueryRepository.existsByName("New Merchant"))
                 .thenReturn(Uni.createFrom().item(false));
         lenient().when(merchantCommandRepository.persist(any(Merchant.class)))
@@ -150,9 +138,8 @@ class MerchantCommandServiceImplTest {
         request.setContactPhone("081234567890");
         request.setStatus("PENDING");
 
-        lenient().when(userQueryService.findById(
-                UserCommon.FindByIdUserRequest.newBuilder().setId(1).build()))
-                .thenReturn(Uni.createFrom().item(createMockUserResponse()));
+        lenient().when(userPort.findById(1))
+                .thenReturn(Uni.createFrom().item(createMockUser()));
         when(merchantQueryRepository.existsByName("Existing Merchant"))
                 .thenReturn(Uni.createFrom().item(true));
 
@@ -175,14 +162,8 @@ class MerchantCommandServiceImplTest {
         request.setContactPhone("081234567890");
         request.setStatus("PENDING");
 
-        UserCommon.ApiResponseUser userResponse = UserCommon.ApiResponseUser.newBuilder()
-                .setStatus("error")
-                .setMessage("User not found")
-                .build();
-
-        when(userQueryService.findById(
-                UserCommon.FindByIdUserRequest.newBuilder().setId(999).build()))
-                .thenReturn(Uni.createFrom().item(userResponse));
+        when(userPort.findById(999))
+                .thenReturn(Uni.createFrom().failure(new ResourceNotFoundException("User not found")));
 
         try {
             merchantCommandService.createMerchant(request).await().indefinitely();
@@ -208,9 +189,8 @@ class MerchantCommandServiceImplTest {
 
         lenient().when(merchantQueryRepository.findMerchantById(1L))
                 .thenReturn(Uni.createFrom().item(existingMerchant));
-        lenient().when(userQueryService.findById(
-                UserCommon.FindByIdUserRequest.newBuilder().setId(1).build()))
-                .thenReturn(Uni.createFrom().item(createMockUserResponse()));
+        lenient().when(userPort.findById(1))
+                .thenReturn(Uni.createFrom().item(createMockUser()));
         lenient().when(merchantCommandRepository.persist(any(Merchant.class)))
                 .thenReturn(Uni.createFrom().item(existingMerchant));
 

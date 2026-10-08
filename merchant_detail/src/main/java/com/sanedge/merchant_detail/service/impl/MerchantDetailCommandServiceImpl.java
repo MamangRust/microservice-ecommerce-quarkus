@@ -9,7 +9,7 @@ import com.sanedge.common.exception.ResourceNotFoundException;
 import com.sanedge.common.exception.InvalidRequestException;
 import com.sanedge.common.observability.TracingMetrics;
 import com.sanedge.merchant_detail.domain.response.MerchantDetailResponse;
-import pb.merchant.MerchantQueryService;
+import com.sanedge.common.adapter.merchant.MerchantPort;
 import com.sanedge.merchant_detail.domain.response.MerchantDetailResponseDeleteAt;
 import com.sanedge.merchant_detail.entity.MerchantDetail;
 import com.sanedge.merchant_detail.repository.MerchantDetailCommandRepository;
@@ -17,7 +17,6 @@ import com.sanedge.merchant_detail.repository.MerchantDetailQueryRepository;
 import com.sanedge.merchant_detail.service.MerchantDetailCommandService;
 
 import io.opentelemetry.api.common.Attributes;
-import io.quarkus.grpc.GrpcClient;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,19 +32,19 @@ public class MerchantDetailCommandServiceImpl implements MerchantDetailCommandSe
         private final MerchantDetailCommandRepository merchantDetailCommandRepository;
         private final RedisService redisService;
         private final TracingMetrics tracingMetrics;
-        private final MerchantQueryService merchantQueryService;
+        private final MerchantPort merchantPort;
 
         @Inject
         public MerchantDetailCommandServiceImpl(MerchantDetailQueryRepository merchantDetailQueryRepository,
                         MerchantDetailCommandRepository merchantDetailCommandRepository,
                         RedisService redisService,
                         TracingMetrics tracingMetrics,
-                        @GrpcClient("merchant") MerchantQueryService merchantQueryService) {
+                        MerchantPort merchantPort) {
                 this.merchantDetailQueryRepository = merchantDetailQueryRepository;
                 this.merchantDetailCommandRepository = merchantDetailCommandRepository;
                 this.redisService = redisService;
                 this.tracingMetrics = tracingMetrics;
-                this.merchantQueryService = merchantQueryService;
+                this.merchantPort = merchantPort;
         }
 
         private Uni<Void> invalidateCache(Long merchantDetailId) {
@@ -66,19 +65,8 @@ public class MerchantDetailCommandServiceImpl implements MerchantDetailCommandSe
                 logger.info("Creating merchant detail: {}", req);
 
                 return tracingMetrics.traceAndMeasure("createMerchantDetail", "create_detail", attrs,
-                                () -> merchantQueryService.findById(
-                                                pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder()
-                                                                .setId(req.getMerchantId())
-                                                                .build())
-                                                .chain(merchantResponse -> {
-                                                                if (merchantResponse == null || !merchantResponse.hasData()
-                                                                                || merchantResponse.getData().getId() == 0) {
-                                                                                logger.warn("Merchant not found with id {}",
-                                                                                                req.getMerchantId());
-                                                                                throw new ResourceNotFoundException(
-                                                                                                "Merchant not found with id " + req.getMerchantId());
-                                                                }
-
+                                () -> merchantPort.findById(req.getMerchantId())
+                                                .chain(merchant -> {
                                                                 MerchantDetail entity = new MerchantDetail();
                                                                 entity.setMerchantId(req.getMerchantId());
                                                                 entity.setDisplayName(req.getDisplayName());

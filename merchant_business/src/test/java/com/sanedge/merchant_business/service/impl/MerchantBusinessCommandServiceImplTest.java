@@ -3,6 +3,7 @@ package com.sanedge.merchant_business.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -27,6 +28,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.sanedge.common.adapter.merchant.MerchantPort;
+import com.sanedge.common.adapter.model.Merchant;
 import com.sanedge.common.config.RedisService;
 import com.sanedge.common.domain.response.ApiResponse;
 import com.sanedge.common.exception.InvalidRequestException;
@@ -42,8 +45,6 @@ import com.sanedge.merchant_business.repository.MerchantBusinessQueryRepository;
 
 import io.opentelemetry.api.common.Attributes;
 import io.smallrye.mutiny.Uni;
-import pb.merchant.MerchantQueryService;
-import pb.merchant.MerchantCommon;
 
 @ExtendWith(MockitoExtension.class)
 class MerchantBusinessCommandServiceImplTest {
@@ -64,7 +65,7 @@ class MerchantBusinessCommandServiceImplTest {
     private TracingMetrics tracingMetrics;
 
     @Mock
-    private MerchantQueryService merchantQueryService;
+    private MerchantPort merchantPort;
 
     private MerchantBusinessCommandServiceImpl service;
 
@@ -76,7 +77,7 @@ class MerchantBusinessCommandServiceImplTest {
                 validator,
                 redisService,
                 tracingMetrics,
-                merchantQueryService);
+                merchantPort);
 
         lenient().when(validator.validate(any())).thenReturn(new HashSet<>());
 
@@ -138,22 +139,16 @@ class MerchantBusinessCommandServiceImplTest {
     }
 
     private void mockMerchantExists(Integer merchantId) {
-        when(merchantQueryService.findById(
-                any(MerchantCommon.FindByIdMerchantRequest.class)))
+        when(merchantPort.findById(merchantId))
                 .thenReturn(Uni.createFrom().item(
-                        MerchantCommon.ApiResponseMerchant.newBuilder()
-                                .setData(MerchantCommon.MerchantResponse.newBuilder()
-                                        .setId(merchantId)
-                                        .setUserId(100)
-                                        .build())
-                                .build()));
+                        new Merchant(merchantId, 100, "Merchant", "desc", "addr", "mail@example.com", "0800", "active",
+                                null, null)));
     }
 
     private void mockMerchantNotFound() {
-        when(merchantQueryService.findById(
-                any(MerchantCommon.FindByIdMerchantRequest.class)))
-                .thenReturn(Uni.createFrom().item(
-                        MerchantCommon.ApiResponseMerchant.newBuilder().build()));
+        when(merchantPort.findById(anyInt()))
+                .thenReturn(Uni.createFrom()
+                        .failure(new ResourceNotFoundException("Merchant not found")));
     }
 
     @Nested
@@ -190,7 +185,7 @@ class MerchantBusinessCommandServiceImplTest {
 
             assertThatThrownBy(() -> service.createMerchantBusiness(req).await().indefinitely())
                     .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessageContaining("Merchant not found with id " + req.getMerchantId());
+                    .hasMessageContaining("Merchant not found");
         }
 
         @Test

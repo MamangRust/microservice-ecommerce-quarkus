@@ -26,9 +26,16 @@ import com.sanedge.transaction.repository.TransactionOutboxRepository;
 import com.sanedge.transaction.service.KafkaService;
 import com.sanedge.transaction.service.TransactionCommandService;
 
-import io.quarkus.grpc.GrpcClient;
+import com.sanedge.common.adapter.merchant.MerchantPort;
+import com.sanedge.common.adapter.model.Order;
+import com.sanedge.common.adapter.model.OrderItem;
+import com.sanedge.common.adapter.model.ShippingAddress;
+import com.sanedge.common.adapter.order.OrderPort;
+import com.sanedge.common.adapter.order_item.OrderItemPort;
+import com.sanedge.common.adapter.shipping_address.ShippingAddressPort;
+import com.sanedge.common.adapter.user.UserPort;
+
 import io.vertx.core.json.JsonObject;
-import pb.user.UserQueryService;
 
 import io.opentelemetry.api.common.Attributes;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
@@ -45,20 +52,20 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
     private final RedisService redisService;
     private final TracingMetrics tracingMetrics;
 
-    @GrpcClient("merchant")
-    pb.merchant.MerchantQueryService merchantQueryService;
+    @Inject
+    MerchantPort merchantPort;
 
-    @GrpcClient("order")
-    pb.order.OrderQueryService orderQueryService;
+    @Inject
+    OrderPort orderPort;
 
-    @GrpcClient("order_item")
-    pb.order_item.OrderItemQueryService orderItemQueryService;
+    @Inject
+    OrderItemPort orderItemPort;
 
-    @GrpcClient("shipping_address")
-    pb.shipping_address.ShippingQueryService shippingQueryService;
+    @Inject
+    ShippingAddressPort shippingAddressPort;
 
-    @GrpcClient("user")
-    UserQueryService userQueryService;
+    @Inject
+    UserPort userPort;
 
     @Inject
     KafkaService kafkaService;
@@ -107,58 +114,39 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
                         .put("order.id", req.getOrderID() != null ? req.getOrderID().toString() : "null")
                         .put("merchant.id", req.getMerchantID() != null ? req.getMerchantID().toString() : "null")
                         .build(),
-                () -> merchantQueryService
-                        .findById(pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder()
-                                .setId(req.getMerchantID()).build())
-                        .chain(merchantResponse -> {
-                            if (merchantResponse == null || !merchantResponse.hasData()
-                                    || merchantResponse.getData().getId() == 0) {
-                                logger.error("Merchant not found | merchantId={}", req.getMerchantID());
-                                throw new ResourceNotFoundException("Merchant not found");
-                            }
-
-                            return orderQueryService.findById(pb.order.OrderCommon.FindByIdOrderRequest.newBuilder()
-                                    .setId(req.getOrderID()).build());
-                        })
-                        .chain(orderResponse -> {
-                            if (orderResponse == null || !orderResponse.hasData()
-                                    || orderResponse.getData().getId() == 0) {
+                () -> merchantPort.findById(req.getMerchantID())
+                        .chain(merchant -> orderPort.findById(req.getOrderID()))
+                        .chain(order -> {
+                            if (order == null || order.id() == 0) {
                                 logger.error("Order not found | orderId={}", req.getOrderID());
                                 throw new ResourceNotFoundException("Order not found");
                             }
-                            pb.order.OrderCommon.OrderResponse order = orderResponse.getData();
 
                             return Uni.combine().all().unis(
-                                    orderItemQueryService
-                                            .findOrderItemByOrder(pb.order_item.OrderItemCommon.FindByIdOrderItemRequest
-                                                    .newBuilder().setId(order.getId()).build()),
-                                    shippingQueryService.findByOrder(
-                                            pb.shipping_address.ShippingAddressCommon.FindByIdShippingRequest
-                                                    .newBuilder().setId(order.getId()).build()))
+                                    orderItemPort.findOrderItemByOrder(order.id()),
+                                    shippingAddressPort.findByOrder(order.id()))
                                     .asTuple().chain(tuple -> {
-                                        List<pb.order_item.OrderItemCommon.OrderItemResponse> orderItems = tuple
-                                                .getItem1().getDataList();
-                                        pb.shipping_address.ShippingAddressCommon.ShippingResponse shipping = tuple
-                                                .getItem2().getData();
+                                        List<OrderItem> orderItems = tuple.getItem1();
+                                        ShippingAddress shipping = tuple.getItem2();
 
                                         if (orderItems.isEmpty()) {
                                             logger.error("No order items found | orderId={}", req.getOrderID());
                                             throw new IllegalArgumentException("No order items found");
                                         }
 
-                                        if (shipping == null || shipping.getId() == 0) {
+                                        if (shipping == null || shipping.id() == 0) {
                                             logger.error("Shipping address not found | orderId={}", req.getOrderID());
                                             throw new ResourceNotFoundException("Shipping address not found");
                                         }
 
                                         int totalAmount = 0;
-                                        for (pb.order_item.OrderItemCommon.OrderItemResponse item : orderItems) {
-                                            if (item.getQuantity() <= 0) {
+                                        for (OrderItem item : orderItems) {
+                                            if (item.quantity() <= 0) {
                                                 throw new IllegalArgumentException("Invalid order item quantity");
                                             }
-                                            totalAmount += item.getPrice() * item.getQuantity();
+                                            totalAmount += item.price() * item.quantity();
                                         }
-                                        totalAmount += shipping.getShippingCost();
+                                        totalAmount += shipping.shippingCost();
                                         int ppn = totalAmount * 11 / 100;
                                         int totalAmountWithTax = totalAmount + ppn;
 
@@ -224,39 +212,20 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
                                 throw new IllegalArgumentException("Transaction cannot be modified");
                             }
 
-                            return merchantQueryService
-                                    .findById(pb.merchant.MerchantCommon.FindByIdMerchantRequest.newBuilder()
-                                            .setId(req.getMerchantID()).build())
-                                    .chain(merchantResponse -> {
-                                        if (merchantResponse == null || !merchantResponse.hasData()
-                                                || merchantResponse.getData().getId() == 0) {
-                                            logger.error("Merchant not found | merchantId={}", req.getMerchantID());
-                                            throw new ResourceNotFoundException("Merchant not found");
-                                        }
-
-                                        return orderQueryService.findById(pb.order.OrderCommon.FindByIdOrderRequest
-                                                .newBuilder().setId(req.getOrderID()).build());
-                                    })
-                                    .chain(orderResponse -> {
-                                        if (orderResponse == null || !orderResponse.hasData()
-                                                || orderResponse.getData().getId() == 0) {
+                            return merchantPort.findById(req.getMerchantID())
+                                    .chain(merchant -> orderPort.findById(req.getOrderID()))
+                                    .chain(order -> {
+                                        if (order == null || order.id() == 0) {
                                             logger.error("Order not found | orderId={}", req.getOrderID());
                                             throw new ResourceNotFoundException("Order not found");
                                         }
-                                        pb.order.OrderCommon.OrderResponse order = orderResponse.getData();
 
                                         return Uni.combine().all().unis(
-                                                orderItemQueryService.findOrderItemByOrder(
-                                                        pb.order_item.OrderItemCommon.FindByIdOrderItemRequest
-                                                                .newBuilder().setId(order.getId()).build()),
-                                                shippingQueryService.findByOrder(
-                                                        pb.shipping_address.ShippingAddressCommon.FindByIdShippingRequest
-                                                                .newBuilder().setId(order.getId()).build()))
+                                                orderItemPort.findOrderItemByOrder(order.id()),
+                                                shippingAddressPort.findByOrder(order.id()))
                                                 .asTuple().chain(tuple -> {
-                                                    List<pb.order_item.OrderItemCommon.OrderItemResponse> orderItems = tuple
-                                                            .getItem1().getDataList();
-                                                    pb.shipping_address.ShippingAddressCommon.ShippingResponse shipping = tuple
-                                                            .getItem2().getData();
+                                                    List<OrderItem> orderItems = tuple.getItem1();
+                                                    ShippingAddress shipping = tuple.getItem2();
 
                                                     if (orderItems.isEmpty()) {
                                                         logger.error("No order items found | orderId={}",
@@ -264,7 +233,7 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
                                                         throw new IllegalArgumentException("No order items found");
                                                     }
 
-                                                    if (shipping == null || shipping.getId() == 0) {
+                                                    if (shipping == null || shipping.id() == 0) {
                                                         logger.error("Shipping address not found | orderId={}",
                                                                 req.getOrderID());
                                                         throw new ResourceNotFoundException(
@@ -272,14 +241,14 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
                                                     }
 
                                                     int totalAmount = 0;
-                                                    for (pb.order_item.OrderItemCommon.OrderItemResponse item : orderItems) {
-                                                        if (item.getQuantity() <= 0) {
+                                                    for (OrderItem item : orderItems) {
+                                                        if (item.quantity() <= 0) {
                                                             throw new IllegalArgumentException(
                                                                     "Invalid order item quantity");
                                                         }
-                                                        totalAmount += item.getPrice() * item.getQuantity();
+                                                        totalAmount += item.price() * item.quantity();
                                                     }
-                                                    totalAmount += shipping.getShippingCost();
+                                                    totalAmount += shipping.shippingCost();
                                                     int ppn = totalAmount * 11 / 100;
                                                     int totalAmountWithTax = totalAmount + ppn;
 
@@ -447,25 +416,19 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
 
     // Package-private to allow @Spy-based happy-path tests to bypass the email
     // Kafka chain.
-    Uni<Void> sendTransactionEmail(Transaction tx, pb.order.OrderCommon.OrderResponse order) {
-        return userQueryService
-                .findById(pb.user.UserCommon.FindByIdUserRequest.newBuilder().setId(order.getUserId()).build())
-                .chain(res -> {
-                    if (!"success".equalsIgnoreCase(res.getStatus()) || !res.hasData()) {
-                        logger.warn("User not found for transaction email, userId={}", order.getUserId());
-                        return Uni.createFrom().voidItem();
-                    }
-                    pb.user.UserCommon.UserResponse user = res.getData();
-
+    Uni<Void> sendTransactionEmail(Transaction tx, Order order) {
+        return userPort
+                .findById(order.userId())
+                .chain(user -> {
                     String subject = "Transaction Created Successfully";
                     String body = String.format(
                             "Hello %s %s,\n\nYour transaction has been created successfully!\n\nTransaction Details:\n- ID: %s\n- Amount: %s\n- Payment Method: %s\n- Status: %s\n\nThank you for shopping with us!\n\nRegards,\nSupport Team",
-                            user.getFirstname(), user.getLastname(), tx.id, tx.getAmount(), tx.getPaymentMethod(),
+                            user.firstname(), user.lastname(), tx.id, tx.getAmount(), tx.getPaymentMethod(),
                             tx.getStatus());
 
                     String eventId = UUID.randomUUID().toString();
                     JsonObject payload = new JsonObject()
-                            .put("email", user.getEmail())
+                            .put("email", user.email())
                             .put("subject", subject)
                             .put("body", body)
                             .put("event_id", eventId)
@@ -474,13 +437,13 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
                             .put("occurred_at", Instant.now().toString());
 
                     if (transactionOutboxRepository == null) {
-                        return kafkaService.sendExistingEvent("email-service-topic-transaction-create", user.getEmail(), payload);
+                        return kafkaService.sendExistingEvent("email-service-topic-transaction-create", user.email(), payload);
                     }
 
                     TransactionOutbox event = new TransactionOutbox();
                     event.setEventId(eventId);
                     event.setTopic("email-service-topic-transaction-create");
-                    event.setEventKey(user.getEmail());
+                    event.setEventKey(user.email());
                     event.setPayload(payload.encode());
                     return transactionOutboxRepository.persist(event).replaceWithVoid();
                 })
